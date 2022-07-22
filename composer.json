@@ -1,0 +1,24 @@
+{
+    "name": "gvand/php-blog-init",
+    "description": "blog php",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Greg Dev",
+            "email": "gvandevray@numericable.fr"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.4"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7",
+        "filp/whoops": "^2.14",
+        "phpstan/phpstan": "^1.8"
+    }
+}
