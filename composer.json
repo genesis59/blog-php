@@ -14,7 +14,8 @@
         }
     ],
     "require": {
-        "twig/twig": "^3.4"
+        "twig/twig": "^3.4",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7",
