@@ -12,16 +12,16 @@ final class Database
 {
     private PDOStatement $statement;
 
-    public function __construct(private ?PDO $connection)
+    private PDO $connection;
+
+    public function __construct()
     {
         $this->connection = $this->getConnection();
     }
 
     public function prepare(string $sql): void
     {
-        if ($this->connection) {
-            $this->statement = $this->connection->prepare($sql);
-        }
+        $this->statement = $this->connection->prepare($sql);
     }
 
     /**
