@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use App\Model\Repository\ArticleRepository;
+use App\Model\Repository\UserRepository;
 use DateTime;
+use Exception;
 
 class Comment
 {
@@ -79,11 +82,14 @@ class Comment
     }
 
     /**
-     * @param DateTime $createdAt
+     * @param DateTime|string $createdAt
+     * @throws Exception
      */
-    public function setCreatedAt(DateTime $createdAt): void
+    public function setCreatedAt(DateTime|string $createdAt): void
     {
-        $this->createdAt = $createdAt;
+        if (is_string($createdAt)) {
+            $this->createdAt = new DateTime($createdAt);
+        }
     }
 
     /**
@@ -133,7 +139,5 @@ class Comment
     {
         $this->article = $article;
     }
-
-
 
 }

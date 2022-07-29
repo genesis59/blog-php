@@ -40,6 +40,6 @@ final class Database
     public function execute(array $criteria = null): ?array
     {
         $this->statement->execute($criteria);
-        return $this->statement->fetchAll();
+        return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }
