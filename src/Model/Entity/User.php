@@ -20,9 +20,9 @@ class User
     private string $pseudo;
 
     /**
-     * @var Role
+     * @var string
      */
-    private Role $roleUsers;
+    private string $roleUsers;
 
     /**
      * @var string
@@ -53,6 +53,14 @@ class User
     }
 
     /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
      * @return string
      */
     public function getPseudo(): string
@@ -69,17 +77,17 @@ class User
     }
 
     /**
-     * @return Role
+     * @return string
      */
-    public function getRoleUsers(): Role
+    public function getRoleUsers(): string
     {
         return $this->roleUsers;
     }
 
     /**
-     * @param Role $roleUsers
+     * @param string $roleUsers
      */
-    public function setRoleUsers(Role $roleUsers): void
+    public function setRoleUsers(string $roleUsers): void
     {
         $this->roleUsers = $roleUsers;
     }
@@ -147,4 +155,8 @@ class User
     {
         $this->updatedAt = $updatedAt;
     }
+
+
+
+
 }

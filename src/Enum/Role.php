@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
-enum Role
+class Role
 {
     public const ADMIN = 'role_admin';
     public const EDITOR = 'role_editor';
