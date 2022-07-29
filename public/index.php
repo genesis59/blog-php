@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 require_once '../vendor/autoload.php';
+require_once '../env.php';
 
 use App\Service\Http\Request;
 
-const APP_ENV = 'dev';
 
 if (APP_ENV === 'dev') {
     $whoops = new \Whoops\Run();
