@@ -14,6 +14,15 @@ final class Database
 
     private PDO $connection;
 
+    private function getConnection(): PDO
+    {
+        try {
+            return new PDO(MYSQL_DSN, MYSQL_USER, MYSQL_PASSWORD, [PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
+        } catch (PDOException $exception) {
+            throw new PDOException($exception->getMessage());
+        }
+    }
+
     public function __construct()
     {
         $this->connection = $this->getConnection();
@@ -32,14 +41,5 @@ final class Database
     {
         $this->statement->execute($criteria);
         return $this->statement->fetchAll();
-    }
-
-    private function getConnection(): PDO
-    {
-        try {
-            return new PDO(MYSQL_DSN, MYSQL_USER, MYSQL_PASSWORD, [PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
-        } catch (PDOException $exception) {
-            throw new PDOException($exception->getMessage());
-        }
     }
 }
