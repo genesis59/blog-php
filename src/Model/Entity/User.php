@@ -33,7 +33,7 @@ class User
     /**
      * @var string
      */
-    private string $password;
+    private string $pass;
 
     /**
      * @var DateTime
@@ -112,17 +112,17 @@ class User
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPass(): string
     {
-        return $this->password;
+        return $this->pass;
     }
 
     /**
      * @param string $password
      */
-    public function setPassword(string $password): void
+    public function setPass(string $pass): void
     {
-        $this->password = $password;
+        $this->pass = $pass;
     }
 
     /**

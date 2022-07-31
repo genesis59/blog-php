@@ -1,6 +1,6 @@
 USE blog_php;
 
-INSERT INTO user(pseudo, role_users, email, password, created_at, updated_at)
+INSERT INTO user(pseudo, role_users, email, pass, created_at, updated_at)
 VALUES ('toto', 'role_admin', 'admin@admin.com', 'test', ADDDATE(NOW(), INTERVAL -4 DAY), NOW()),
        ('tata', 'role_editor', 'editor@editor.com', 'test', ADDDATE(NOW(), INTERVAL -3 DAY), NOW()),
        ('titi', 'role_user', 'user@user.com', 'test', ADDDATE(NOW(), INTERVAL -2 DAY), NOW()),
