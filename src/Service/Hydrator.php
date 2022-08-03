@@ -1,16 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepository;
 
+/**
+ * @template T
+ */
 class Hydrator
 {
+    /**
+     * @var bool
+     */
     public static bool $isEntity = false;
 
     /**
-     * @template T
      * @param array<string,mixed> $array
      * @param object<T> $object
      * @return object<T>
@@ -65,9 +72,14 @@ class Hydrator
         return join(array_map('ucfirst', explode('_', $fieldName)));
     }
 
-    public static function getEntity(string $method, mixed $value): object
+    /**
+     * @param string $method
+     * @param mixed $value
+     * @return object<mixed>|null
+     */
+    public static function getEntity(string $method, mixed $value): ?object
     {
-        $nameSpaceInstance = NAME_SPACE_ENTITY . substr($method, 3);
+        $nameSpaceInstance = Environment::$env['NAME_SPACE_ENTITY'] . substr($method, 3);
         $instance = new $nameSpaceInstance();
         $instance->setId($value);
         return $instance;

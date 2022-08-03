@@ -10,14 +10,23 @@ use PDOException;
 
 final class Database
 {
+    /**
+     * @var PDOStatement
+     */
     private PDOStatement $statement;
 
+    /**
+     * @var PDO
+     */
     private PDO $connection;
 
+    /**
+     * @return PDO
+     */
     private function getConnection(): PDO
     {
         try {
-            return new PDO(MYSQL_DSN, MYSQL_USER, MYSQL_PASSWORD, [PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
+            return new PDO(Environment::$env['MYSQL_DSN'], Environment::$env['MYSQL_USER'], Environment::$env['MYSQL_PASSWORD'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
         } catch (PDOException $exception) {
             throw new PDOException($exception->getMessage());
         }
@@ -28,6 +37,10 @@ final class Database
         $this->connection = $this->getConnection();
     }
 
+    /**
+     * @param string $sql
+     * @return void
+     */
     public function prepare(string $sql): void
     {
         $this->statement = $this->connection->prepare($sql);
