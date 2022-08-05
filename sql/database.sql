@@ -36,6 +36,6 @@ CREATE TABLE comment
     id_user    int UNSIGNED                NOT NULL,
     id_article int UNSIGNED                NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT FK_comment_user FOREIGN KEY (id_user) REFERENCES user (id),
-    CONSTRAINT FK_comment_article FOREIGN KEY (id_article) REFERENCES article (id)
+    CONSTRAINT FK_comment_user FOREIGN KEY (id_user) REFERENCES user (id) ON DELETE CASCADE,
+    CONSTRAINT FK_comment_article FOREIGN KEY (id_article) REFERENCES article (id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
