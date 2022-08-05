@@ -6,6 +6,7 @@ namespace App\Model\Entity;
 
 use App\Enum\Role;
 use DateTime;
+use Exception;
 
 class User
 {
@@ -32,7 +33,7 @@ class User
     /**
      * @var string
      */
-    private string $password;
+    private string $pass;
 
     /**
      * @var DateTime
@@ -111,17 +112,17 @@ class User
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPass(): string
     {
-        return $this->password;
+        return $this->pass;
     }
 
     /**
-     * @param string $password
+     * @param string $pass
      */
-    public function setPassword(string $password): void
+    public function setPass(string $pass): void
     {
-        $this->password = $password;
+        $this->pass = $pass;
     }
 
     /**
@@ -133,11 +134,14 @@ class User
     }
 
     /**
-     * @param DateTime $createdAt
+     * @param DateTime|string $createdAt
+     * @throws Exception
      */
-    public function setCreatedAt(DateTime $createdAt): void
+    public function setCreatedAt(DateTime|string $createdAt): void
     {
-        $this->createdAt = $createdAt;
+        if (is_string($createdAt)) {
+            $this->createdAt = new DateTime($createdAt);
+        }
     }
 
     /**
@@ -149,14 +153,13 @@ class User
     }
 
     /**
-     * @param DateTime $updatedAt
+     * @param DateTime|string $updatedAt
+     * @throws Exception
      */
-    public function setUpdatedAt(DateTime $updatedAt): void
+    public function setUpdatedAt(DateTime|string $updatedAt): void
     {
-        $this->updatedAt = $updatedAt;
+        if (is_string($updatedAt)) {
+            $this->updatedAt = new DateTime($updatedAt);
+        }
     }
-
-
-
-
 }
