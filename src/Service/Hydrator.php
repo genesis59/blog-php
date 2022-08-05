@@ -8,7 +8,7 @@ use App\Model\Entity\User;
 use App\Model\Repository\UserRepository;
 
 /**
- * @template T
+ * @template T of object
  */
 class Hydrator
 {
@@ -19,8 +19,8 @@ class Hydrator
 
     /**
      * @param array<string,mixed> $array
-     * @param object<T> $object
-     * @return object<T>
+     * @param T $object
+     * @return T
      */
     public static function hydrate(array $array, object $object): object
     {
@@ -75,13 +75,15 @@ class Hydrator
     /**
      * @param string $method
      * @param mixed $value
-     * @return object<mixed>|null
+     * @return object|null
      */
     public static function getEntity(string $method, mixed $value): ?object
     {
         $nameSpaceInstance = Environment::$env['NAME_SPACE_ENTITY'] . substr($method, 3);
         $instance = new $nameSpaceInstance();
-        $instance->setId($value);
+        if (method_exists($instance, "setId")) {
+            $instance->setId($value);
+        }
         return $instance;
     }
 }

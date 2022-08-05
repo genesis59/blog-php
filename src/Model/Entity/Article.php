@@ -162,5 +162,4 @@ class Article
     {
         $this->user = $user;
     }
-
 }

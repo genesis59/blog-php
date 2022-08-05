@@ -118,7 +118,7 @@ class User
     }
 
     /**
-     * @param string $password
+     * @param string $pass
      */
     public function setPass(string $pass): void
     {
@@ -162,5 +162,4 @@ class User
             $this->updatedAt = new DateTime($updatedAt);
         }
     }
-
 }
