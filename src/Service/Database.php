@@ -21,20 +21,28 @@ final class Database
     private PDO $connection;
 
     /**
+     * @param string $dsn
+     * @param string $user
+     * @param string $password
      * @return PDO
      */
-    private function getConnection(): PDO
+    private function getConnection(string $dsn, string $user, string $password): PDO
     {
         try {
-            return new PDO(Environment::$env['MYSQL_DSN'], Environment::$env['MYSQL_USER'], Environment::$env['MYSQL_PASSWORD'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
+            return new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING]);
         } catch (PDOException $exception) {
             throw new PDOException($exception->getMessage());
         }
     }
 
-    public function __construct()
+    /**
+     * @param string $dsn
+     * @param string $user
+     * @param string $password
+     */
+    public function __construct(private readonly string $dsn, private readonly string $user, private readonly string $password)
     {
-        $this->connection = $this->getConnection();
+        $this->connection = $this->getConnection($this->dsn, $this->user, $this->password);
     }
 
     /**

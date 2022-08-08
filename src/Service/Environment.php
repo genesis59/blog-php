@@ -9,12 +9,12 @@ class Environment
     /**
      * @var array <string,string>
      */
-    public static array $env;
+    public array $env;
 
     /**
      * @return array<string,string>
      */
-    private function getVariablesEnvironment(): array
+    private function setVariablesEnvironment(): array
     {
         /** @var array<int,string> $envFileList */
         $envFileList = file(__DIR__ . '/../../.env');
@@ -28,6 +28,14 @@ class Environment
 
     public function __construct()
     {
-        Environment::$env = $this->getVariablesEnvironment();
+        $this->env = $this->setVariablesEnvironment();
+    }
+
+    /**
+     * @return array<string,string>
+     */
+    public function getEnv(): array
+    {
+        return $this->env;
     }
 }
