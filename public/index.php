@@ -6,6 +6,8 @@ require_once '../vendor/autoload.php';
 
 use App\Service\Http\Request;
 use App\Service\Environment;
+use App\Service\Http\Session\Session;
+use App\Service\MailerService;
 use App\Service\Router;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -17,6 +19,7 @@ if ($env['APP_ENV'] === 'dev') {
     $whoops->pushHandler(new PrettyPageHandler());
     $whoops->register();
 }
+
 $request = new Request($_GET, $_POST, $_FILES, $_SERVER);
 $router = new Router($request,$env);
 $response = $router->run();

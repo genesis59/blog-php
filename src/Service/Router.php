@@ -37,8 +37,13 @@ final class Router
             $controller = new HomeController(new ArticleRepository($this->database), new UserRepository($this->database), $this->view);
             return $controller->index();
         } elseif ($action === 'contact') {
+            $transport = new \Swift_SmtpTransport('smtp.sfr.fr', 465, 'SSL');
+            $transport->setUsername($this->env['USER_MAIL']);
+            $transport->setPassword($this->env['PASSWORD_MAIL']);
+            $mailerService = new MailerService($transport, $this->session);
+
             $controller = new HomeController(new ArticleRepository($this->database), new UserRepository($this->database), $this->view);
-            return $controller->contact($this->request);
+            return $controller->contact($this->request, $mailerService);
         }
         return new Response("Error 404 - cette page n'existe pas<br><a href='index.php?action=accueil'>Aller Ici</a>", 404);
     }

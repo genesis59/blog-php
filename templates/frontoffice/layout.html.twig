@@ -11,6 +11,13 @@
 <body class="bg-light">
 {% include './frontoffice/components/_header.html.twig' %}
 {% include './frontoffice/components/_navbar.html.twig' %}
+<div class="container mt-3">
+    {% for key,message in data.flashes %}
+        <div class="alert alert-{{ key }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
 {% block content %}
 {% endblock %}
 {% include './frontoffice/components/_footer.html.twig' %}

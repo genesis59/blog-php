@@ -15,7 +15,8 @@
     ],
     "require": {
         "twig/twig": "^3.4",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "swiftmailer/swiftmailer": "6.3"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7",

@@ -10,6 +10,7 @@ use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
+use App\Service\MailerService;
 use App\View\View;
 
 class HomeController
@@ -58,8 +59,17 @@ class HomeController
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function contact(Request $request): Response
+    public function contact(Request $request, MailerService $mailerService): Response
     {
-        return new Response($this->view->render(['template' => 'home']));
+        $mailerService->sendContactEmail(
+            $request->request()->get('email'),
+            $request->request()->get('message'),
+            $request->request()->get('nom'),
+            $request->request()->get('prenom')
+        );
+
+        return new Response($this->view->render([
+            'template' => 'home'
+        ]));
     }
 }
