@@ -1,0 +1,24 @@
+@import "components/header.css";
+@import "components/footer.css";
+@import "components/navbar.css";
+
+@font-face {
+    font-family: 'pt_sansregular';
+    src: url('../font/PTsans/ptsans-regular-webfont.woff2') format('woff2'),
+    url('../font/PTsans/ptsans-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+html{
+    height:100%;
+}
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    font-family: 'pt_sansregular', sans-serif;
+}
+a {
+    text-decoration: none;
+}
