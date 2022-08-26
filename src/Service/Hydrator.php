@@ -79,7 +79,7 @@ class Hydrator
      */
     public static function getEntity(string $method, mixed $value): ?object
     {
-        $nameSpaceInstance = Environment::$env['NAME_SPACE_ENTITY'] . substr($method, 3);
+        $nameSpaceInstance = 'App\\Model\\Entity\\' . substr($method, 3);
         $instance = new $nameSpaceInstance();
         if (method_exists($instance, "setId")) {
             $instance->setId($value);
