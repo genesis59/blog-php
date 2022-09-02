@@ -12,6 +12,7 @@ use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
+use App\Service\Model\ArticleService;
 use App\View\View;
 
 final class Router
@@ -21,6 +22,9 @@ final class Router
     private readonly Session $session;
     private readonly Validator $validator;
     private readonly MailerService $mailerService;
+    private readonly ArticleRepository $articleRepository;
+    private readonly UserRepository $userRepository;
+    private readonly ArticleService $articleService;
 
     /**
      * @param Request $request
@@ -32,7 +36,10 @@ final class Router
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->validator = new Validator($this->session);
-        $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int) $this->env['MAIL_PORT'], $this->session, $this->view);
+        $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
+        $this->articleRepository = new ArticleRepository($this->database);
+        $this->userRepository = new UserRepository($this->database);
+        $this->articleService = new ArticleService($this->articleRepository, $this->userRepository);
     }
 
     public function run(): Response
@@ -44,16 +51,9 @@ final class Router
             $pathInfo = "/home";
         }
         if ($pathInfo === "/home" || $pathInfo === "/contact") {
-            $homeController = new HomeController(new ArticleRepository($this->database), new UserRepository($this->database), $this->view, $this->validator, $this->env);
+            $homeController = new HomeController($this->articleService, $this->view, $this->validator, $this->env);
             if ($pathInfo === "/home") {
-                return $homeController->index();
-            }
-            if ($pathInfo === '/contact') {
-                if ($requestMethod === "POST") {
-                    return $homeController->contact($this->request, $this->mailerService);
-                } else {
-                    return $homeController->index();
-                }
+                return $homeController->index($this->request, $this->mailerService);
             }
         }
         // TODO traitement si id int
