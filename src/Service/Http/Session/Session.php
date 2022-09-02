@@ -37,14 +37,21 @@ final class Session
         $this->sessionParamBag->unset($name);
     }
 
-    // TODO Gestion de plusieurs message flash
+
     public function addFlashes(string $type, string $message): void
     {
-        $this->set('flashes', [$type => $message]);
+
+        if ($this->get('flashes') !== null) {
+            $flashes = $this->getFlashes();
+            $flashes[$type][] = $message;
+        } else {
+            $flashes = [$type => [$message]];
+        }
+        $this->set('flashes', $flashes);
     }
 
     /**
-     * @return array<string,string>|null
+     * @return array<string,array<string>>|null
      */
     public function getFlashes(): ?array
     {
