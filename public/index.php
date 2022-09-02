@@ -6,8 +6,6 @@ require_once '../vendor/autoload.php';
 
 use App\Service\Http\Request;
 use App\Service\Environment;
-use App\Service\Http\Session\Session;
-use App\Service\MailerService;
 use App\Service\Router;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
