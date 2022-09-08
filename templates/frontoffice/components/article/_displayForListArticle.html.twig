@@ -6,6 +6,6 @@
                 le {{ article.createdAt|date("d/M/Y") }}</h6>
             <p class="card-text">{{ article.chapo }}</p>
         </div>
-        <a href="#" class="card-link me-4 mb-3" style="text-align: end;">Voir le détail</a>
+        <a href="{{ url_domain }}article?numero={{ article.id }}" class="card-link me-4 mb-3" style="text-align: end;">Voir le détail</a>
     </div>
 </article>

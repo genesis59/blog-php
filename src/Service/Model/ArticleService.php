@@ -49,6 +49,7 @@ class ArticleService extends EntityService
         if ($article instanceof Article) {
             return $this->hydrateOneUserArticle($article);
         }
+        $this->session->addFlashes("info", "L'article demandé n'existe pas");
         return null;
     }
 
@@ -67,7 +68,6 @@ class ArticleService extends EntityService
         if ($articles) {
             return $this->hydrateAllUserInArticle($articles);
         }
-        $this->session->addFlashes('info', "La page demandée n'existe pas.");
         return null;
     }
 }
