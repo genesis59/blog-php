@@ -8,8 +8,9 @@ use App\Model\Entity\Article;
 use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\UserRepository;
+use App\Service\Http\Session\Session;
 
-class ArticleService
+class ArticleService extends EntityService
 {
     /**
      * @param Article $article
@@ -24,44 +25,49 @@ class ArticleService
     }
 
     /**
-     * @param Article|array<Article> $value
-     * @return Article|array<Article>
+     * @param array<Article> $value
+     * @return array<Article>
      */
-    private function hydrateOneOrAllUserArticle(Article|array $value): Article|array
+    private function hydrateAllUserInArticle(array $value): array
     {
-        if (is_array($value)) {
-            foreach ($value as $item) {
+        foreach ($value as $item) {
+            if ($item instanceof Article) {
                 $this->hydrateOneUserArticle($item);
             }
-        } else {
-            $this->hydrateOneUserArticle($value);
         }
         return $value;
     }
 
-    public function __construct(private readonly ArticleRepository $articleRepository, private readonly UserRepository $userRepository,)
+    public function __construct(private readonly ArticleRepository $articleRepository, private readonly UserRepository $userRepository, private readonly Session $session)
     {
+        parent::__construct($this->articleRepository);
+    }
+
+    public function getOne(int $id): ?Article
+    {
+        $article = $this->articleRepository->find($id);
+        if ($article instanceof Article) {
+            return $this->hydrateOneUserArticle($article);
+        }
+        return null;
     }
 
     /**
-     * @return array<Article>
+     * @param array<string,string> $order
+     * @return Article[]|null
      */
-    public function getAllArticles(): array
+    public function getSomeHydratedArticlesPaginate(int $limit, int $pageData, array $order = ["id" => "DESC"]): ?array
     {
-        /** @var array<int,Article> $articles */
-        $articles = $this->articleRepository->findAll();
-        $this->hydrateOneOrAllUserArticle($articles);
-        return $articles;
-    }
+        $nbPageMax = (int)ceil($this->articleRepository->count() / $limit);
+        $currentPage = $this->getCurrentPage($pageData, $nbPageMax);
 
-    /**
-     * @return array<Article>
-     */
-    public function getSomeLastArticles(int $nbArticle): array
-    {
         /** @var array<int,Article> $articles */
-        $articles = $this->articleRepository->findBy([], ["created_at" => "DESC"], $nbArticle);
-        $this->hydrateOneOrAllUserArticle($articles);
-        return $articles;
+        $articles = $this->articleRepository->findBy([], $order, $limit, 4 * ($currentPage - 1));
+
+        if ($articles) {
+            return $this->hydrateAllUserInArticle($articles);
+        }
+        $this->session->addFlashes('info', "La page demandée n'existe pas.");
+        return null;
     }
 }

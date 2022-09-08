@@ -17,6 +17,7 @@ use App\View\View;
 
 class HomeController
 {
+    const NUMBER_LAST_ARTICLE_ON_HOMEPAGE = 4;
     /**
      * @param array<string> $env
      */
@@ -50,7 +51,7 @@ class HomeController
                 'confidentialite' => $request->request()->get('confidentialite') ?? "",
             ],
             'url_domain' => $this->env["URL_DOMAIN"],
-            'articles' => $this->articleService->getSomeLastArticles(4),
+            'articles' => $this->articleService->getSomeHydratedArticlesPaginate(self::NUMBER_LAST_ARTICLE_ON_HOMEPAGE, 1),
         ]), 200);
     }
 }
