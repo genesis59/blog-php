@@ -39,7 +39,7 @@ final class Router
         $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
         $this->articleRepository = new ArticleRepository($this->database);
         $this->userRepository = new UserRepository($this->database);
-        $this->articleService = new ArticleService($this->articleRepository, $this->userRepository);
+        $this->articleService = new ArticleService($this->articleRepository, $this->userRepository, $this->session);
     }
 
     public function run(): Response
@@ -48,18 +48,26 @@ final class Router
         $pathInfo = $this->request->server()->get('PATH_INFO');
         $requestMethod = $this->request->server()->get("REQUEST_METHOD");
         if ($pathInfo === null) {
-            $pathInfo = "/home";
+            $pathInfo = "/form";
         }
-        if ($pathInfo === "/home" || $pathInfo === "/contact") {
+        if ($pathInfo === "/form" || $pathInfo === "/contact") {
             $homeController = new HomeController($this->articleService, $this->view, $this->validator, $this->env);
-            if ($pathInfo === "/home") {
+            if ($pathInfo === "/form") {
                 return $homeController->index($this->request, $this->mailerService);
             }
         }
         // TODO traitement si id int
         if ($pathInfo === '/article/id') {
-            $articleController = new ArticleController(new ArticleRepository($this->database), $this->view, $this->env);
+            $articleController = new ArticleController($this->articleService, $this->view, $this->env);
             return $articleController->article(1);
+        }
+        if ($pathInfo === '/articles') {
+            $page = 1;
+            if ($this->request->query()->has('page') && $this->request->query()->get('page') !== "") {
+                $page = (int) $this->request->query()->get('page');
+            }
+            $articleController = new ArticleController($this->articleService, $this->view, $this->env);
+            return $articleController->articles($page);
         }
         if ($pathInfo === '/admin') {
             return new Response("<h1>Bienvenue dans l'administration 😉</h1>", 200);
