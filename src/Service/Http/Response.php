@@ -14,14 +14,17 @@ final class Response
     public function __construct(
         private readonly string $content = '',
         private readonly int $statusCode = 200,
-        private readonly array $headers = []
+        private readonly array $headers = [
+            "content_type" => "text/html",
+            "charset" => "UTF-8"
+        ]
     ) {
     }
 
     public function send(): void
     {
         http_response_code($this->statusCode);
-        //echo $this->statusCode . ' ' . implode(',', $this->headers); // TODO Il faut renvoyer aussi le status de la réponse
+        header('Content-Type: ' . $this->headers["content_type"] . '; charset=' . $this->headers["charset"]);
         echo $this->content;
     }
 }

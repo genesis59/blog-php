@@ -33,7 +33,6 @@ final class View
         $data['data']['session'] = $this->session->toArray();
         $data['data']['flashes'] = $this->session->getFlashes();
 
-        $data['data']['test'] = 'test';
         return $this->twig->render("frontoffice/${data['template']}.html.twig", $data);
     }
 }

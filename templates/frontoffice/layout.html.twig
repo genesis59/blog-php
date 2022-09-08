@@ -12,10 +12,12 @@
 {% include './frontoffice/components/_header.html.twig' %}
 {% include './frontoffice/components/_navbar.html.twig' %}
 <div class="container mt-3">
-    {% for key,message in data.flashes %}
-        <div class="alert alert-{{ key }}" role="alert">
-            {{ message }}
-        </div>
+    {% for key,messages in data.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ key }}" role="alert">
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
     {% endfor %}
 </div>
 {% block content %}
