@@ -53,4 +53,9 @@ interface EntityRepositoryInterface
      * @return bool
      */
     public function delete(object $entity): bool;
+
+    /**
+     * @return int
+     */
+    public function count(): int;
 }
