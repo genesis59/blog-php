@@ -68,10 +68,13 @@ class ArticleController
         if (!$article) {
             return $this->articles();
         }
+        $comments = $this->commentService->getAllComment($article);
+        $idPreviousArticle = $this->articleService->getPreviousArticleId($article);
+        $idNextArticle = $this->articleService->getNextArticleId($article);
 
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
             if ($this->validator->formAddCommentIsValid($request)) {
-                // TODO récupérer l utilisateur connecté
+                // TODO récupérer l'utilisateur connecté
                 $user = $this->userService->getOne((int)$request->request()->get("user"));
                 if ($user) {
                     $this->commentService->addNewComment($article, $user, $request->request()->get("commentaire"));
@@ -86,13 +89,14 @@ class ArticleController
             }
             $this->session->addFlashes('danger', 'Une problème est survenu le commentaire ne peut être soumis.');
         }
-
         return new Response($this->view->render([
             'template' => 'article',
             'article' => $article,
             'url_domain' => $this->env["URL_DOMAIN"],
             'header_title' => $article->getTitle(),
-            'max_article' => $this->articleService->getCountTotalRows()
+            'next_id' => $idNextArticle,
+            'previous_id' => $idPreviousArticle,
+            'comments' => $comments
         ]), 200);
     }
 }

@@ -70,4 +70,24 @@ class ArticleService extends EntityService
         }
         return null;
     }
+
+
+    public function getPreviousArticleId(Article $article): ?int
+    {
+        $previousArticle = $this->articleRepository->getPreviousArticle($article);
+        if ($previousArticle instanceof Article) {
+            return $previousArticle->getId();
+        }
+        return null;
+    }
+
+
+    public function getNextArticleId(Article $article): ?int
+    {
+        $nextArticle = $this->articleRepository->getNextArticle($article);
+        if ($nextArticle instanceof Article) {
+            return $nextArticle->getId();
+        }
+        return null;
+    }
 }

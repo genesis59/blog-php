@@ -1,3 +1,4 @@
+<hr class="mb-3">
 <form method="post">
     <div class="row">
         <div class="mb-3 col-12">
@@ -6,7 +7,7 @@
             </label>
             <textarea class="form-control" id="commentaire" rows="3" name="commentaire" placeholder="Votre commentaire"></textarea>
         </div>
-{#        TO DO mettre l utilisateur connecté #}
+{#        TODO mettre l utilisateur connecté #}
         <input type="hidden" name="user" value="{{ article.user.id }}">
         <input type="hidden" name="article" value="{{ article.id }}">
         <div class="col-12 mt-3 text-end">
@@ -14,4 +15,3 @@
         </div>
     </div>
 </form>
-<hr class="mb-3">

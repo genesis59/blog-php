@@ -50,7 +50,7 @@ final class Router
         $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
         $this->articleService = new ArticleService($this->articleRepository, $this->userRepository, $this->session);
         $this->userService = new UserService($this->userRepository);
-        $this->commentService = new CommentService($this->commentRepository, $this->session);
+        $this->commentService = new CommentService($this->commentRepository, $this->session, $this->userRepository);
         $this->articleController = new ArticleController($this->articleService, $this->userService, $this->commentService, $this->view, $this->env, $this->session, $this->validator);
         $this->homeController = new HomeController($this->articleService, $this->view, $this->validator, $this->env);
     }
@@ -59,7 +59,6 @@ final class Router
     {
         // TODO tableau des noms de route
         $pathInfo = $this->request->server()->get('PATH_INFO');
-        $requestMethod = $this->request->server()->get("REQUEST_METHOD");
         if ($pathInfo === null) {
             $pathInfo = "/home";
         }
