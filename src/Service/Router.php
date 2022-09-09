@@ -13,6 +13,8 @@ use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
 use App\Service\Model\ArticleService;
+use App\Service\Model\CommentService;
+use App\Service\Model\UserService;
 use App\View\View;
 
 final class Router
@@ -21,10 +23,13 @@ final class Router
     private readonly View $view;
     private readonly Session $session;
     private readonly Validator $validator;
-    private readonly MailerService $mailerService;
-    private readonly ArticleService $articleService;
     private readonly ArticleRepository $articleRepository;
     private readonly UserRepository $userRepository;
+    private readonly CommentRepository $commentRepository;
+    private readonly MailerService $mailerService;
+    private readonly ArticleService $articleService;
+    private readonly CommentService $commentService;
+    private readonly UserService $userService;
     private readonly HomeController $homeController;
     private readonly ArticleController $articleController;
 
@@ -41,9 +46,12 @@ final class Router
         $this->validator = new Validator($this->session);
         $this->articleRepository = new ArticleRepository($this->database);
         $this->userRepository = new UserRepository($this->database);
+        $this->commentRepository = new CommentRepository($this->database);
         $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
         $this->articleService = new ArticleService($this->articleRepository, $this->userRepository, $this->session);
-        $this->articleController = new ArticleController($this->articleService, $this->view, $this->env, $this->session);
+        $this->userService = new UserService($this->userRepository);
+        $this->commentService = new CommentService($this->commentRepository, $this->session);
+        $this->articleController = new ArticleController($this->articleService, $this->userService, $this->commentService, $this->view, $this->env, $this->session, $this->validator);
         $this->homeController = new HomeController($this->articleService, $this->view, $this->validator, $this->env);
     }
 
@@ -63,7 +71,7 @@ final class Router
                 $this->session->addFlashes("info", "L'article demandé n'existe pas");
                 return $this->articleController->articles(1);
             }
-            return $this->articleController->article((int) $this->request->query()->get('numero'));
+            return $this->articleController->article((int) $this->request->query()->get('numero'), $this->request);
         }
         if ($pathInfo === '/articles') {
             $page = 1;

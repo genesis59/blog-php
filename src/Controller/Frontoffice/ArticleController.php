@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontoffice;
 
+use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
 use App\Service\Model\ArticleService;
+use App\Service\Model\CommentService;
+use App\Service\Model\UserService;
+use App\Service\Validator;
 use App\View\View;
 
 class ArticleController
@@ -22,9 +26,12 @@ class ArticleController
      */
     public function __construct(
         private readonly ArticleService $articleService,
+        private readonly UserService $userService,
+        private readonly CommentService $commentService,
         private readonly View $view,
         private readonly array $env,
-        private readonly Session $session
+        private readonly Session $session,
+        private readonly Validator $validator,
     ) {
     }
 
@@ -55,12 +62,31 @@ class ArticleController
         ]), 200);
     }
 
-    public function article(int $id): Response
+    public function article(int $id, Request $request): Response
     {
         $article = $this->articleService->getOne($id);
         if (!$article) {
             return $this->articles();
         }
+
+        if ($request->server()->get("REQUEST_METHOD") === "POST") {
+            if ($this->validator->formAddCommentIsValid($request)) {
+                // TODO récupérer l utilisateur connecté
+                $user = $this->userService->getOne((int)$request->request()->get("user"));
+                if ($user) {
+                    $this->commentService->addNewComment($article, $user, $request->request()->get("commentaire"));
+                    return new Response($this->view->render([
+                        'template' => 'article',
+                        'article' => $article,
+                        'url_domain' => $this->env["URL_DOMAIN"],
+                        'header_title' => $article->getTitle(),
+                        'max_article' => $this->articleService->getCountTotalRows()
+                    ]), 200);
+                }
+            }
+            $this->session->addFlashes('danger', 'Une problème est survenu le commentaire ne peut être soumis.');
+        }
+
         return new Response($this->view->render([
             'template' => 'article',
             'article' => $article,

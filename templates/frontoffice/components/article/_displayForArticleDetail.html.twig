@@ -1,11 +1,9 @@
-<article class="container mt-4 mb-4">
-    <h2 class="pb-2">{{ article.title }}</h2>
+<h2 class="pb-2">{{ article.title }}</h2>
 
-    <p class="pb-2">{{ article.chapo }}</p>
+<p class="pb-2">{{ article.chapo }}</p>
 
-    <p>{{ article.content | convert_encoding('UTF-8', 'ISO-8859-1')}}</p>
-    <div class="row">
-        <div class="col-6 text-start">Le {{ article.createdAt|date("d/m/Y") }} par {{ article.user.pseudo }}</div>
-        <div class="col-6 text-end"><a href="{{ url_domain}}articles" class="btn btn-primary">Retour à la liste</a> </div>
-    </div>
-</article>
+<p>{{ article.content | convert_encoding('UTF-8', 'ISO-8859-1') }}</p>
+<div class="row">
+    <div class="col-6 text-start">Le {{ article.createdAt|date("d/m/Y") }} par {{ article.user.pseudo }}</div>
+    <div class="col-6 text-end"><a href="{{ url_domain }}articles" class="btn btn-primary">Retour à la liste</a></div>
+</div>

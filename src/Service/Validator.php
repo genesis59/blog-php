@@ -72,4 +72,13 @@ class Validator
         }
         return false;
     }
+
+    public function formAddCommentIsValid(Request $request): bool
+    {
+        $commentIsValid = $this->inputTextIsValid("commentaire", $request->request()->get('commentaire'), 10);
+        if ($commentIsValid) {
+            return true;
+        }
+        return false;
+    }
 }
