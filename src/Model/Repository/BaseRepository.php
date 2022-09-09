@@ -31,7 +31,7 @@ abstract class BaseRepository implements EntityRepositoryInterface
 
     /**
      * @param string $sql
-     * @param array<string,mixed>$criteria
+     * @param array<string,mixed> $criteria
      * @return string
      */
     protected function addWhere(string $sql, array $criteria): string
@@ -173,5 +173,17 @@ abstract class BaseRepository implements EntityRepositoryInterface
             }
         }
         return false;
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        $resultRequest = $this->database->count('SELECT COUNT(*) AS nbLine FROM ' . $this->getClassName());
+        if ($resultRequest) {
+            return $resultRequest['nbLine'];
+        }
+        return 0;
     }
 }

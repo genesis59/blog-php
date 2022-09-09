@@ -27,9 +27,9 @@ class Comment
     private DateTime $createdAt;
 
     /**
-     * @var bool
+     * @var bool|int
      */
-    private bool $isActive;
+    private bool|int $isActive;
 
     /**
      * @var User
@@ -93,19 +93,28 @@ class Comment
     }
 
     /**
-     * @return bool
+     * @return bool|int
      */
-    public function isActive(): bool
+    public function isActive(): bool|int
     {
         return $this->isActive;
     }
 
     /**
-     * @param bool $isActive
+     * @param bool|int $isActive
+     * @return void
      */
-    public function setIsActive(bool $isActive): void
+    public function setIsActive(bool|int $isActive): void
     {
-        $this->isActive = $isActive;
+        $value = $isActive;
+        if (is_int($isActive)) {
+            if ($isActive === 1) {
+                $value = true;
+            } else {
+                $value = false;
+            }
+        }
+        $this->isActive = $value;
     }
 
     /**

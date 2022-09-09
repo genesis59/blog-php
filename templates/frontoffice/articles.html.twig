@@ -1,0 +1,21 @@
+{% extends './frontoffice/layout.html.twig' %}
+
+{% block content %}
+    <div class="container mt-4 mb-4">
+        <h2 class="border-5 border-bottom border-dark pb-2">Listes des articles</h2>
+        <section class="container mt-4">
+            <div class="row">
+                {% if not empty %}
+                    {% for article in articles %}
+                        {% include 'frontoffice/components/article/_displayForListArticle.html.twig' %}
+                    {% endfor %}
+                    {% include 'frontoffice/components/pagination/_pagination.html.twig' %}
+                {% else %}
+                    <div class="m-5">
+                        <h2>Désolé cette page ne contient pas d'articles</h2>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

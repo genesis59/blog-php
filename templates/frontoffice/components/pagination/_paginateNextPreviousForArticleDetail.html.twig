@@ -1,0 +1,14 @@
+<div class="row mb-3">
+    <div class="col-6 text-end">
+        {% if previous_id is not null %}
+            <img src="/images/arrow-24.png" alt="flèche" width="24" title="arraw" class="rotation180">
+            <a href="{{ url_domain }}article?numero={{ previous_id }}">Article précédent</a>
+        {% endif %}
+    </div>
+    <div class="col-6 text-start">
+        {% if next_id is not null %}
+            <a href="{{ url_domain }}article?numero={{ next_id }}">Article suivant</a>
+            <img src="/images/arrow-24.png" alt="flèche" width="24" title="arraw">
+        {% endif %}
+    </div>
+</div>
