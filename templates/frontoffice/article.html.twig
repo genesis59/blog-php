@@ -1,1 +1,20 @@
 {% extends './frontoffice/layout.html.twig' %}
+
+{% block content %}
+    {% include './frontoffice/components/article/_displayForArticleDetail.html.twig' %}
+    <div class="row mb-5">
+
+        <div class="col-6 text-end">
+            {% if article.id > 1 %}
+                <img src="/images/arrow-24.png" alt="flèche" width="24" title="arraw" class="rotation180">
+                <a href="{{ url_domain }}article?numero={{ article.id - 1 }}">Article précédent</a>
+            {% endif %}
+        </div>
+        <div class="col-6 text-start">
+            {% if article.id < max_article %}
+                <a href="{{ url_domain }}article?numero={{ article.id + 1 }}">Article suivant</a>
+                <img src="/images/arrow-24.png" alt="flèche" width="24" title="arraw">
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

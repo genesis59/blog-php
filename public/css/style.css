@@ -22,3 +22,7 @@ body {
 a {
     text-decoration: none;
 }
+
+.rotation180 {
+    transform: rotate(180deg);
+}

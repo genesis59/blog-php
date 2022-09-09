@@ -27,4 +27,9 @@ abstract class EntityService
         }
         return $pageData;
     }
+
+    public function getCountTotalRows(): int
+    {
+        return $this->entityRepository->count();
+    }
 }

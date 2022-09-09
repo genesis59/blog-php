@@ -65,7 +65,8 @@ class ArticleController
             'template' => 'article',
             'article' => $article,
             'url_domain' => $this->env["URL_DOMAIN"],
-            'header_title' => $article->getTitle()
+            'header_title' => $article->getTitle(),
+            'max_article' => $this->articleService->getCountTotalRows()
         ]), 200);
     }
 }
