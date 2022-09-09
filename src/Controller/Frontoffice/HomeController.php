@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontoffice;
 
-use App\Model\Entity\Article;
-use App\Model\Entity\User;
-use App\Model\Repository\ArticleRepository;
-use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\MailerService;
