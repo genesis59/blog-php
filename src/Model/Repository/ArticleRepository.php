@@ -55,7 +55,7 @@ class ArticleRepository extends BaseRepository
      */
     public function getPreviousArticle(Article $article): ?object
     {
-        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE created_at < :datedata ORDER BY 'ASC' LIMIT 1";
+        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE created_at < :datedata ORDER BY created_at DESC LIMIT 1";
         $this->database->prepare($sql);
         $date = $article->getCreatedAt()->format('Y-m-d H:i:s');
         $result = $this->database->execute(['datedata' => $date]);
@@ -71,7 +71,7 @@ class ArticleRepository extends BaseRepository
      */
     public function getNextArticle(Article $article): ?object
     {
-        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE created_at > :datedata ORDER BY 'DESC' LIMIT 1";
+        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE created_at > :datedata ORDER BY created_at ASC LIMIT 1";
         $this->database->prepare($sql);
         $date = $article->getCreatedAt()->format('Y-m-d H:i:s');
         $result = $this->database->execute(['datedata' => $date]);

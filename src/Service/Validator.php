@@ -22,7 +22,7 @@ class Validator
             if (!$speChar) {
                 if (!preg_match("/^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i", $value)) {
                     $valid = false;
-                    $this->session->addFlashes("danger", "Certains caractères utilisés sur le champ " . $fieldName . " ne sont pas valides. Seul les caractères spéciaux suivants sont autorisés : (á,à,â,ä,ã,å,ç,é,è,ê,ë,í,ì,î,ï,ñ,ó,ò,ô,ö,õ,ú,ù,û,ü,ý,ÿ,æ,œ) en minuscule ou majuscule.");
+                    $this->session->addFlashes("danger", "Champ " . $fieldName . " non valides. Les caractères spéciaux ne sont pas autorisés.");
                 }
             }
             if ($min && strlen($value) < $min) {

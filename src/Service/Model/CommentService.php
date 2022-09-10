@@ -53,7 +53,7 @@ class CommentService extends EntityService
         $newComment->setContent($comment);
         $success = $this->commentRepository->create($newComment);
         if ($success) {
-            $this->session->addFlashes('success', 'Votre commentaire à bien été soumis.');
+            $this->session->addFlashes('success', 'Merci pour votre commentaire. Nous le traiterons dans les plus brefs délais');
         } else {
             $this->session->addFlashes('danger', 'Une problème est survenu le commentaire ne peut être soumis.');
         }

@@ -89,6 +89,7 @@ class ArticleController
             }
             $this->session->addFlashes('danger', 'Une problème est survenu le commentaire ne peut être soumis.');
         }
+
         return new Response($this->view->render([
             'template' => 'article',
             'article' => $article,
