@@ -1,11 +1,11 @@
 USE blog_php;
 
 INSERT INTO user(pseudo, role_users, email, pass, created_at, updated_at)
-VALUES ('Anonyme', 'role_user', 'admin@admin.fr', 'test', ADDDATE(NOW(), INTERVAL -4 DAY), NOW()),
-       ('toto', 'role_admin', 'admin@admin.com', 'test', ADDDATE(NOW(), INTERVAL -4 DAY), NOW()),
-       ('tata', 'role_editor', 'editor@editor.com', 'test', ADDDATE(NOW(), INTERVAL -3 DAY), NOW()),
-       ('titi', 'role_user', 'user@user.com', 'test', ADDDATE(NOW(), INTERVAL -2 DAY), NOW()),
-       ('tutu', 'role_user', 'user2@user2.com', 'test', ADDDATE(NOW(), INTERVAL -1 DAY), NOW());
+VALUES ('Anonyme', 'role_anonyme', 'admin@admin.fr', '$argon2i$v=19$m=65536,t=4,p=1$ckxBTVpUdGVzTngzN3hCbg$hGt7lkQw2dsF9dsskfu0TYC17JyT5fiIB9ddz0FTMSA', ADDDATE(NOW(), INTERVAL -4 DAY), NOW()),
+       ('toto', 'role_admin', 'admin@admin.com', '$argon2i$v=19$m=65536,t=4,p=1$ckxBTVpUdGVzTngzN3hCbg$hGt7lkQw2dsF9dsskfu0TYC17JyT5fiIB9ddz0FTMSA', ADDDATE(NOW(), INTERVAL -4 DAY), NOW()),
+       ('tata', 'role_editor', 'editor@editor.com', '$argon2i$v=19$m=65536,t=4,p=1$ckxBTVpUdGVzTngzN3hCbg$hGt7lkQw2dsF9dsskfu0TYC17JyT5fiIB9ddz0FTMSA', ADDDATE(NOW(), INTERVAL -3 DAY), NOW()),
+       ('titi', 'role_user', 'user@user.com', '$argon2i$v=19$m=65536,t=4,p=1$ckxBTVpUdGVzTngzN3hCbg$hGt7lkQw2dsF9dsskfu0TYC17JyT5fiIB9ddz0FTMSA', ADDDATE(NOW(), INTERVAL -2 DAY), NOW()),
+       ('tutu', 'role_user', 'user2@user2.com', '$argon2i$v=19$m=65536,t=4,p=1$ckxBTVpUdGVzTngzN3hCbg$hGt7lkQw2dsF9dsskfu0TYC17JyT5fiIB9ddz0FTMSA', ADDDATE(NOW(), INTERVAL -1 DAY), NOW());
 
 INSERT INTO article(title, chapo, content, created_at, updated_at, id_user)
 VALUES ('Genshin Impact 3.0 : Le préchargement de la mise à jour est désormais disponible !',

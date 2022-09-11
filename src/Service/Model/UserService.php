@@ -22,4 +22,17 @@ class UserService extends EntityService
         }
         return null;
     }
+
+    /**
+     * @param array<string,string> $criteria
+     * @return User|null
+     */
+    public function getOneBy(array $criteria): ?User
+    {
+        $user = $this->userRepository->findOneBy($criteria);
+        if ($user instanceof User) {
+            return $user;
+        }
+        return null;
+    }
 }

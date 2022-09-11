@@ -1,23 +1,34 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom border-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_domain }}">My Blog</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link {{ template == "home" ? "active text-primary" : ""}}" href="{{ url_domain }}">Accueil</a>
+                    <a class="nav-link {{ template == "home" ? "active text-primary" : "" }}" href="{{ url_domain }}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ template == "articles" ? "active text-primary" : ""}}" href="{{ url_domain }}articles">Blog</a>
+                    <a class="nav-link {{ template == "articles" ? "active text-primary" : "" }}"
+                       href="{{ url_domain }}articles">Blog</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Inscription</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link login-button" href="#">Se connecter</a>
-                </li>
+                {% if user is null %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ template == "signin" ? "active text-primary" : "" }}"
+                           href="{{ url_domain }}signin">Inscription</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link login-button {{ template == "login" ? "active text-primary" : "" }}"
+                           href="{{ url_domain }}login">Se connecter</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link login-button"
+                           href="{{ url_domain }}logout">Déconnexion</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
