@@ -1,0 +1,22 @@
+﻿<form method="post">
+    <div class="row">
+        <div class="mb-3 col-12">
+            <label for="email" class="form-label">
+                Email
+                <span class="text-danger">*</span>
+            </label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Votre email"
+                   value="{{ form.email }}" required>
+        </div>
+        <div class="mb-3 col-12">
+            <label for="password" class="form-label">
+                Mot de passe
+                <span class="text-danger">*</span>
+            </label>
+            <input type="password" class="form-control" id="nom" name="password" placeholder="Votre mot de passe" required>
+        </div>
+        <div class="col-12 mt-3">
+            <button class="btn btn-primary" type="submit">Se connecter</button>
+        </div>
+    </div>
+</form>

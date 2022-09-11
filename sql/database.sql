@@ -6,7 +6,7 @@ CREATE TABLE user
 (
     id         int UNSIGNED AUTO_INCREMENT                   NOT NULL,
     pseudo     varchar(255) UNIQUE                           NOT NULL,
-    role_users ENUM ('role_user','role_admin','role_editor') NOT NULL DEFAULT 'role_user',
+    role_users ENUM ('role_user','role_admin','role_editor','role_anonyme') NOT NULL DEFAULT 'role_user',
     email      varchar(255) UNIQUE,
     pass       varchar(255)                                  NOT NULL,
     created_at datetime                                      NOT NULL,
