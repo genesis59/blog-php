@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontoffice;
 
+use App\Controller\ControllerTrait;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -14,7 +15,10 @@ use App\View\View;
 
 class HomeController
 {
+    use ControllerTrait;
+
     const NUMBER_LAST_ARTICLE_ON_HOMEPAGE = 4;
+
     /**
      * @param array<string> $env
      */
@@ -29,7 +33,7 @@ class HomeController
 
     public function index(Request $request, MailerService $mailerService): Response
     {
-        $user = $this->session->get('user');
+        $user = $this->getUser();
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
             if ($this->validator->formContactIsValid($request)) {
                 $mailerService->sendContactEmail(

@@ -56,7 +56,7 @@ final class Router
         $this->userService = new UserService($this->userRepository);
         $this->commentService = new CommentService($this->commentRepository, $this->session, $this->userRepository);
         $this->securityService = new SecurityService($this->userService, $this->validator, $this->session);
-        $this->articleController = new ArticleController($this->articleService, $this->userService, $this->commentService, $this->view, $this->env, $this->session, $this->validator);
+        $this->articleController = new ArticleController($this->articleService, $this->commentService, $this->view, $this->env, $this->session, $this->validator);
         $this->homeController = new HomeController($this->articleService, $this->view, $this->validator, $this->env, $this->session);
         $this->userSecurityController = new SecurityController($this->view, $this->env, $this->securityService, $this->session);
     }
@@ -77,7 +77,11 @@ final class Router
                 $this->session->addFlashes("info", "L'article demandé n'existe pas");
                 return $this->articleController->articles(1);
             }
-            return $this->articleController->article((int)$this->request->query()->get('numero'), $this->request);
+            $page = 1;
+            if ($this->request->query()->has('page') && $this->request->query()->get('page') !== "") {
+                $page = (int)$this->request->query()->get('page');
+            }
+            return $this->articleController->article((int)$this->request->query()->get('numero'), $this->request, $page);
         }
         if ($pathInfo === '/articles') {
             $page = 1;

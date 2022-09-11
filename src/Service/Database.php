@@ -63,17 +63,4 @@ final class Database
         $this->statement->execute($criteria);
         return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    /**
-     * @param string $sql
-     * @return array<mixed>|null
-     */
-    public function count(string $sql): ?array
-    {
-        $result = $this->connection->query($sql);
-        if (!$result) {
-            return null;
-        }
-        return $result->fetch();
-    }
 }

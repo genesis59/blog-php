@@ -9,9 +9,12 @@ use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\UserRepository;
 use App\Service\Http\Session\Session;
+use App\Service\Pagination\PaginationTrait;
 
-class ArticleService extends EntityService
+class ArticleService
 {
+    use PaginationTrait;
+
     /**
      * @param Article $article
      * @return Article
@@ -40,7 +43,6 @@ class ArticleService extends EntityService
 
     public function __construct(private readonly ArticleRepository $articleRepository, private readonly UserRepository $userRepository, private readonly Session $session)
     {
-        parent::__construct($this->articleRepository);
     }
 
     public function getOne(int $id): ?Article
@@ -63,7 +65,7 @@ class ArticleService extends EntityService
         $currentPage = $this->getCurrentPage($pageData, $nbPageMax);
 
         /** @var array<int,Article> $articles */
-        $articles = $this->articleRepository->findBy([], $order, $limit, 4 * ($currentPage - 1));
+        $articles = $this->articleRepository->findBy([], $order, $limit, $limit * ($currentPage - 1));
 
         if ($articles) {
             return $this->hydrateAllUserInArticle($articles);
@@ -71,23 +73,26 @@ class ArticleService extends EntityService
         return null;
     }
 
-
     public function getPreviousArticleId(Article $article): ?int
     {
-        $previousArticle = $this->articleRepository->getPreviousArticle($article);
+        $previousArticle = $this->articleRepository->getPreviousEntity($article);
         if ($previousArticle instanceof Article) {
             return $previousArticle->getId();
         }
         return null;
     }
 
-
     public function getNextArticleId(Article $article): ?int
     {
-        $nextArticle = $this->articleRepository->getNextArticle($article);
+        $nextArticle = $this->articleRepository->getNextEntity($article);
         if ($nextArticle instanceof Article) {
             return $nextArticle->getId();
         }
         return null;
+    }
+
+    public function getTotalRows(): int
+    {
+        return $this->articleRepository->count();
     }
 }

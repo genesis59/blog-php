@@ -7,11 +7,10 @@ namespace App\Service\Model;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepository;
 
-class UserService extends EntityService
+class UserService
 {
     public function __construct(private readonly UserRepository $userRepository)
     {
-        parent::__construct($this->userRepository);
     }
 
     public function getOne(int $id): ?User

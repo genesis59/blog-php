@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontoffice;
 
-use App\Service\Http\RedirectResponse;
+use App\Controller\ControllerTrait;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -13,6 +13,8 @@ use App\View\View;
 
 class SecurityController
 {
+    use ControllerTrait;
+
     /**
      * @param array<string,string> $env
      */
@@ -26,14 +28,14 @@ class SecurityController
 
     public function login(Request $request): Response
     {
-        $user = $this->session->get('user') ?? null;
+        $user = $this->getUser() ?? null;
         if ($user) {
             $this->session->addFlashes('info', 'Vous êtes déjà connecté');
-            return new RedirectResponse($this->env['URL_DOMAIN']);
+            return $this->redirect($this->env['URL_DOMAIN']);
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
             $this->securityService->checkLoginIsValid($request);
-            return new RedirectResponse($this->env['URL_DOMAIN']);
+            return $this->redirect($this->env['URL_DOMAIN']);
         }
         return new Response($this->view->render([
             'template' => 'login',
@@ -46,7 +48,7 @@ class SecurityController
     public function logout(): Response
     {
         $this->session->remove('user');
-        return new RedirectResponse($this->env['URL_DOMAIN']);
+        return $this->redirect($this->env['URL_DOMAIN']);
     }
 
     public function signin(): Response
