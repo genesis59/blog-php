@@ -5,7 +5,8 @@
         {% include './frontoffice/components/article/_displayForArticleDetail.html.twig' %}
         {% include './frontoffice/components/pagination/_paginateNextPreviousForArticleDetail.html.twig' %}
         {% if user is not null %}
-        {% include './frontoffice/components/form/_formAddComment.html.twig' %}
+            {% include './frontoffice/components/_flashes.html.twig' %}
+            {% include './frontoffice/components/form/_formAddComment.html.twig' %}
         {% endif %}
         {% include './frontoffice/components/comment/_commentList.html.twig' %}
     </div>

@@ -34,8 +34,12 @@ class SecurityController
             return $this->redirect($this->env['URL_DOMAIN']);
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
-            $this->securityService->checkLoginIsValid($request);
-            return $this->redirect($this->env['URL_DOMAIN']);
+            $check = $this->securityService->checkLoginIsValid($request);
+            if ($check) {
+                return $this->redirect($this->env['URL_DOMAIN']);
+            }
+
+            return $this->redirect($this->env['URL_DOMAIN'] . "login");
         }
         return new Response($this->view->render([
             'template' => 'login',

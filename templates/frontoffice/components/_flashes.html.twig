@@ -1,0 +1,11 @@
+<div class="container mt-3">
+    {% block flash %}
+        {% for key,messages in data.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ key }}" role="alert">
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}
+</div>

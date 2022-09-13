@@ -22,6 +22,6 @@ trait ControllerTrait
 
     public function redirect(string $url): Response
     {
-        return new RedirectResponse($this->env['URL_DOMAIN']);
+        return new RedirectResponse($url);
     }
 }

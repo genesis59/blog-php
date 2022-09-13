@@ -34,6 +34,7 @@ class HomeController
     public function index(Request $request, MailerService $mailerService): Response
     {
         $user = $this->getUser();
+        $fromContact = false;
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
             if ($this->validator->formContactIsValid($request)) {
                 $mailerService->sendContactEmail(
@@ -43,10 +44,12 @@ class HomeController
                     $request->request()->get('prenom')
                 );
             }
+            $fromContact = true;
         }
         return new Response($this->view->render([
             'template' => 'home',
             'user' => $user,
+            'from_contact' => $fromContact,
             'form' => [
                 'nom' => $request->request()->get('nom') ?? "",
                 'prenom' => $request->request()->get('prenom') ?? "",
