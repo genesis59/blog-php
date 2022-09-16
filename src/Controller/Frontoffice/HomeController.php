@@ -61,4 +61,13 @@ class HomeController
             'articles' => $this->articleService->getSomeHydratedArticlesPaginate(self::NUMBER_LAST_ARTICLE_ON_HOMEPAGE, 1),
         ]), 200);
     }
+
+    public function privacy(): Response
+    {
+        return new Response($this->view->render([
+            'template' => 'privacy',
+            'header_title' => 'Politiques de confidentialité',
+            'url_domain' => $this->env["URL_DOMAIN"]
+        ]), 200);
+    }
 }

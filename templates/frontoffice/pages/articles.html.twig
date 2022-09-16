@@ -7,9 +7,9 @@
             <div class="row">
                 {% if articles is not null %}
                     {% for article in articles %}
-                        {% include 'frontoffice/components/article/_displayForListArticle.html.twig' %}
+                        {% include './frontoffice/components/article/_displayForListArticle.html.twig' %}
                     {% endfor %}
-                    {% include 'frontoffice/components/pagination/_pagination.html.twig' %}
+                    {% include './frontoffice/components/pagination/_pagination.html.twig' %}
                 {% else %}
                     <div class="m-5">
                         <h2>Désolé cette page ne contient pas d'articles</h2>

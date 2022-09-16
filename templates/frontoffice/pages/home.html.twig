@@ -8,7 +8,7 @@
         <section class="container mt-3">
             <div class="row">
                 {% for article in articles %}
-                    {% include 'frontoffice/components/article/_displayForListArticle.html.twig' %}
+                    {% include './frontoffice/components/article/_displayForListArticle.html.twig' %}
                 {% endfor %}
             </div>
         </section>
@@ -17,7 +17,7 @@
             {% include './frontoffice/components/_flashes.html.twig' %}
             {% endif %}
             <h2 class="border-5 border-bottom border-dark pb-2 mt-4 mb-4">Nous contacter</h2>
-            {% include 'frontoffice/components/form/_formContact.html.twig' %}
+            {% include './frontoffice/components/form/_formContact.html.twig' %}
         </section>
     </div>
 {% endblock %}
