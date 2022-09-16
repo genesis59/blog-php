@@ -7,3 +7,9 @@ footer {
     left: 0;
     right: 0;
 }
+.privacy {
+    color: white;
+}
+.privacy :hover {
+    color: blue;
+}

@@ -47,18 +47,18 @@ final class Router
         $this->database = new Database($this->env['MYSQL_DSN'], $this->env['MYSQL_USER'], $this->env['MYSQL_PASSWORD']);
         $this->session = new Session();
         $this->view = new View($this->session);
-        $this->validator = new Validator($this->session);
         $this->articleRepository = new ArticleRepository($this->database);
         $this->userRepository = new UserRepository($this->database);
         $this->commentRepository = new CommentRepository($this->database);
         $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
         $this->articleService = new ArticleService($this->articleRepository, $this->userRepository, $this->session);
-        $this->userService = new UserService($this->userRepository);
+        $this->userService = new UserService($this->userRepository, $this->session);
         $this->commentService = new CommentService($this->commentRepository, $this->session, $this->userRepository);
-        $this->securityService = new SecurityService($this->userService, $this->validator, $this->session);
+        $this->securityService = new SecurityService($this->userService, $this->session);
+        $this->validator = new Validator($this->session, $this->userService);
         $this->articleController = new ArticleController($this->articleService, $this->commentService, $this->view, $this->env, $this->session, $this->validator);
         $this->homeController = new HomeController($this->articleService, $this->view, $this->validator, $this->env, $this->session);
-        $this->userSecurityController = new SecurityController($this->view, $this->env, $this->securityService, $this->session);
+        $this->userSecurityController = new SecurityController($this->view, $this->env, $this->securityService, $this->session, $this->validator, $this->userService);
     }
 
     public function run(): Response
@@ -100,7 +100,11 @@ final class Router
         }
 
         if ($pathInfo === '/signin') {
-            return $this->userSecurityController->signin();
+            return $this->userSecurityController->signin($this->request);
+        }
+
+        if ($pathInfo === '/privacy') {
+            return $this->homeController->privacy();
         }
 
         /** Route BACK OFFICE */
@@ -108,9 +112,11 @@ final class Router
         if ($pathInfo === '/admin') {
             return new Response("<h1>Bienvenue dans l'administration 😉</h1>", 200);
         }
-        return new Response("Error 404 - cette page n'existe pas<br><a href='index.php?action=accueil'>Aller Ici</a>", 404, [
-            "content_type" => "text/html",
-            "charset" => "UTF-8"
-        ]);
+
+        return new Response($this->view->render([
+            'template' => 'errors/404',
+            'url_domain' => $this->env["URL_DOMAIN"],
+            'header_title' => 'Page introuvable',
+        ]));
     }
 }
