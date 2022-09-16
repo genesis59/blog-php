@@ -55,7 +55,20 @@ interface EntityRepositoryInterface
     public function delete(object $entity): bool;
 
     /**
+     * @param array<string,mixed> $criteria
      * @return int
      */
-    public function count(): int;
+    public function count(array $criteria = []): int;
+
+    /**
+     * @param T $entity
+     * @return object|null
+     */
+    public function getPreviousEntity(object $entity): ?object;
+
+    /**
+     * @param T $entity
+     * @return object|null
+     */
+    public function getNextEntity(object $entity): ?object;
 }

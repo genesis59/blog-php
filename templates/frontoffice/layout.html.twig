@@ -1,29 +1,20 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grégory Vandevraye Développeur web</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
-    <link rel="stylesheet" href="/bootstrap-5.0.2-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_domain }}images/favicon.png">
+    <link rel="stylesheet" href="{{ url_domain }}bootstrap-5.0.2-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="{{ url_domain }}css/style.css">
 </head>
 <body class="bg-light">
 {% include './frontoffice/components/_header.html.twig' %}
 {% include './frontoffice/components/_navbar.html.twig' %}
-<div class="container mt-3">
-    {% for key,messages in data.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ key }}" role="alert">
-                <span>{{ message }}</span>
-            </div>
-        {% endfor %}
-    {% endfor %}
-</div>
 {% block content %}
 {% endblock %}
 {% include './frontoffice/components/_footer.html.twig' %}
-<script src="/bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
-<script src="/js/app.js"></script>
+<script src="{{ url_domain }}bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
+<script src="{{ url_domain }}js/app.js"></script>
 </body>
 </html>

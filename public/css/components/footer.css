@@ -1,9 +1,18 @@
 .bg-black {
     background-color: #212529;
 }
+
 footer {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+.privacy {
+    color: white;
+}
+
+.privacy:hover {
+    color: blue;
 }

@@ -48,36 +48,4 @@ class ArticleRepository extends BaseRepository
         $this->database->execute(['id' => $entity->getId(), 'title' => $entity->getTitle(), 'content' => $entity->getContent(), 'chapo' => $entity->getChapo(), 'idUser' => $entity->getUser()->getId()]);
         return true;
     }
-
-    /**
-     * @param Article $article
-     * @return object|null
-     */
-    public function getPreviousArticle(Article $article): ?object
-    {
-        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE created_at < :datedata ORDER BY 'ASC' LIMIT 1";
-        $this->database->prepare($sql);
-        $date = $article->getCreatedAt()->format('Y-m-d H:i:s');
-        $result = $this->database->execute(['datedata' => $date]);
-        if ($result) {
-            return Hydrator::hydrate($result[0], new Article());
-        }
-        return null;
-    }
-
-    /**
-     * @param Article $article
-     * @return object|null
-     */
-    public function getNextArticle(Article $article): ?object
-    {
-        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE created_at > :datedata ORDER BY 'DESC' LIMIT 1";
-        $this->database->prepare($sql);
-        $date = $article->getCreatedAt()->format('Y-m-d H:i:s');
-        $result = $this->database->execute(['datedata' => $date]);
-        if ($result) {
-            return Hydrator::hydrate($result[0], new Article());
-        }
-        return null;
-    }
 }

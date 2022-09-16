@@ -9,9 +9,11 @@
     font-weight: normal;
     font-style: normal;
 }
-html{
-    height:100%;
+
+html {
+    height: 100%;
 }
+
 body {
     min-height: 100%;
     margin: 0;
@@ -19,10 +21,19 @@ body {
     position: relative;
     font-family: 'pt_sansregular', sans-serif;
 }
+
 a {
     text-decoration: none;
 }
 
 .rotation180 {
     transform: rotate(180deg);
+}
+
+.error404 {
+    width: 100%;
+    height: 600px;
+    background-image: url("../images/404.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
 }

@@ -36,7 +36,7 @@
                 <input class="form-check-input" type="checkbox" value="accept" name="confidentialite"
                        id="confidentialite" value="{{ form.confidentialite }}" {{ form.confidentialite ? "checked" : "" }} required>
                 <label class="form-check-label" for="confidentialite">
-                    Veuillez accepter nos politiques de confidentialité <span class="text-danger">*</span>
+                    <a href="{{ url_domain }}privacy" class="text-dark">Veuillez accepter nos politiques de confidentialité</a> <span class="text-danger">*</span>
                 </label>
             </div>
         </div>

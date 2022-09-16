@@ -1,15 +1,16 @@
+{% set target = target is defined ? target : "" %}
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         <li class="page-item {{ current_page > 1 ? "" : "disabled" }}">
-            <a class="page-link" href="{{ url_domain }}articles?page={{ current_page - 1 }}">Previous</a>
+            <a class="page-link" href="{{ url_to_paginate }}{{ current_page - 1 }}{{ target }}">Previous</a>
         </li>
         {% for i in 1..max_page %}
             <li class="page-item {{ i == current_page ? "active" : "" }}">
-                <a class="page-link" href="{{ url_domain }}articles?page={{ i }}">{{ i }}</a>
+                <a class="page-link" href="{{ url_to_paginate }}{{ i }}{{ target }}">{{ i }}</a>
             </li>
         {% endfor %}
         <li class="page-item {{ current_page < max_page ? "" : "disabled" }}">
-            <a class="page-link" href="{{ url_domain }}articles?page={{ current_page + 1 }}">Next</a>
+            <a class="page-link" href="{{ url_to_paginate }}{{ current_page + 1 }}{{ target }}">Next</a>
         </li>
     </ul>
 </nav>

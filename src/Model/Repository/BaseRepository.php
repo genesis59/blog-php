@@ -176,14 +176,56 @@ abstract class BaseRepository implements EntityRepositoryInterface
     }
 
     /**
+     * @param array<string,mixed> $criteria
      * @return int
      */
-    public function count(): int
+    public function count(array $criteria = []): int
     {
-        $resultRequest = $this->database->count('SELECT COUNT(*) AS nbLine FROM ' . $this->getClassName());
+        $sql = 'SELECT COUNT(*) AS nbLine FROM ' . $this->getClassName();
+        if (count($criteria) > 0) {
+            $sql = $this->addWhere($sql, $criteria);
+        }
+        $this->database->prepare($sql);
+        $resultRequest = $this->database->execute($criteria);
         if ($resultRequest) {
-            return $resultRequest['nbLine'];
+            return $resultRequest[0]['nbLine'];
         }
         return 0;
+    }
+
+    /**
+     * @param T $entity
+     * @return object|null
+     */
+    public function getPreviousEntity(object $entity): ?object
+    {
+        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE created_at < :datedata ORDER BY created_at DESC LIMIT 1";
+        $this->database->prepare($sql);
+        if (method_exists($entity, 'getCreatedAt')) {
+            $date = $entity->getCreatedAt()->format('Y-m-d H:i:s');
+            $result = $this->database->execute(['datedata' => $date]);
+            if ($result) {
+                return Hydrator::hydrate($result[0], new $this->class());
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param T $entity
+     * @return object|null
+     */
+    public function getNextEntity(object $entity): ?object
+    {
+        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE created_at > :datedata ORDER BY created_at ASC LIMIT 1";
+        $this->database->prepare($sql);
+        if (method_exists($entity, 'getCreatedAt')) {
+            $date = $entity->getCreatedAt()->format('Y-m-d H:i:s');
+            $result = $this->database->execute(['datedata' => $date]);
+            if ($result) {
+                return Hydrator::hydrate($result[0], new $this->class());
+            }
+        }
+        return null;
     }
 }

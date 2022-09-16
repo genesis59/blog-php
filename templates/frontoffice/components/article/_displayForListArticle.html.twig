@@ -3,7 +3,12 @@
         <div class="card-body">
             <h5 class="card-title pb-3 border-bottom border-dark">{{ article.title }}</h5>
             <h6 class="card-subtitle mt-4 mb-2 text-muted ">Publié par {{ article.user.pseudo }}
-                le {{ article.createdAt|date("d/M/Y") }}</h6>
+                le {{ article.createdAt|date("d M Y") }}
+                {% if article.createdAt != article.updatedAt %}
+                    modifié le {{ article.updatedAt|date("d M Y") }}
+                {% endif %}
+
+            </h6>
             <p class="card-text">{{ article.chapo }}</p>
         </div>
         <a href="{{ url_domain }}article?numero={{ article.id }}" class="card-link me-4 mb-3" style="text-align: end;">Voir le détail</a>
