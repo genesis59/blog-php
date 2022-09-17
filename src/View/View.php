@@ -15,7 +15,11 @@ final class View
 {
     private readonly Environment $twig;
 
-    public function __construct(private readonly Session $session)
+    /**
+     * @param Session $session
+     * @param array<string,string> $env
+     */
+    public function __construct(private readonly Session $session, private readonly array $env)
     {
         $loader = new FilesystemLoader('../templates');
         $this->twig = new Environment($loader);
@@ -30,9 +34,12 @@ final class View
      */
     public function render(array $data): string
     {
+
         $data['data']['session'] = $this->session->toArray();
         $data['data']['flashes'] = $this->session->getFlashes();
+        $data['url_domain'] = $this->env["URL_DOMAIN"];
+        $data['user'] = $this->session->get('user') ?? null;
 
-        return $this->twig->render("frontoffice/pages/${data['template']}.html.twig", $data);
+        return $this->twig->render("${data['template']}.html.twig", $data);
     }
 }

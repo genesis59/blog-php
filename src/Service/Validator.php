@@ -2,15 +2,15 @@
 
 namespace App\Service;
 
+use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
 use App\Service\Http\Session\Session;
-use App\Service\Model\UserService;
 
 class Validator
 {
     function __construct(
         private readonly Session $session,
-        private readonly UserService $userService
+        private readonly UserRepository $userRepository
     ) {
     }
 
@@ -25,7 +25,7 @@ class Validator
             if (!$speChar) {
                 if (!preg_match("/^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i", $value)) {
                     $valid = false;
-                    $this->session->addFlashes("danger", "Champ " . $fieldName . " non valides. Les caractères spéciaux ne sont pas autorisés.");
+                    $this->session->addFlashes("danger", "Champ " . $fieldName . " invalide. Les caractères spéciaux ne sont pas autorisés.");
                 }
             }
             if ($min && strlen($value) < $min) {
@@ -70,7 +70,7 @@ class Validator
      */
     public function attributeIsUnique(string $fieldName, array $criteria): bool
     {
-        if ($this->userService->getOneBy($criteria) === null) {
+        if ($this->userRepository->findOneBy($criteria) === null) {
             return true;
         }
         $this->session->addFlashes("danger", "La valeur renseigné dans le champ " . $fieldName . " n'est pas disponible.");

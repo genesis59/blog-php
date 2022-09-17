@@ -8,19 +8,19 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link {{ template == "home" ? "active text-primary" : "" }}" href="{{ url_domain }}">Accueil</a>
+                    <a class="nav-link {{ template == "frontoffice/pages/home" ? "active text-primary" : "" }}" href="{{ url_domain }}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ template == "articles" ? "active text-primary" : "" }}"
+                    <a class="nav-link {{ template == "frontoffice/pages/articles" ? "active text-primary" : "" }}"
                        href="{{ url_domain }}articles">Blog</a>
                 </li>
                 {% if user is null %}
                     <li class="nav-item">
-                        <a class="nav-link {{ template == "signin" ? "active text-primary" : "" }}"
+                        <a class="nav-link {{ template == "frontoffice/pages/signin" ? "active text-primary" : "" }}"
                            href="{{ url_domain }}signin">Inscription</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link login-button {{ template == "login" ? "active text-primary" : "" }}"
+                        <a class="nav-link login-button {{ template == "frontoffice/pages/login" ? "active text-primary" : "" }}"
                            href="{{ url_domain }}login">Se connecter</a>
                     </li>
                 {% else %}

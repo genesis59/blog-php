@@ -1,5 +1,5 @@
 {% if comments is not null %}
-    <h2 id="comment">Liste des commentaires</h2>
+    <h2>Liste des commentaires</h2>
     {% for comment in comments %}
         {% if comment.isActive %}
             <div class="border-top border-dark mt-3 p-3">
@@ -8,5 +8,5 @@
             </div>
         {% endif %}
     {% endfor %}
-    {% include './frontoffice/components/pagination/_pagination.html.twig' %}
+    {% include './components/pagination/_pagination.html.twig' %}
 {% endif %}

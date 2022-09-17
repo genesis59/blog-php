@@ -34,7 +34,7 @@ interface EntityRepositoryInterface
      * @param int|null $offset
      * @return array<int,object>|null
      */
-    public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array;
+    public function findBy(array $criteria, bool $isMaster = true, array $orderBy = null, int $limit = null, int $offset = null): ?array;
 
     /**
      * @param T $entity

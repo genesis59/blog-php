@@ -6,6 +6,7 @@ namespace App\Model\Repository;
 
 use App\Enum\Role;
 use App\Model\Entity\Article;
+use App\Model\Repository\Interfaces\EntityRepositoryInterface;
 use App\Service\Hydrator;
 
 /**
