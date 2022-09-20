@@ -1,0 +1,8 @@
+{% extends './backoffice/layout.html.twig' %}
+
+{% block content %}
+    <h2 class="border-5 border-bottom border-dark pb-2" id="articles">Listes des commentaires en attente de validation</h2>
+    {% include './components/_flashes.html.twig' %}
+    {% include './backoffice/components/comment/_commentsTable.html.twig' %}
+    {% include './components/pagination/_pagination.html.twig' %}
+{% endblock %}
