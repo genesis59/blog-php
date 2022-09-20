@@ -1,0 +1,32 @@
+<table class="table table-responsive">
+    <thead>
+    <tr>
+        <th class="col-3">Titre</th>
+        <th class="col-5">Chapô</th>
+        <th class="col-2">Dernière modification</th>
+        <th class="col-2">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if articles is not null %}
+        {% for article in articles %}
+            <tr>
+                <th>{{ article.title }}</th>
+                <td>{{ article.chapo }}</td>
+                <td>{{ article.updatedAt|date("d M Y à h:i") }}</td>
+                <td>
+                    <div class="btn-group mt-3">
+                        <a href="{{ url_domain }}article?numero={{ article.id }}" class="btn btn-primary">Voir</a>
+                        <a href="#" class="btn btn-primary">Modifier</a>
+                        <a href="#" class="btn btn-danger">Supprimer</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <div class="m-5">
+            <h2>Désolé cette page ne contient pas d'articles</h2>
+        </div>
+    {% endif %}
+    </tbody>
+</table>

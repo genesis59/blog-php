@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-light" id="navbarAdmin">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_domain }}">My Blog</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="{{ url_domain }}admin" class="{{ template == "backoffice/pages/articles" ? "text-warning" : "text-white"}} nav-link">Articles</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_domain }}admin/comments" class="{{ template == "backoffice/pages/comments" ? "text-warning" : "text-white"}} nav-link">Commentaires</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="{{ template == "backoffice/pages/users" ? "text-warning" : "text-white"}} nav-link">Utilisateurs</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link disabled text-white-50" href="#">Bienvenu {{ user.pseudo }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white"
+                       href="{{ url_domain }}logout">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

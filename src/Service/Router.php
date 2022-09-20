@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Controller\ArticleController;
+use App\Controller\CommentController;
 use App\Controller\Frontoffice\HomeController;
 use App\Controller\SecurityController;
 use App\Model\Repository\ArticleRepository;
@@ -30,6 +31,7 @@ final class Router
     private readonly ArticleController $articleController;
     private readonly SecurityController $securityController;
     private readonly Paginator $paginator;
+    private readonly CommentController $commentController;
 
 
     /**
@@ -51,6 +53,7 @@ final class Router
         $this->articleController = new ArticleController($this->articleRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->validator, $this->paginator);
         $this->homeController = new HomeController($this->view, $this->validator, $this->session, $this->paginator, $this->articleRepository);
         $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->validator, $this->userRepository);
+        $this->commentController = new CommentController($this->view, $this->session, $this->env, $this->paginator, $this->commentRepository);
     }
 
     public function run(): Response
@@ -101,9 +104,12 @@ final class Router
         if ($pathInfo === '/admin') {
             return $this->articleController->articles($this->request, false);
         }
+        if ($pathInfo === '/admin/comments') {
+            return $this->commentController->comments($this->request);
+        }
 
         return new Response($this->view->render([
-            'template' => 'errors/404',
+            'template' => 'frontoffice/pages/errors/404',
             'url_domain' => $this->env["URL_DOMAIN"],
             'header_title' => 'Page introuvable',
         ]));
