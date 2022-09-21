@@ -7,9 +7,13 @@
         <h2 class="border-5 border-bottom border-dark pb-2">Dernières publications</h2>
         <section class="container mt-3">
             <div class="row">
+                {% if articles is not null %}
                 {% for article in articles %}
                     {% include './frontoffice/components/article/_displayForListArticle.html.twig' %}
                 {% endfor %}
+                {% else %}
+                    <h4 class="text-center mt-5">Aucun article pour le moment.</h4>
+                {% endif %}
             </div>
         </section>
         <section class="mt-5 mb-5">

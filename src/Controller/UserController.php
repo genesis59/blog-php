@@ -63,9 +63,11 @@ class UserController
 
                     /** @var Article[] $articles */
                     $articles = $this->articleRepository->findBy(["id_user" => $user->getId()]);
-                    foreach ($articles as $article) {
-                        $article->setUser($userAnonyme);
-                        $this->articleRepository->update($article);
+                    if ($articles !== null) {
+                        foreach ($articles as $article) {
+                            $article->setUser($userAnonyme);
+                            $this->articleRepository->update($article);
+                        }
                     }
                     $this->userRepository->delete($user);
                 }
@@ -74,17 +76,19 @@ class UserController
         $pageData = $request->query()->has("page") && (int)$request->query()->get("page") !== 0 ? (int)$request->query()->get("page") : 1;
         $users = $this->paginator->paginate($this->userRepository, [], self::MAX_USER_PER_PAGE, $pageData);
 
-        // Récupération des données pour la pagination
-        $maxPage = $this->paginator->getMaxPage($this->userRepository->count() - 2, self::MAX_USER_PER_PAGE);
-        if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
-            $pageData = 1;
-            $this->session->addFlashes('info', "La page demandée n'existe pas.");
-            $this->redirect($this->env["URL_DOMAIN"] . "admin/users");
+        if ($users !== null && count($users) > 2) {
+            // Récupération des données pour la pagination
+            $maxPage = $this->paginator->getMaxPage($this->userRepository->count() - 2, self::MAX_USER_PER_PAGE);
+            if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
+                $pageData = 1;
+                $this->session->addFlashes('info', "La page demandée n'existe pas.");
+                $this->redirect($this->env["URL_DOMAIN"] . "admin/users");
+            }
         }
         return new Response($this->view->render([
             'template' => 'backoffice/pages/users',
             'users' => $users,
-            'max_page' => $maxPage,
+            'max_page' => $maxPage ?? 1,
             'current_page' => $pageData,
             'url_to_paginate' => $this->env["URL_DOMAIN"] . "admin/users?page="
         ]), 200);

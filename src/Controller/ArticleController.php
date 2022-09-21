@@ -80,15 +80,16 @@ class ArticleController
 
         $pageData = $request->query()->has("page") && (int)$request->query()->get("page") !== 0 ? (int)$request->query()->get("page") : 1;
 
-        /** @var array<int,Article> $articles */
+        /** @var Article[] $articles */
         $articles = $this->paginator->paginate($this->articleRepository, [], $this->articlesPerPage, $pageData);
-
-        // Récupération des données pour la pagination
-        $maxPage = $this->paginator->getMaxPage($this->articleRepository->count(), $this->articlesPerPage);
-        if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
-            $pageData = 1;
-            $this->session->addFlashes('info', "La page demandée n'existe pas.");
-            $this->redirect($this->env["URL_DOMAIN"] . $this->dataOffice['url_to_paginate']);
+        $maxPage = 1;
+        if ($articles !== null) {
+            $maxPage = $this->paginator->getMaxPage($this->articleRepository->count(), $this->articlesPerPage);
+            if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
+                $pageData = 1;
+                $this->session->addFlashes('info', "La page demandée n'existe pas.");
+                $this->redirect($this->env["URL_DOMAIN"] . $this->dataOffice['url_to_paginate']);
+            }
         }
 
         return new Response($this->view->render([
