@@ -19,7 +19,7 @@ class UserController
 
     const MAX_USER_PER_PAGE = 5;
 
-    private function toggleRoleUsers(Request $request, User $user): void
+    private function toggleRoleUsers(User $user): void
     {
         $newRole = Role::USER;
         if ($user->getRoleUsers() === Role::USER) {
