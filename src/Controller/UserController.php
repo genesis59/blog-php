@@ -19,11 +19,41 @@ class UserController
 
     const MAX_USER_PER_PAGE = 5;
 
+    private function toggleRoleUsers(Request $request, User $user): void
+    {
+        $newRole = Role::USER;
+        if ($user->getRoleUsers() === Role::USER) {
+            $newRole = Role::EDITOR;
+        }
+        $user->setRoleUsers($newRole);
+        $this->userRepository->update($user);
+        $this->session->addFlashes("success", "Rôle modifié.");
+    }
+
+    private function anonymizedArticlesOfDeleteUser(User $user): void
+    {
+        // On anonymise les articles de cet utilisateur
+        /** @var User $userAnonyme */
+        $userAnonyme = $this->userRepository->find(1);
+
+        /** @var Article[] $articles */
+        $articles = $this->articleRepository->findBy(["id_user" => $user->getId()]);
+        if ($articles !== null) {
+            foreach ($articles as $article) {
+                $article->setUser($userAnonyme);
+                $this->articleRepository->update($article);
+            }
+        }
+        $this->userRepository->delete($user);
+        $this->session->addFlashes("succes", "Utilisateur supprimé.");
+    }
+
     /**
      * @param View $view
      * @param Session $session
      * @param array<string,string> $env
      * @param UserRepository $userRepository
+     * @param ArticleRepository $articleRepository
      * @param Paginator $paginator
      */
     public function __construct(
@@ -38,38 +68,19 @@ class UserController
 
     public function users(Request $request): Response
     {
-
-
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
             if ($request->request()->has("user")) {
                 /** @var User $user */
                 $user = $this->userRepository->find($request->request()->get("user"));
                 if ($user !== null) {
-                    if ($request->request()->has("role") != null) {
-                        $user->setRoleUsers(Role::EDITOR);
-                    } else {
-                        $user->setRoleUsers(Role::USER);
-                    }
-                    $this->userRepository->update($user);
+                    $this->toggleRoleUsers($request, $user);
                 }
             }
             if ($request->request()->has("deleteUser")) {
                 /** @var User $user */
                 $user = $this->userRepository->find($request->request()->get("deleteUser"));
                 if ($user !== null) {
-                    // On anonymise les articles de cet utilisateur
-                    /** @var User $userAnonyme */
-                    $userAnonyme = $this->userRepository->find(1);
-
-                    /** @var Article[] $articles */
-                    $articles = $this->articleRepository->findBy(["id_user" => $user->getId()]);
-                    if ($articles !== null) {
-                        foreach ($articles as $article) {
-                            $article->setUser($userAnonyme);
-                            $this->articleRepository->update($article);
-                        }
-                    }
-                    $this->userRepository->delete($user);
+                    $this->anonymizedArticlesOfDeleteUser($user);
                 }
             }
         }
