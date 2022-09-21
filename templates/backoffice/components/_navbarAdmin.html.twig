@@ -14,13 +14,10 @@
                     <a href="{{ url_domain }}admin/comments" class="{{ template == "backoffice/pages/comments" ? "text-warning" : "text-white"}} nav-link">Commentaires</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="{{ template == "backoffice/pages/users" ? "text-warning" : "text-white"}} nav-link">Utilisateurs</a>
+                    <a href="{{ url_domain }}admin/users" class="{{ template == "backoffice/pages/users" ? "text-warning" : "text-white"}} nav-link">Utilisateurs</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link disabled text-white-50" href="#">Bienvenu {{ user.pseudo }}</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link text-white"
                        href="{{ url_domain }}logout">Déconnexion</a>

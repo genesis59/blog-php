@@ -13,11 +13,11 @@
     {% include './backoffice/components/_navbarAdmin.html.twig' %}
 </div>
 <div class="container mt-5 mb-5">
-    <h1>Bienvenue dans l'administration 😉</h1>
+    <h1>Bienvenu {{ user.pseudo| capitalize }} 😉</h1>
     {% block content %}
     {% endblock %}
 </div>
-{% if template == "backoffice/pages/comments" %}
+{% if template == "backoffice/pages/comments" or template == "backoffice/pages/users" %}
     {% include './backoffice/components/_modal_comment.html.twig' %}
 {% endif %}
 <script src="{{ url_domain }}bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>

@@ -78,7 +78,7 @@ class ArticleController
     {
         $this->setOfficeVariable($frontOffice);
 
-        $pageData = $request->query()->has("page") ? (int)$request->query()->get("page") : 1;
+        $pageData = $request->query()->has("page") && (int)$request->query()->get("page") !== 0 ? (int)$request->query()->get("page") : 1;
 
         /** @var array<int,Article> $articles */
         $articles = $this->paginator->paginate($this->articleRepository, [], $this->articlesPerPage, $pageData);
@@ -88,6 +88,7 @@ class ArticleController
         if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
             $pageData = 1;
             $this->session->addFlashes('info', "La page demandée n'existe pas.");
+            $this->redirect($this->env["URL_DOMAIN"] . $this->dataOffice['url_to_paginate']);
         }
 
         return new Response($this->view->render([
@@ -105,7 +106,7 @@ class ArticleController
 
         $id = $request->query()->has("numero") ? (int)$request->query()->get("numero") : 0;
 
-        $pageData = $request->query()->has("page") ? (int)$request->query()->get("page") : 1;
+        $pageData = $request->query()->has("page") && (int)$request->query()->get("page") !== 0 ? (int)$request->query()->get("page") : 1;
         /** @var Article $article */
         $article = $this->articleRepository->find($id);
 
@@ -139,6 +140,7 @@ class ArticleController
         $maxPage = $this->paginator->getMaxPage($this->commentRepository->count(['id_article' => $article->getId(), 'is_active' => 1]), self::MAX_COMMENT_PER_PAGE);
         if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
             $pageData = 1;
+            $this->session->addFlashes('info', "La page demandée n'existe pas.");
         }
         /** @var array<int,Comment> $comments */
         $comments = $this->paginator->paginate($this->commentRepository, ['id_article' => $article->getId(), 'is_active' => 1], self::MAX_COMMENT_PER_PAGE, $pageData);

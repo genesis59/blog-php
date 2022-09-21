@@ -8,6 +8,7 @@ use App\Controller\ArticleController;
 use App\Controller\CommentController;
 use App\Controller\Frontoffice\HomeController;
 use App\Controller\SecurityController;
+use App\Controller\UserController;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\CommentRepository;
 use App\Model\Repository\UserRepository;
@@ -32,6 +33,7 @@ final class Router
     private readonly SecurityController $securityController;
     private readonly Paginator $paginator;
     private readonly CommentController $commentController;
+    private readonly UserController $userController;
 
 
     /**
@@ -54,6 +56,7 @@ final class Router
         $this->homeController = new HomeController($this->view, $this->validator, $this->session, $this->paginator, $this->articleRepository);
         $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->validator, $this->userRepository);
         $this->commentController = new CommentController($this->view, $this->session, $this->env, $this->paginator, $this->commentRepository);
+        $this->userController = new UserController($this->view, $this->session, $this->env, $this->userRepository, $this->articleRepository, $this->paginator);
     }
 
     public function run(): Response
@@ -106,6 +109,10 @@ final class Router
         }
         if ($pathInfo === '/admin/comments') {
             return $this->commentController->comments($this->request);
+        }
+
+        if ($pathInfo === '/admin/users') {
+            return $this->userController->users($this->request);
         }
 
         return new Response($this->view->render([

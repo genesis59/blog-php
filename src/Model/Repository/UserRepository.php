@@ -59,9 +59,9 @@ class UserRepository extends BaseRepository
                 }
             }
         }
-        $sql = 'UPDATE ' . $this->getClassName() . ' SET pseudo = :pseudo, email = :email, pass = :pass, updated_at = NOW() WHERE id = :id';
+        $sql = 'UPDATE ' . $this->getClassName() . ' SET pseudo = :pseudo, email = :email, pass = :pass, updated_at = NOW(), role_users = :role WHERE id = :id';
         $this->database->prepare($sql);
-        $this->database->execute(['id' => $entity->getId(), 'pseudo' => $entity->getPseudo(), 'email' => $entity->getEmail(), 'pass' => $entity->getPass()]);
+        $this->database->execute(['id' => $entity->getId(), 'pseudo' => $entity->getPseudo(), 'email' => $entity->getEmail(), 'pass' => $entity->getPass(), 'role' => $entity->getRoleUsers()]);
         return true;
     }
 }

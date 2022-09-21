@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Model\Entity\Comment;
@@ -12,6 +14,8 @@ use App\View\View;
 
 class CommentController
 {
+    use ControllerTrait;
+
     const MAX_COMMENT_PER_PAGE = 5;
 
     /**
@@ -51,7 +55,8 @@ class CommentController
                 }
             }
         }
-        $pageData = $request->query()->has("page") ? (int)$request->query()->get("page") : 1;
+        $pageData = $request->query()->has("page") && (int)$request->query()->get("page") !== 0 ? (int)$request->query()->get("page") : 1;
+
         $comments = $this->paginator->paginate($this->commentRepository, ["is_active" => 0], self::MAX_COMMENT_PER_PAGE, $pageData);
 
         // Récupération des données pour la pagination
@@ -59,6 +64,7 @@ class CommentController
         if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
             $pageData = 1;
             $this->session->addFlashes('info', "La page demandée n'existe pas.");
+            $this->redirect($this->env["URL_DOMAIN"] . "admin/comments");
         }
 
         return new Response($this->view->render([
