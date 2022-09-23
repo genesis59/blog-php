@@ -151,32 +151,38 @@ class Validator
 
     public function formNewEditArticleIsValid(Request $request, bool $isNew): bool
     {
+        $isValid = false;
         if (
             !$request->request()->has('title') ||
             !$request->request()->has('chapo') ||
             !$request->request()->has('content')
         ) {
             $this->session->addFlashes("danger", "Désolé le formulaire n'est pas complet.");
-            return false;
         }
         if (!$isNew) {
-            if (!$request->request()->has('id') || !$request->request()->has('author')) {
-                $this->session->addFlashes("danger", "Désolé le formulaire n'est pas complet2.");
-                return false;
-            }
-            $article = $this->articleRepository->find((int) $request->request()->get('id'));
-            $author = $this->userRepository->find((int) $request->request()->get('author'));
-            if ($article === null || $author === null) {
-                $this->session->addFlashes("danger", "Désolé le formulaire n'est pas valide.");
-                return false;
-            }
+            $isValid = $this->modelFormEditIsValid($request);
         }
         $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 150);
         $chapoIsValid = $this->inputTextIsValid("chapô", $request->request()->get('chapo'), 10, 255);
         $contentIsValid = $this->inputTextIsValid("contenu", $request->request()->get('content'), 10);
         if ($titleIsValid && $chapoIsValid && $contentIsValid) {
-            return true;
+            $isValid =  true;
         }
-        return false;
+        return $isValid;
+    }
+
+    private function modelFormEditIsValid(Request $request): bool
+    {
+        if (!$request->request()->has('id') || !$request->request()->has('author')) {
+            $this->session->addFlashes("danger", "Désolé le formulaire n'est pas complet2.");
+            return false;
+        }
+        $article = $this->articleRepository->find((int) $request->request()->get('id'));
+        $author = $this->userRepository->find((int) $request->request()->get('author'));
+        if ($article === null || $author === null) {
+            $this->session->addFlashes("danger", "Désolé le formulaire n'est pas valide.");
+            return false;
+        }
+        return true;
     }
 }

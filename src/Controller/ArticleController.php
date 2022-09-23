@@ -171,30 +171,13 @@ class ArticleController
     {
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->validator->formNewEditArticleIsValid($request, $isNew)) {
             if (!$isNew) {
-                /** @var Article $article */
-                $article = $this->articleRepository->find((int)$request->request()->get("id"));
-                /** @var User $user */
-                $user = $this->userRepository->find((int)$request->request()->get("author"));
-                $article->setTitle($request->request()->get("title"));
-                $article->setChapo($request->request()->get("chapo"));
-                $article->setContent($request->request()->get("content"));
-                $article->setUser($user);
-                $this->articleRepository->update($article);
-                $this->session->addFlashes("success", "L'article a bien été modifié.");
+                $this->updateArticle($request);
                 $this->redirect($this->env["URL_DOMAIN"] . "admin");
             }
             if (!$this->getUser()) {
                 $this->redirect($this->env["URL_DOMAIN"]);
             }
-            $article = new Article();
-            $article->setTitle($request->request()->get("title"));
-            $article->setChapo($request->request()->get("chapo"));
-            $article->setContent($request->request()->get("content"));
-            /** @var User $user */
-            $user = $this->getUser();
-            $article->setUser($user);
-            $this->articleRepository->create($article);
-            $this->session->addFlashes("success", "L'article a bien été créé.");
+            $this->addArticle($request);
             $this->redirect($this->env["URL_DOMAIN"] . "admin");
         }
         $idArticle = $request->query()->has("numero") ? (int)$request->query()->get("numero") : null;
@@ -220,5 +203,32 @@ class ArticleController
                 'id' => $article === null ? $request->request()->get("id") ?? null : $article->getUser()->getId()
             ]
         ]), 200);
+    }
+
+    private function addArticle(Request $request): void
+    {
+        $article = new Article();
+        $article->setTitle($request->request()->get("title"));
+        $article->setChapo($request->request()->get("chapo"));
+        $article->setContent($request->request()->get("content"));
+        /** @var User $user */
+        $user = $this->getUser();
+        $article->setUser($user);
+        $this->articleRepository->create($article);
+        $this->session->addFlashes("success", "L'article a bien été créé.");
+    }
+
+    private function updateArticle(Request $request): void
+    {
+        /** @var Article $article */
+        $article = $this->articleRepository->find((int)$request->request()->get("id"));
+        /** @var User $user */
+        $user = $this->userRepository->find((int)$request->request()->get("author"));
+        $article->setTitle($request->request()->get("title"));
+        $article->setChapo($request->request()->get("chapo"));
+        $article->setContent($request->request()->get("content"));
+        $article->setUser($user);
+        $this->articleRepository->update($article);
+        $this->session->addFlashes("success", "L'article a bien été modifié.");
     }
 }
