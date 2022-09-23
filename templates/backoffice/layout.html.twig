@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_domain }}images/favicon.png">
+    <link rel="stylesheet" href="{{ url_domain }}bootstrap-5.0.2-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="{{ url_domain }}css/style.css">
+</head>
+<body class="bg-light">
+<div class="container-fluid p-0">
+    {% include './backoffice/components/_navbarAdmin.html.twig' %}
+</div>
+<div class="container mt-5 mb-5">
+    <h1>Bienvenu {{ user.pseudo| capitalize }} 😉</h1>
+    {% block content %}
+    {% endblock %}
+</div>
+{% if template == "backoffice/pages/comments" or template == "backoffice/pages/users" %}
+    {% include './backoffice/components/_modal_comment.html.twig' %}
+{% endif %}
+<script src="{{ url_domain }}bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
+<script src="{{ url_domain }}js/app-back.js"></script>
+</body>
+</html>

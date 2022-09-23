@@ -1,0 +1,47 @@
+<table class="table table-responsive">
+    <thead>
+    <tr>
+        <th class="col-3">Email</th>
+        <th class="col-2">Pseudo</th>
+        <th class="col-2">Rôle</th>
+        <th class="col-5">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if users is not null %}
+        {% for user in users %}
+            {% if user.roleUsers == "role_editor" or user.roleUsers == "role_user" %}
+                <tr>
+                    <th>{{ user.email }}</th>
+                    <td>{{ user.pseudo }}</td>
+                    <td>{{ user.roleUsers }}</td>
+                    <td>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <form name="form-change-role{{ user.id }}" method="POST">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" name="role"
+                                               id="flexSwitchCheckChecked" {{ user.roleUsers == "role_editor" ? "checked" : "" }}
+                                               onchange="submitFormChangeRole({{ user.id }})">
+                                        <label class="form-check-label"
+                                               for="flexSwitchCheckChecked">{{ user.roleUsers == "role_editor" ? "Désactiver le rôle éditeur" : "Activer le rôle éditeur" }}</label>
+                                    </div>
+                                    <input name="user" type="hidden" value="{{ user.id }}">
+                                </form>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" name="deleteUser" value="{{ user.id }}" class="btn btn-danger modal-trigger">Supprimer le compte</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+
+    {% else %}
+        <div class="m-5">
+            <h2>Désolé cette page ne contient pas d'articles</h2>
+        </div>
+    {% endif %}
+    </tbody>
+</table>

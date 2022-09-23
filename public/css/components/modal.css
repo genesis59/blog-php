@@ -1,0 +1,67 @@
+*,
+::before,
+::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-container {
+    /* display: none; */
+    visibility: hidden;
+    transition: 0.4s;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+}
+
+.modal-container.active {
+    /* display: block; */
+    visibility: visible;
+}
+
+.modal-div-button {
+    margin-top: 20px;
+    float: right;
+}
+
+.modal-window {
+    opacity: 0;
+    width: 95%;
+    max-width: 700px;
+    min-width: 300px;
+    padding: 30px;
+    border-radius: 5px;
+    border: 5px solid var(--bs-dark);
+    background: #fff;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,calc(-50% - 50px));
+    transition: opacity 0.4s ease-out,
+    transform 0.4s ease-out;
+
+}
+
+.modal-container.active .modal-window {
+    opacity: 1;
+    transform: translate(-50%,-50%);
+    transition: opacity 0.4s 0.2s ease-out,
+    transform 0.4s 0.2s ease-out;
+}
+
+.overlay {
+    opacity: 0;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    background-color: #333333d3;
+    transition: opacity 0.4s ease-out;
+}
+
+.modal-container.active .overlay {
+    opacity: 1;
+    transition: opacity 0.4s 0.2s ease-out;
+}

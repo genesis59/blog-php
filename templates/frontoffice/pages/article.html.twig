@@ -1,11 +1,11 @@
 {% extends './frontoffice/layout.html.twig' %}
 
 {% block content %}
-    <div class="container mt-4 mb-4" id="article">
+    <div class="container mt-4 mb-4">
         {% include './frontoffice/components/article/_displayForArticleDetail.html.twig' %}
-        {% include './frontoffice/components/pagination/_paginateNextPreviousForArticleDetail.html.twig' %}
+        {% include './components/pagination/_paginateNextPreviousForArticleDetail.html.twig' %}
         {% if user is not null %}
-            {% include './frontoffice/components/_flashes.html.twig' %}
+            {% include './components/_flashes.html.twig' %}
             {% include './frontoffice/components/form/_formAddComment.html.twig' %}
         {% endif %}
         {% include './frontoffice/components/comment/_commentList.html.twig' %}

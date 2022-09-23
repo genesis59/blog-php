@@ -1,0 +1,36 @@
+<table class="table table-responsive">
+    <thead>
+    <tr>
+        <th class="col-3">Titre</th>
+        <th class="col-5">Commentaire</th>
+        <th class="col-2">Date</th>
+        <th class="col-2">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if comments is not null %}
+        {% for comment in comments %}
+            <tr>
+                <th>{{ comment.article.title }}</th>
+                <td>{{ comment.content }}</td>
+                <td>{{ content.updatedAt|date("d M Y à H:i") }}</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary modal-trigger" name="accept"
+                                value="{{ comment.id }}">Valider le commentaire
+                        </button>
+                        <button type="button" class="btn btn-danger modal-trigger" name="delete"
+                                value="{{ comment.id }}">Supprimer
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <div class="m-5">
+            <h2>Désolé cette page ne contient pas d'articles</h2>
+        </div>
+    {% endif %}
+    </tbody>
+</table>
+

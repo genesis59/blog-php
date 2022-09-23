@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Validator;
 
-use App\Service\Http\Request;
+use App\Model\Repository\UserRepository;
 use App\Service\Http\Session\Session;
-use App\Service\Model\UserService;
 
 class Validator
 {
     function __construct(
-        private readonly Session $session,
-        private readonly UserService $userService
+        protected readonly Session $session,
+        protected readonly UserRepository $userRepository
     ) {
     }
 
@@ -25,7 +24,7 @@ class Validator
             if (!$speChar) {
                 if (!preg_match("/^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i", $value)) {
                     $valid = false;
-                    $this->session->addFlashes("danger", "Champ " . $fieldName . " non valides. Les caractères spéciaux ne sont pas autorisés.");
+                    $this->session->addFlashes("danger", "Champ " . $fieldName . " invalide. Les caractères spéciaux ne sont pas autorisés.");
                 }
             }
             if ($min && strlen($value) < $min) {
@@ -70,7 +69,7 @@ class Validator
      */
     public function attributeIsUnique(string $fieldName, array $criteria): bool
     {
-        if ($this->userService->getOneBy($criteria) === null) {
+        if ($this->userRepository->findOneBy($criteria) === null) {
             return true;
         }
         $this->session->addFlashes("danger", "La valeur renseigné dans le champ " . $fieldName . " n'est pas disponible.");
@@ -85,42 +84,5 @@ class Validator
             return false;
         }
         return true;
-    }
-
-    public function formContactIsValid(Request $request): bool
-    {
-        $nomIsValid = $this->inputTextIsValid("nom", $request->request()->get('nom'), 1, 50, false);
-        $prenomIsValid = $this->inputTextIsValid("prénom", $request->request()->get('prenom'), 2, 50, false);
-        $emailIsValid = $this->inputEmailIsValid($request->request()->get('email'));
-        $messageIsValid = $this->inputTextIsValid("message", $request->request()->get('message'), 10);
-        $acceptedPrivacy = $this->inputCheckBoxIsChecked($request->request()->get('confidentialite'), "accept");
-        if ($nomIsValid && $prenomIsValid && $emailIsValid && $messageIsValid && $acceptedPrivacy) {
-            return true;
-        }
-        return false;
-    }
-
-    public function formAddCommentIsValid(Request $request): bool
-    {
-        $commentIsValid = $this->inputTextIsValid("commentaire", $request->request()->get('commentaire'), 10);
-        if ($commentIsValid) {
-            return true;
-        }
-        return false;
-    }
-
-    public function formRegisterIsValid(Request $request): bool
-    {
-        $nomIsValid = $this->inputTextIsValid("pseudo", $request->request()->get('pseudo'), 3, 50);
-        $pseudoIsUnique = $this->attributeIsUnique("pseudo", ["pseudo" => $request->request()->get('pseudo')]);
-        $emailIsValid = $this->inputEmailIsValid($request->request()->get('email'));
-        $emailIsUnique = $this->attributeIsUnique("email", ["email" => $request->request()->get('email')]);
-        $acceptedPrivacy = $this->inputCheckBoxIsChecked($request->request()->get('confidentialite'), "accept");
-        $formatPasswordIsValid = $this->formatPasswordIsValid($request->request()->get('password'));
-
-        if ($nomIsValid && $emailIsValid && $acceptedPrivacy && $formatPasswordIsValid && $emailIsUnique && $pseudoIsUnique) {
-            return true;
-        }
-        return false;
     }
 }

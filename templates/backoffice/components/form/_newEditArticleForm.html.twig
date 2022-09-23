@@ -1,0 +1,54 @@
+<form method="post">
+    <div class="row">
+        <div class="mb-3 {{ type_form == "edit" ? "col-12 col-md-6" : "col-12" }}">
+            <label for="title" class="form-label">
+                Titre
+                <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Votre titre"
+                   value="{{ form.title }}"
+                   required>
+        </div>
+        {% if type_form == "edit" %}
+            {% if form.author_ongoing_selected is not null %}
+                {% set authorSelected = form.author_ongoing_selected %}
+            {% else %}
+                {% if article.user.id == 1 or (article.user.roleUsers != "role_editor" and article.user.roleUsers != "role_admin") %}
+                    {% set authorSelected = current_user.id %}
+                {% else %}
+                    {% set authorSelected = article.user.id %}
+                {% endif %}
+            {% endif %}
+            <div class="mb-3 col-12 col-md-6">
+                <label for="author" class="form-label">
+                    Auteur{{ authorSelected }}
+                    <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" id="author" name="author" aria-label="Default select example">
+                    {% for author in authors %}
+                        <option value="{{ author.id }}" {{ author.id == authorSelected ? "selected" : "" }}>{{ author.pseudo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+        <div class="mb-3 col-12">
+            <label for="chapo" class="form-label">
+                Chapô
+                <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" id="chapo" rows="3" name="chapo" placeholder="Votre chapô"
+                      required>{{ form.chapo }}</textarea>
+        </div>
+        <div class="mb-3 col-12">
+            <label for="content" class="form-label">
+                Contenu
+                <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" id="content" rows="6" name="content" placeholder="Votre contenu"
+                      required>{{ form.content }}</textarea>
+        </div>
+        <div class="col-12 mt-3">
+            <button class="btn btn-primary" type="submit">{{ type_form == "edit" ? "Modifier" : "Ajouter" }}</button>
+        </div>
+    </div>
+</form>

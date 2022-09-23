@@ -78,7 +78,7 @@ abstract class BaseRepository implements EntityRepositoryInterface
         return $sql;
     }
 
-    public function __construct(protected Database $database)
+    public function __construct(protected readonly Database $database, protected readonly Hydrator $hydrator)
     {
     }
 
@@ -98,14 +98,14 @@ abstract class BaseRepository implements EntityRepositoryInterface
      */
     public function findOneBy(array $criteria, array $orderBy = null): ?object
     {
-        if ($result = $this->findBy($criteria, $orderBy)) {
+        if ($result = $this->findBy($criteria, true, $orderBy)) {
             return $result[0];
         }
         return null;
     }
 
     /**
-     * @return array<object>|null
+     * @return object[]|null
      */
     public function findAll(): ?array
     {
@@ -117,9 +117,9 @@ abstract class BaseRepository implements EntityRepositoryInterface
      * @param array<string,string>|null $orderBy
      * @param int|null $limit
      * @param int|null $offset
-     * @return array<int,object>|null
+     * @return object[]|null
      */
-    public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
+    public function findBy(array $criteria, bool $isMaster = true, array $orderBy = null, int $limit = null, int $offset = null): ?array
     {
         $sql = 'SELECT * FROM ' . $this->getClassName();
         if ($criteria !== []) {
@@ -135,7 +135,7 @@ abstract class BaseRepository implements EntityRepositoryInterface
         $objects = null;
         if ($result = $this->database->execute($criteria)) {
             foreach ($result as $item) {
-                $objects[] = Hydrator::hydrate($item, new $this->class());
+                $objects[] = $this->hydrator->hydrate($item, new $this->class());
             }
         }
         return $objects;
@@ -205,7 +205,7 @@ abstract class BaseRepository implements EntityRepositoryInterface
             $date = $entity->getCreatedAt()->format('Y-m-d H:i:s');
             $result = $this->database->execute(['datedata' => $date]);
             if ($result) {
-                return Hydrator::hydrate($result[0], new $this->class());
+                return $this->hydrator->hydrate($result[0], new $this->class());
             }
         }
         return null;
@@ -223,7 +223,7 @@ abstract class BaseRepository implements EntityRepositoryInterface
             $date = $entity->getCreatedAt()->format('Y-m-d H:i:s');
             $result = $this->database->execute(['datedata' => $date]);
             if ($result) {
-                return Hydrator::hydrate($result[0], new $this->class());
+                return $this->hydrator->hydrate($result[0], new $this->class());
             }
         }
         return null;

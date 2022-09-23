@@ -20,8 +20,8 @@ trait ControllerTrait
         return null;
     }
 
-    public function redirect(string $url): Response
+    public function redirect(string $url): void
     {
-        return new RedirectResponse($url);
+         (new RedirectResponse())->redirect($url);
     }
 }
