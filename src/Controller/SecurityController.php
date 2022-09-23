@@ -9,7 +9,7 @@ use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
-use App\Service\Validator;
+use App\Service\Validator\FormValidator;
 use App\View\View;
 
 class SecurityController
@@ -26,7 +26,7 @@ class SecurityController
         private readonly View $view,
         private readonly array $env,
         private readonly Session $session,
-        private readonly Validator $validator,
+        private readonly FormValidator $validator,
         private readonly UserRepository $userRepository
     ) {
     }

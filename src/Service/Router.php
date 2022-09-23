@@ -15,6 +15,7 @@ use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
+use App\Service\Validator\FormValidator;
 use App\View\View;
 
 final class Router
@@ -23,7 +24,7 @@ final class Router
     private readonly Hydrator $hydrator;
     private readonly View $view;
     private readonly Session $session;
-    private readonly Validator $validator;
+    private readonly FormValidator $formValidator;
     private readonly ArticleRepository $articleRepository;
     private readonly UserRepository $userRepository;
     private readonly CommentRepository $commentRepository;
@@ -51,10 +52,10 @@ final class Router
         $this->userRepository = new UserRepository($this->database, $this->hydrator);
         $this->commentRepository = new CommentRepository($this->database, $this->hydrator);
         $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
-        $this->validator = new Validator($this->session, $this->userRepository);
-        $this->articleController = new ArticleController($this->articleRepository, $this->userRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->validator, $this->paginator);
-        $this->homeController = new HomeController($this->view, $this->validator, $this->session, $this->paginator, $this->articleRepository);
-        $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->validator, $this->userRepository);
+        $this->formValidator = new FormValidator($this->session, $this->userRepository);
+        $this->articleController = new ArticleController($this->articleRepository, $this->userRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->formValidator, $this->paginator);
+        $this->homeController = new HomeController($this->view, $this->formValidator, $this->session, $this->paginator, $this->articleRepository);
+        $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->formValidator, $this->userRepository);
         $this->commentController = new CommentController($this->view, $this->session, $this->env, $this->paginator, $this->commentRepository);
         $this->userController = new UserController($this->view, $this->session, $this->env, $this->userRepository, $this->articleRepository, $this->paginator);
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Enum\Role;
 use App\Model\Entity\Article;
 use App\Model\Entity\Comment;
 use App\Model\Entity\User;
@@ -15,7 +14,7 @@ use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
 use App\Service\Paginator;
-use App\Service\Validator;
+use App\Service\Validator\FormValidator;
 use App\View\View;
 
 class ArticleController
@@ -62,7 +61,7 @@ class ArticleController
      * @param View $view
      * @param array<string,string> $env
      * @param Session $session
-     * @param Validator $validator
+     * @param FormValidator $validator
      * @param Paginator $paginator
      */
     public function __construct(
@@ -72,7 +71,7 @@ class ArticleController
         private readonly View $view,
         private readonly array $env,
         private readonly Session $session,
-        private readonly Validator $validator,
+        private readonly FormValidator $validator,
         private readonly Paginator $paginator
     ) {
     }

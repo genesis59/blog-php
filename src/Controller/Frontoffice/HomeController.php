@@ -12,7 +12,7 @@ use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
 use App\Service\MailerService;
 use App\Service\Paginator;
-use App\Service\Validator;
+use App\Service\Validator\FormValidator;
 use App\View\View;
 
 class HomeController
@@ -23,7 +23,7 @@ class HomeController
 
     public function __construct(
         private readonly View $view,
-        private readonly Validator $validator,
+        private readonly FormValidator $validator,
         private readonly Session $session,
         private readonly Paginator $paginator,
         private readonly ArticleRepository $articleRepository
