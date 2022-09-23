@@ -51,8 +51,8 @@ final class Router
         $this->userRepository = new UserRepository($this->database, $this->hydrator);
         $this->commentRepository = new CommentRepository($this->database, $this->hydrator);
         $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
-        $this->validator = new Validator($this->session, $this->userRepository);
-        $this->articleController = new ArticleController($this->articleRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->validator, $this->paginator);
+        $this->validator = new Validator($this->session, $this->userRepository, $this->articleRepository);
+        $this->articleController = new ArticleController($this->articleRepository, $this->userRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->validator, $this->paginator);
         $this->homeController = new HomeController($this->view, $this->validator, $this->session, $this->paginator, $this->articleRepository);
         $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->validator, $this->userRepository);
         $this->commentController = new CommentController($this->view, $this->session, $this->env, $this->paginator, $this->commentRepository);
@@ -107,6 +107,15 @@ final class Router
         if ($pathInfo === '/admin') {
             return $this->articleController->articles($this->request, false);
         }
+
+        if ($pathInfo === '/admin/article/new') {
+            return $this->articleController->newEdit($this->request);
+        }
+
+        if ($pathInfo === '/admin/article/edit') {
+            return $this->articleController->newEdit($this->request, false);
+        }
+
         if ($pathInfo === '/admin/comments') {
             return $this->commentController->comments($this->request);
         }

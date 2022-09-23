@@ -105,7 +105,7 @@ abstract class BaseRepository implements EntityRepositoryInterface
     }
 
     /**
-     * @return array<object>|null
+     * @return object[]|null
      */
     public function findAll(): ?array
     {
@@ -117,7 +117,7 @@ abstract class BaseRepository implements EntityRepositoryInterface
      * @param array<string,string>|null $orderBy
      * @param int|null $limit
      * @param int|null $offset
-     * @return array<int,object>|null
+     * @return object[]|null
      */
     public function findBy(array $criteria, bool $isMaster = true, array $orderBy = null, int $limit = null, int $offset = null): ?array
     {

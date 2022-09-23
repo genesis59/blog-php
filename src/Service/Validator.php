@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
 use App\Service\Http\Session\Session;
@@ -10,7 +11,8 @@ class Validator
 {
     function __construct(
         private readonly Session $session,
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly ArticleRepository $articleRepository
     ) {
     }
 
@@ -89,6 +91,16 @@ class Validator
 
     public function formContactIsValid(Request $request): bool
     {
+        if (
+            !$request->request()->has('nom') ||
+            !$request->request()->has('prenom') ||
+            !$request->request()->has('email') ||
+            !$request->request()->has('message') ||
+            !$request->request()->has('confidentialite')
+        ) {
+            $this->session->addFlashes("danger", "Désolé le formulaire n'est pas complet.");
+            return false;
+        }
         $nomIsValid = $this->inputTextIsValid("nom", $request->request()->get('nom'), 1, 50, false);
         $prenomIsValid = $this->inputTextIsValid("prénom", $request->request()->get('prenom'), 2, 50, false);
         $emailIsValid = $this->inputEmailIsValid($request->request()->get('email'));
@@ -102,6 +114,10 @@ class Validator
 
     public function formAddCommentIsValid(Request $request): bool
     {
+        if (!$request->request()->has('commentaire')) {
+            $this->session->addFlashes("danger", "Désolé le formulaire n'est pas complet.");
+            return false;
+        }
         $commentIsValid = $this->inputTextIsValid("commentaire", $request->request()->get('commentaire'), 10);
         if ($commentIsValid) {
             return true;
@@ -111,6 +127,15 @@ class Validator
 
     public function formRegisterIsValid(Request $request): bool
     {
+        if (
+            !$request->request()->has('pseudo') ||
+            !$request->request()->has('chapo') ||
+            !$request->request()->has('password') ||
+            !$request->request()->has('confidentialite')
+        ) {
+            $this->session->addFlashes("danger", "Désolé le formulaire n'est pas complet.");
+            return false;
+        }
         $nomIsValid = $this->inputTextIsValid("pseudo", $request->request()->get('pseudo'), 3, 50);
         $pseudoIsUnique = $this->attributeIsUnique("pseudo", ["pseudo" => $request->request()->get('pseudo')]);
         $emailIsValid = $this->inputEmailIsValid($request->request()->get('email'));
@@ -119,6 +144,37 @@ class Validator
         $formatPasswordIsValid = $this->formatPasswordIsValid($request->request()->get('password'));
 
         if ($nomIsValid && $emailIsValid && $acceptedPrivacy && $formatPasswordIsValid && $emailIsUnique && $pseudoIsUnique) {
+            return true;
+        }
+        return false;
+    }
+
+    public function formNewEditArticleIsValid(Request $request, bool $isNew): bool
+    {
+        if (
+            !$request->request()->has('title') ||
+            !$request->request()->has('chapo') ||
+            !$request->request()->has('content')
+        ) {
+            $this->session->addFlashes("danger", "Désolé le formulaire n'est pas complet.");
+            return false;
+        }
+        if (!$isNew) {
+            if (!$request->request()->has('id') || !$request->request()->has('author')) {
+                $this->session->addFlashes("danger", "Désolé le formulaire n'est pas complet2.");
+                return false;
+            }
+            $article = $this->articleRepository->find((int) $request->request()->get('id'));
+            $author = $this->userRepository->find((int) $request->request()->get('author'));
+            if ($article === null || $author === null) {
+                $this->session->addFlashes("danger", "Désolé le formulaire n'est pas valide.");
+                return false;
+            }
+        }
+        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 150);
+        $chapoIsValid = $this->inputTextIsValid("chapô", $request->request()->get('chapo'), 10, 255);
+        $contentIsValid = $this->inputTextIsValid("contenu", $request->request()->get('content'), 10);
+        if ($titleIsValid && $chapoIsValid && $contentIsValid) {
             return true;
         }
         return false;

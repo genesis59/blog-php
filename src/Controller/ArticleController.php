@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\Role;
 use App\Model\Entity\Article;
 use App\Model\Entity\Comment;
 use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\CommentRepository;
+use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -65,6 +67,7 @@ class ArticleController
      */
     public function __construct(
         private readonly ArticleRepository $articleRepository,
+        private readonly UserRepository $userRepository,
         private readonly CommentRepository $commentRepository,
         private readonly View $view,
         private readonly array $env,
@@ -161,6 +164,61 @@ class ArticleController
             'max_page' => $maxPage,
             'current_page' => $pageData,
             'url_to_paginate' => $this->env["URL_DOMAIN"] . "article?numero=" . $id . "&page=",
+        ]), 200);
+    }
+
+    public function newEdit(Request $request, bool $isNew = true): Response
+    {
+        if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->validator->formNewEditArticleIsValid($request, $isNew)) {
+            if (!$isNew) {
+                /** @var Article $article */
+                $article = $this->articleRepository->find((int)$request->request()->get("id"));
+                /** @var User $user */
+                $user = $this->userRepository->find((int)$request->request()->get("author"));
+                $article->setTitle($request->request()->get("title"));
+                $article->setChapo($request->request()->get("chapo"));
+                $article->setContent($request->request()->get("content"));
+                $article->setUser($user);
+                $this->articleRepository->update($article);
+                $this->session->addFlashes("success", "L'article a bien été modifié.");
+                $this->redirect($this->env["URL_DOMAIN"] . "admin");
+            }
+            if (!$this->getUser()) {
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
+            $article = new Article();
+            $article->setTitle($request->request()->get("title"));
+            $article->setChapo($request->request()->get("chapo"));
+            $article->setContent($request->request()->get("content"));
+            /** @var User $user */
+            $user = $this->getUser();
+            $article->setUser($user);
+            $this->articleRepository->create($article);
+            $this->session->addFlashes("success", "L'article a bien été créé.");
+            $this->redirect($this->env["URL_DOMAIN"] . "admin");
+        }
+        $idArticle = $request->query()->has("numero") ? (int)$request->query()->get("numero") : null;
+        $article = null;
+        if ($idArticle !== null) {
+            /** @var Article $article */
+            $article = $this->articleRepository->find($idArticle);
+            if ($article == null) {
+                $this->session->addFlashes("danger", "Désolé l'article demandé n'existe pas");
+                $this->redirect($this->env["URL_DOMAIN"] . "admin");
+            }
+        }
+        $authors = $this->userRepository->findAll();
+        return new Response($this->view->render([
+            'template' => 'backoffice/pages/newEditArticle',
+            'is_new' => $isNew,
+            'authors' => $authors ?? null,
+            'form' => [
+                'title' => $article === null ? $request->request()->get("title") ?? null : $article->getTitle(),
+                'chapo' => $article === null ? $request->request()->get("chapo") ?? null : $article->getChapo(),
+                'content' => $article === null ? $request->request()->get("content") ?? null : $article->getContent(),
+                'author' => $article === null ? $request->request()->get("author") ?? null : $article->getUser()->getId(),
+                'id' => $article === null ? $request->request()->get("id") ?? null : $article->getUser()->getId()
+            ]
         ]), 200);
     }
 }

@@ -73,7 +73,7 @@ class UserController
                 /** @var User $user */
                 $user = $this->userRepository->find($request->request()->get("user"));
                 if ($user !== null) {
-                    $this->toggleRoleUsers($request, $user);
+                    $this->toggleRoleUsers($user);
                 }
             }
             if ($request->request()->has("deleteUser")) {
