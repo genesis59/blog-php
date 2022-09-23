@@ -4,9 +4,9 @@
             <h5 class="card-title pb-3 border-bottom border-dark">{{ article.title }}</h5>
             <h6 class="card-subtitle mt-4 mb-2 text-muted ">
                 <p class="m-0">Publié par {{ article.user.pseudo }},
-                    le {{ article.createdAt|date("d M Y à h:i") }}</p>
+                    le {{ article.createdAt|date("d M Y à H:i") }}</p>
                 {% if article.createdAt != article.updatedAt %}
-                    <p class="m-0">Mis à jour le {{ article.updatedAt|date("d M Y à h:i") }}</p>
+                    <p class="m-0">Mis à jour le {{ article.updatedAt|date("d M Y à H:i") }}</p>
                 {% endif %}
             </h6>
             <p class="card-text">{{ article.chapo }}</p>

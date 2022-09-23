@@ -167,68 +167,69 @@ class ArticleController
         ]), 200);
     }
 
-    public function newEdit(Request $request, bool $isNew = true): Response
+    public function new(Request $request): Response
     {
-        if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->validator->formNewEditArticleIsValid($request, $isNew)) {
-            if (!$isNew) {
-                $this->updateArticle($request);
-                $this->redirect($this->env["URL_DOMAIN"] . "admin");
-            }
+        if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->validator->formNewArticleIsValid($request)) {
             if (!$this->getUser()) {
                 $this->redirect($this->env["URL_DOMAIN"]);
             }
-            $this->addArticle($request);
+            $article = new Article();
+            $article->setTitle($request->request()->get("title"));
+            $article->setChapo($request->request()->get("chapo"));
+            $article->setContent($request->request()->get("content"));
+            /** @var User $user */
+            $user = $this->getUser();
+            $article->setUser($user);
+            $this->articleRepository->create($article);
+            $this->session->addFlashes("success", "L'article a bien été créé.");
             $this->redirect($this->env["URL_DOMAIN"] . "admin");
         }
-        $idArticle = $request->query()->has("numero") ? (int)$request->query()->get("numero") : null;
-        $article = null;
-        if ($idArticle !== null) {
-            /** @var Article $article */
-            $article = $this->articleRepository->find($idArticle);
-            if ($article == null) {
-                $this->session->addFlashes("danger", "Désolé l'article demandé n'existe pas");
-                $this->redirect($this->env["URL_DOMAIN"] . "admin");
-            }
-        }
-        $authors = $this->userRepository->findAll();
         return new Response($this->view->render([
             'template' => 'backoffice/pages/newEditArticle',
-            'is_new' => $isNew,
-            'authors' => $authors ?? null,
+            'type_form' => 'new',
             'form' => [
-                'title' => $article === null ? $request->request()->get("title") ?? null : $article->getTitle(),
-                'chapo' => $article === null ? $request->request()->get("chapo") ?? null : $article->getChapo(),
-                'content' => $article === null ? $request->request()->get("content") ?? null : $article->getContent(),
-                'author' => $article === null ? $request->request()->get("author") ?? null : $article->getUser()->getId(),
-                'id' => $article === null ? $request->request()->get("id") ?? null : $article->getUser()->getId()
+                'title' => $request->request()->has("title") ? $request->request()->get("title") : null,
+                'chapo' => $request->request()->has("chapo") ? $request->request()->get("chapo") : null,
+                'content' => $request->request()->has("content") ? $request->request()->get("content") : null
             ]
         ]), 200);
     }
 
-    private function addArticle(Request $request): void
+    public function edit(Request $request): Response
     {
-        $article = new Article();
-        $article->setTitle($request->request()->get("title"));
-        $article->setChapo($request->request()->get("chapo"));
-        $article->setContent($request->request()->get("content"));
-        /** @var User $user */
-        $user = $this->getUser();
-        $article->setUser($user);
-        $this->articleRepository->create($article);
-        $this->session->addFlashes("success", "L'article a bien été créé.");
-    }
+        $idArticle = $request->query()->has("numero") ? (int)$request->query()->get("numero") : null;
 
-    private function updateArticle(Request $request): void
-    {
         /** @var Article $article */
-        $article = $this->articleRepository->find((int)$request->request()->get("id"));
-        /** @var User $user */
-        $user = $this->userRepository->find((int)$request->request()->get("author"));
-        $article->setTitle($request->request()->get("title"));
-        $article->setChapo($request->request()->get("chapo"));
-        $article->setContent($request->request()->get("content"));
-        $article->setUser($user);
-        $this->articleRepository->update($article);
-        $this->session->addFlashes("success", "L'article a bien été modifié.");
+        $article = $this->articleRepository->find($idArticle ?? 0);
+
+        if ($article == null) {
+            $this->session->addFlashes("danger", "Désolé l'article demandé n'existe pas");
+            $this->redirect($this->env["URL_DOMAIN"] . "admin");
+        }
+        if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->validator->formEditArticleIsValid($request)) {
+            /** @var User $user */
+            $user = $this->userRepository->find((int)$request->request()->get("author"));
+            $article->setTitle($request->request()->get("title"));
+            $article->setChapo($request->request()->get("chapo"));
+            $article->setContent($request->request()->get("content"));
+            $article->setUser($user);
+            $this->articleRepository->update($article);
+            $this->session->addFlashes("success", "L'article a bien été modifié.");
+            $this->redirect($this->env["URL_DOMAIN"] . "admin");
+        }
+        $authors = $this->userRepository->selectUserWithRoleEditorAndAdmin();
+        return new Response($this->view->render([
+            'template' => 'backoffice/pages/newEditArticle',
+            'type_form' => 'edit',
+            'current_user' => $this->getUser(),
+            'authors' => $authors ?? null,
+            'article' => $article,
+            'form' => [
+                'title' => $request->request()->has("title") ? $request->request()->get("title") : $article->getTitle(),
+                'chapo' => $request->request()->has("chapo") ? $request->request()->get("chapo") : $article->getChapo(),
+                'content' => $request->request()->has("content") ? $request->request()->get("content") : $article->getContent(),
+                'author_ongoing_selected' => $request->request()->get("author") ?? null
+            ]
+        ]), 200);
     }
 }

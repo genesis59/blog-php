@@ -51,7 +51,7 @@ final class Router
         $this->userRepository = new UserRepository($this->database, $this->hydrator);
         $this->commentRepository = new CommentRepository($this->database, $this->hydrator);
         $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
-        $this->validator = new Validator($this->session, $this->userRepository, $this->articleRepository);
+        $this->validator = new Validator($this->session, $this->userRepository);
         $this->articleController = new ArticleController($this->articleRepository, $this->userRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->validator, $this->paginator);
         $this->homeController = new HomeController($this->view, $this->validator, $this->session, $this->paginator, $this->articleRepository);
         $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->validator, $this->userRepository);
@@ -109,11 +109,11 @@ final class Router
         }
 
         if ($pathInfo === '/admin/article/new') {
-            return $this->articleController->newEdit($this->request);
+            return $this->articleController->new($this->request);
         }
 
         if ($pathInfo === '/admin/article/edit') {
-            return $this->articleController->newEdit($this->request, false);
+            return $this->articleController->edit($this->request);
         }
 
         if ($pathInfo === '/admin/comments') {

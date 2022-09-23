@@ -5,9 +5,9 @@
 <p>{{ article.content }}</p>
 <div class="row">
     <div class="col-6 text-start">
-        <p class="m-0">Date de création: <span class="text-primary">{{ article.createdAt|date("d M Y à h:i") }}</span></p>
+        <p class="m-0">Date de création: <span class="text-primary">{{ article.createdAt|date("d M Y à H:i") }}</span></p>
         {% if article.createdAt != article.updatedAt %}
-            <p class="m-0">Date de mise à jour: <span class="text-primary">{{ article.updatedAt|date("d M Y à h:i") }}</span></p>
+            <p class="m-0">Date de mise à jour: <span class="text-primary">{{ article.updatedAt|date("d M Y à H:i") }}</span></p>
         {% endif %}
         <p class="m-0">Auteur: <span class="text-primary"> {{ article.user.pseudo }}</span></p>
     </div>

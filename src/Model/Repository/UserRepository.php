@@ -64,4 +64,21 @@ class UserRepository extends BaseRepository
         $this->database->execute(['id' => $entity->getId(), 'pseudo' => $entity->getPseudo(), 'email' => $entity->getEmail(), 'pass' => $entity->getPass(), 'role' => $entity->getRoleUsers()]);
         return true;
     }
+
+    /**
+     * @return object[]|null
+     */
+    public function selectUserWithRoleEditorAndAdmin(): ?array
+    {
+        $sql = "SELECT * FROM " . $this->getClassName() . " WHERE role_users IN ('role_editor', 'role_admin')";
+        $this->database->prepare($sql);
+        $objects = null;
+        if ($result = $this->database->execute()) {
+            foreach ($result as $item) {
+                $objects[] = $this->hydrator->hydrate($item, new $this->class());
+            }
+            return $objects;
+        }
+        return null;
+    }
 }

@@ -1,6 +1,6 @@
 <form method="post">
     <div class="row">
-        <div class="mb-3 {{ is_new ? "col-12" : "col-12 col-md-6" }}">
+        <div class="mb-3 {{ type_form == "edit" ? "col-12 col-md-6" : "col-12" }}">
             <label for="title" class="form-label">
                 Titre
                 <span class="text-danger">*</span>
@@ -9,24 +9,31 @@
                    value="{{ form.title }}"
                    required>
         </div>
-        {% if is_new == false %}
+        {% if type_form == "edit" %}
+            {% if form.author_ongoing_selected is not null %}
+                {% set authorSelected = form.author_ongoing_selected %}
+            {% else %}
+                {% if article.user.id == 1 or (article.user.roleUsers != "role_editor" and article.user.roleUsers != "role_admin") %}
+                    {% set authorSelected = current_user.id %}
+                {% else %}
+                    {% set authorSelected = article.user.id %}
+                {% endif %}
+            {% endif %}
             <div class="mb-3 col-12 col-md-6">
                 <label for="author" class="form-label">
-                    Author
+                    Auteur{{ authorSelected }}
                     <span class="text-danger">*</span>
                 </label>
                 <select class="form-select" id="author" name="author" aria-label="Default select example">
                     {% for author in authors %}
-                        <option value="{{ author.id }}" {{ author.id == form.author ? "selected" : "" }}>{{ author.id == 1 ? "Cette article ne possède pas
-                                d'auteur" :  author.pseudo }}</option>
+                        <option value="{{ author.id }}" {{ author.id == authorSelected ? "selected" : "" }}>{{ author.pseudo }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <input type="hidden" name="id" value="{{ form.id }}">
         {% endif %}
         <div class="mb-3 col-12">
             <label for="chapo" class="form-label">
-                Chap
+                Chapô
                 <span class="text-danger">*</span>
             </label>
             <textarea class="form-control" id="chapo" rows="3" name="chapo" placeholder="Votre chapô"
@@ -41,7 +48,7 @@
                       required>{{ form.content }}</textarea>
         </div>
         <div class="col-12 mt-3">
-            <button class="btn btn-primary" type="submit">{{ is_new ? "Ajouter" : "Modifier" }}</button>
+            <button class="btn btn-primary" type="submit">{{ type_form == "edit" ? "Modifier" : "Ajouter" }}</button>
         </div>
     </div>
 </form>
