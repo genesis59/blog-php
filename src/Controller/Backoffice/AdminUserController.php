@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Backoffice;
 
+use App\Controller\ControllerTrait;
 use App\Enum\Role;
 use App\Model\Entity\Article;
 use App\Model\Entity\User;
@@ -13,7 +14,7 @@ use App\Service\Http\Session\Session;
 use App\Service\Paginator;
 use App\View\View;
 
-class UserController
+class AdminUserController
 {
     use ControllerTrait;
 
@@ -45,7 +46,7 @@ class UserController
             }
         }
         $this->userRepository->delete($user);
-        $this->session->addFlashes("succes", "Utilisateur supprimé.");
+        $this->session->addFlashes("success", "Utilisateur supprimé.");
     }
 
     /**
@@ -76,9 +77,9 @@ class UserController
                     $this->toggleRoleUsers($user);
                 }
             }
-            if ($request->request()->has("deleteUser")) {
+            if ($request->request()->has("typeAction") && $request->request()->get("typeAction") == "deleteUser") {
                 /** @var User $user */
-                $user = $this->userRepository->find($request->request()->get("deleteUser"));
+                $user = $this->userRepository->find($request->request()->get("id"));
                 if ($user !== null) {
                     $this->anonymizedArticlesOfDeleteUser($user);
                 }

@@ -41,7 +41,7 @@ class FormValidator extends Validator
         $emailIsValid = $this->inputEmailIsValid($request->request()->get('email'));
         $emailIsUnique = $this->attributeIsUnique("email", ["email" => $request->request()->get('email')]);
         $acceptedPrivacy = $this->inputCheckBoxIsChecked($request->request()->get('confidentialite'), "accept");
-        $formatPasswordIsValid = $this->formatPasswordIsValid($request->request()->get('password'));
+        $formatPasswordIsValid = $this->formatPasswordIsValid($request->request()->get('password'), $request->request()->get('confirm_password'));
 
         if ($nomIsValid && $emailIsValid && $acceptedPrivacy && $formatPasswordIsValid && $emailIsUnique && $pseudoIsUnique) {
             return true;

@@ -4,6 +4,7 @@ const modalTriggers = document.querySelectorAll(".modal-trigger");
 const modalTitleText = document?.getElementById("modal-title-text");
 const modalQuestionText = document?.getElementById("modal-question-text");
 const buttonSubmit = document?.getElementById("button-submit");
+const inputHiddenTypeAction = document?.getElementById("typeAction");
 
 modalTriggers.forEach(trigger => trigger.addEventListener("click",toggleModal));
 buttonSubmit?.addEventListener("click",launchForm)
@@ -22,8 +23,9 @@ function toggleModal(e){
         modalTitleText.innerText = "Suppression";
         modalQuestionText.innerText = "Voulez-vous vraiment supprimer cet utilisateur?";
     }
-    buttonSubmit.name = e.target.name;
+    buttonSubmit.name = "id";
     buttonSubmit.value = e.target.value;
+    inputHiddenTypeAction.value = e.target.name;
     modalContainer.classList.toggle("active")
 }
 

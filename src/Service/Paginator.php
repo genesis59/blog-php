@@ -28,7 +28,7 @@ class Paginator
 
     public function getMaxPage(int $nbEntity, int $limitPerPage): int
     {
-        if ($limitPerPage === 0) {
+        if ($limitPerPage === 0 || $nbEntity == 0) {
             return 1;
         }
         return (int)ceil($nbEntity / $limitPerPage);

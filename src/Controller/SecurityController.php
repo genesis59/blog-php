@@ -16,6 +16,7 @@ class SecurityController
 {
     const FORBIDDEN_ROLE = ['role_anonyme'];
     const ACCESS_ADMIN_AUTHORIZED_ROLE = ['role_admin','role_editor'];
+    const ACCESS_ADMIN_USERS_AUTHORIZED_ROLE = ['role_admin'];
 
     use ControllerTrait;
 
@@ -97,6 +98,16 @@ class SecurityController
     {
         if ($user = $this->getUser()) {
             if (in_array($user->getRoleUsers(), self::ACCESS_ADMIN_AUTHORIZED_ROLE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isAdmin(): bool
+    {
+        if ($user = $this->getUser()) {
+            if (in_array($user->getRoleUsers(), self::ACCESS_ADMIN_USERS_AUTHORIZED_ROLE)) {
                 return true;
             }
         }

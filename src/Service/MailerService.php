@@ -29,7 +29,7 @@ class MailerService
                 ->setFrom($from)
                 ->setTo('gvandevray@numericable.fr')
                 ->setBody($this->view->render([
-                    'template' => 'mail/contact',
+                    'template' => 'frontoffice/mail/contact',
                     'prenom' => $prenom,
                     'nom' => $nom,
                     'message' => $message
