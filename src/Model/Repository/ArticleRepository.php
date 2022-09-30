@@ -29,9 +29,9 @@ class ArticleRepository extends BaseRepository
         if (!$entity instanceof Article || $entity->getUser()->getRoleUsers() === Role::USER) {
             return false;
         }
-        $sql = 'INSERT INTO ' . $this->getClassName() . '(title,chapo,content,created_at,updated_at,id_user) VALUES (:title,:chapo,:content,NOW(),NOW(),:idUser)';
+        $sql = 'INSERT INTO ' . $this->getClassName() . '(title,chapo,content,slug,created_at,updated_at,id_user) VALUES (:title,:chapo,:content,:slug,NOW(),NOW(),:idUser)';
         $this->database->prepare($sql);
-        $this->database->execute(['title' => $entity->getTitle(), 'chapo' => $entity->getChapo(), 'content' => $entity->getContent(),'idUser' => $entity->getUser()->getId()]);
+        $this->database->execute(['title' => $entity->getTitle(), 'chapo' => $entity->getChapo(), 'content' => $entity->getContent(), 'slug' => $entity->getSlug(),'idUser' => $entity->getUser()->getId()]);
         return true;
     }
 
@@ -44,9 +44,9 @@ class ArticleRepository extends BaseRepository
         if (!$entity instanceof Article || !$this->findOneBy(['id' => $entity->getId()])) {
             return false;
         }
-        $sql = 'UPDATE ' . $this->getClassName() . ' SET title = :title, chapo = :chapo, content = :content, id_user = :idUser, updated_at = NOW() WHERE id = :id';
+        $sql = 'UPDATE ' . $this->getClassName() . ' SET title = :title, chapo = :chapo, content = :content, slug = :slug, id_user = :idUser, updated_at = NOW() WHERE id = :id';
         $this->database->prepare($sql);
-        $this->database->execute(['id' => $entity->getId(), 'title' => $entity->getTitle(), 'content' => $entity->getContent(), 'chapo' => $entity->getChapo(), 'idUser' => $entity->getUser()->getId()]);
+        $this->database->execute(['id' => $entity->getId(), 'title' => $entity->getTitle(), 'content' => $entity->getContent(), 'slug' => $entity->getSlug(), 'chapo' => $entity->getChapo(), 'idUser' => $entity->getUser()->getId()]);
         return true;
     }
 }

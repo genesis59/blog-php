@@ -16,8 +16,8 @@
                 <td>{{ article.updatedAt|date("d M Y à H:i") }}</td>
                 <td>
                     <div class="btn-group mt-3">
-                        <a href="{{ url_domain }}article?numero={{ article.id }}" class="btn btn-primary">Voir</a>
-                        <a href="{{ url_domain }}admin/article/edit?numero={{ article.id }}" class="btn btn-primary">Modifier</a>
+                        <a href="{{ url_domain }}article/{{ article.slug }}" class="btn btn-primary">Voir</a>
+                        <a href="{{ url_domain }}admin/article/edit/{{ article.slug }}" class="btn btn-primary">Modifier</a>
                         <button type="button" class="btn btn-danger modal-trigger" name="deleteArticle" value="{{ article.id }}">Supprimer</button>
                     </div>
                 </td>

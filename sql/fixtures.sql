@@ -34,22 +34,22 @@ VALUES ('Anonyme', 'role_anonyme', 'anonyme@anonyme.fr',
         '$argon2i$v=19$m=65536,t=4,p=1$ckxBTVpUdGVzTngzN3hCbg$hGt7lkQw2dsF9dsskfu0TYC17JyT5fiIB9ddz0FTMSA',
         '2022-08-30 04:06:19', '2022-08-30 04:06:19');
 
-INSERT INTO article(title, chapo, content, created_at, updated_at, id_user)
-VALUES ('Genshin Impact 3.0 : Le préchargement de la mise à jour est désormais disponible !',
+INSERT INTO article(slug,title, chapo, content, created_at, updated_at, id_user)
+VALUES ('slug-article-0','Genshin Impact 3.0 : Le préchargement de la mise à jour est désormais disponible !',
         'La mise à jour 3.0 de Genshin Impact rajoutant la région de Sumeru arrive mercredi, mais les joueurs peuvent d''ores et déjà prè-télécharger le paquet de ressources. pour pouvoir jouer à la nouvelle version directement lorsqu''elle sera disponible.',
         'La version 3.0 arrive à grands pas sur Genshin Impact et comme à son habitude ; miHoYo nous propose de télécharger en avance les ressources de cette mise à jour via un pré-téléchargement disponible quelques jours avant la sortie officielle. Comme pour les précédents pré-téléchargements, ce sont les versions mobiles (iOS et Android) et PC qui seront concernées par cette fonctionnalité. Peut-être que la version PlayStation y aura le droit un jour qui sait ? En attendant, découvrons comment fonctionne ce pré-téléchargement.',
         '2022-09-02 04:06:19', '2022-09-03 08:12:19', 2),
-       ('10 conseils pour reprendre Genshin Impact avec la 3.0',
+       ('slug-article-1','10 conseils pour reprendre Genshin Impact avec la 3.0',
         'La 3.0 de Genshin Impact s''annonce déjà comme un patch phare du jeu de mihoyo. Avec la nouvelle région de Sumeru à explorer, c''est le moment où jamais de reprendre ce RPG seul ou avec des amis. Voici 10 astuces très simples pour bien progresser et farmer efficacement.',
         'Genshin Impact était devenu un RPG quelque peu ronflant depuis de nombreux mois, mais la mise à jour 3.0 du jeu va mettre un sacré coup de pied dans la fourmilière. Nouvelle région de Sumeru, nouvel attribut élémentaires, brochettes de personnages charismatiques... Les raisons de se replonger dans le RPG de mihoyo ne manquent pas. Aussi, on vous expose ici une liste qui synthétise 10 astuces clés pour reprendre le jeu dans les meilleures conditions, et parvenir à manager ses ressources sans tomber dans les pièges tendus par l''aspect gatcha du titre.',
         '2022-09-02 06:06:19', '2022-09-02 06:06:19', 3),
-       ('Genshin Impact 3.0 : focus sur Tighnari, date de sortie et compétences du nouveau personnage',
+       ('slug-article-2','Genshin Impact 3.0 : focus sur Tighnari, date de sortie et compétences du nouveau personnage',
         'Le Marcheur verdoyant sera à la tête de la toute première bannière du patch de Sumeru. En tant que premier perso Dendro à voir le jour, Il mérite donc une attention toute particulière, à l''aube de cette fameuse version 3.0.',
         'Il est humble, amoureux de la nature, et manie le tout nouvel élément Dendro de Genshin Impact. Ce cher Tighnari a tout pour plaire ! Le Marcheur verdoyant sera d''ailleurs en vitrine de la bannière Viridescent Vigil, toute première bannière de personnage du patch 3.0, et il pourrait bien faire dépenser moultes primo-gemmes de par le monde.
 
 MiHoyo a très récemment publié les dernières infos le concernant, qu''elles soient relatives à son histoire, son gameplay ou même des matériaux requis à son perfectionnement.',
         '2022-09-04 19:42:19', '2022-09-04 19:42:19', 2),
-       ('Genshin Impact live 3.0 : Sumeru, Tighnari, Collei, Dori.. Découvrez le récap des annonces',
+       ('slug-article-3','Genshin Impact live 3.0 : Sumeru, Tighnari, Collei, Dori.. Découvrez le récap des annonces',
         'Le live de la mise à jour 3.0 a eu lieu aujourd''hui et nous vous proposons de découvrir le récapitulatif des annonces. Tighnari, Collei, Dori, Sumeru ou encore les codes pour obtenir des primo-gemmes, nous vous dévoilons tout.',
         'La région de Sumeru nous réserve un environnement plutôt naturel en relation avec l''élément Dendro qui est introduit avec celle-ci. Si nous avions eu des détails sur la zone précédemment, nous avons pu avoir quelques précisions durant ce live.
 
@@ -57,32 +57,32 @@ Tout d''abord, vous devez savoir que la région de Sumeru se situe à l''ouest d
 
 En parlant d''Archon, celle qui l''est actuellement est la Rani Kusanali. Elle lui a succédé i y a 500 ans, ce qui fait d''elle la plus jeune des Sept Archons à l''heure actuelle. Pour en revenir à l''Académie, c''est cette dernière qui gouverne la nation et qui a transformé la connaissance en une ressource gérée de manière rigoureuse.',
         '2022-09-05 15:18:19', '2022-09-05 16:19:19', 3),
-       ('Tower of Fantasy : King est-il un personnage copié de Genshin Impact ?',
+       ('slug-article-4','Tower of Fantasy : King est-il un personnage copié de Genshin Impact ?',
         'Ils sont tous les deux grands, charismatiques, et portent une chevelure rouge flamboyante quasi identique. King et Diluc sont pour ainsi dire jumeaux... sauf qu''ils proviennent de deux titres différents, qui vont d''ailleurs se tirer la bourre sur le terrain des RPG gashapon.',
         'Comme on s''y attendait, ce mois d''aout est comme électrifié par la rivalité naissante entre Genshin Impact et Tower of Fantasy. Les deux RPG en monde ouvert emploient globalement la même marque de fabrique et les mêmes codes esthétiques, et ToF arrive sur la marché mondial avec la ferme intention de faire trembler Genshin Impact, bien en place depuis plus de deux ans.
 
 Alors bien évidemment, les similitudes entre les deux univers sont légions. L''une d''elle titille tout particulièrement les communautés des deux titres : la ressemblance forte entre King et Diluc. "Ressemblance", le mot est peut-être même un peu faible. Les deux jeunes hommes manient l''élément du feu, le charisme, et la coupe de cheveu rouge comme personne.',
         '2022-09-05 18:06:19', '2022-09-05 18:06:19', 1),
-       ('Genshin Impact : Découvrez le nouvel événement intitulé Cadre mécanique perpétuel',
+       ('slug-article-5','Genshin Impact : Découvrez le nouvel événement intitulé Cadre mécanique perpétuel',
         'Genshin Impact : Découvrez le nouvel événement intitulé Cadre mécanique perpétuel',
         'Maintenant que nous avons vu les informations relatives à votre participation, nous allons revenir brièvement sur ce qui vous attend dans cet événement. Tout d''abord, c''est auprès du PNJ Félix Yogue faisant partie de la Cour de Fontaine qu''il faudra prendre les instructions afin d''entamer votre quête pour récupérer les morceaux de cadre mécanique. Il faudra ensuite les restaurer en utilisant l''établi spécial de Félix. Pour finir, il faudra assembler le cadre mécanique. À noter qu''un morceau est débloqué quotidiennement. Attention à ne pas quitter l''interface lors du processus de restauration ou d''assemblage, car la progression ne se sauvegarde pas et il faut donc recommencer.',
         '2022-09-06 20:46:19',
         '2022-09-06 20:46:19', 2),
-       ('Version 3.1 de Genshin Impact  : Voyage à travers le désert',
+       ('slug-article-6','Version 3.1 de Genshin Impact  : Voyage à travers le désert',
         'Explorez le vaste désert de Sumeru en compagnie de Candace, Cyno et Nilou  ! Profitez du Weinlesefest avec vos amis à Mondstadt  !',
         'Bonjour voyageurs ! Ici l’équipe de développement de Genshin Impact, nous avons le plaisir aujourd’hui de vous en dévoiler davantage sur la version 3.1 « Le roi Deshret et les trois mages ». Nous allons cette fois traverser la forêt tropicale vers l’ouest et entrer dans le magnifique désert pour y découvrir les légendes du roi Deshret ainsi que les indices du passé enfouis dans le sable. Trois nouveaux personnages de Sumeru rejoignent la liste des personnages jouables : Candace, Cyno et Nilou. Loin du sable étouffant, la célébration du Weinlesefest se présente dans le vent frais de l’automne avec davantage d’événements, de mini-jeux et de nombreuses récompenses.
 
 La zone de la mort, du mystère et de la technologie
 Contrairement à la forêt tropicale verdoyante, le désert de Sumeru ressemble à première vue à une vaste étendue de vide. On trouve au centre de ce désert le gigantesque Mausolée du roi Deshret. Bien que le roi Deshret et sa civilisation ancienne aient déjà disparu, ses légendes et sa technologie sont toujours mentionnées par le peuple du désert. On y trouve encore des mécanismes et des robots qui gardent sa dernière demeure.',
         '2022-09-07 05:06:19', '2022-09-07 05:45:19', 4),
-       ('Genshin Impact Version 2.8, « Songerie d’une nuit d’été », sera disponible le 13 Juillet',
+       ('slug-article-7','Genshin Impact Version 2.8, « Songerie d’une nuit d’été », sera disponible le 13 Juillet',
         'Profitez de l''été en compagnie de vos compagnons et de Shikanoin Heizou, d''une toute nouvelle aventure dans les îles, de nouvelles histoires et de magnifiques tenues !',
         'Bonjour, chers voyageurs ! L’équipe de développement de Genshin Impact est de retour pour vous inviter à profiter de l’été en Teyvat avec la version 2.8 de Genshin Impact «Songerie d’une nuit d’été» disponible le 13 juillet ! L’Archipel de la pomme dorée est à nouveau ouvert aux gens de l’extérieur, arborant un nouveau look avec davantage d’histoires, de défis et de récompenses. Préparez-vous à plonger dans des royaumes que vous n’avez jamais visités et découvrez la face cachée de vos compagnons. Un an après son apparition en jeu, vous aurez le plaisir d’en découvrir davantage sur Kaedehara Kazuha lorsque vous embarquerez dans la quête d’histoire de ce samouraï vagabond. Son ami proche Shikanoin Heizou sera aussi de la partie.
 
 Séjour estival à la mer
 En comparaison aux précédentes aventures insulaires, le «Séjour estival à la mer» de cette année vous réserve encore plus de surprises, maintenant que l’Archipel de la pomme dorée arbore un nouveau look : de nouveaux paysages et de nombreuses histoires à découvrir au fil de l’événement, de généreuses récompenses qui incluent un grand nombre de coffres et l’opportunité d’obtenir le personnage 4 étoiles Fischl, ainsi que sa toute nouvelle tenue. Tous ces éléments seront disponibles pendant une durée limitée.',
         '2022-09-08 13:28:19', '2022-09-08 13:28:19', 6),
-       ('Genshin Impact Version 2.6  : Aventurez-vous dans le Gouffre',
+       ('slug-article-8','Genshin Impact Version 2.6  : Aventurez-vous dans le Gouffre',
         'Découvrez les mystères tapis dans les profondeurs du Gouffre, rencontrez Kamisato Ayato et célébrez votre premier Festival Irodori à Inazuma en compagnie d''amis venus de tout Teyvat !',
         'Bonjour, chers voyageurs ! Nous avons le plaisir aujourd’hui de partager avec vous les dernières informations à propos de la version 2.6 de Genshin Impact « Zéphyr sur le jardin violet », qui sera officiellement disponible le 30 mars. La nouvelle zone vous permettra d’explorer la partie la plus à l’ouest de Liyue, de plonger dans cet étrange endroit et de continuer l’histoire des jumeaux voyageurs en compagnie de Dainsleif. De l’autre côté de la mer, la vie à Inazuma a bien changé depuis l’abolition du décret de confinement. Le magnifique Festival Irodori verra de nombreux invités d’Inazuma et de l’étranger venir célébrer les arts et la culture. Kamisato Ayato, le jeune maître qui a fait entrer l’un des clans les puis puissants d’Inazuma dans une nouvelle ère, sera disponible en tant que personnage cinq étoiles et le protagoniste d’une intéressante quête d’histoire.
 
@@ -90,31 +90,31 @@ Dans le Gouffre
 
 Le Gouffre a longtemps été la principale source de minerai de Liyue, particulièrement pour la fabrication de sa célèbre porcelaine. Vu d’en haut, le sol de cette zone arbore une teinte rouge-violet. De mystérieux accidents ont entraîné la récente fermeture de toute cette zone. Vous pourrez cependant, en tant que voyageur, rejoindre une équipe d’experts de différents domaines pour découvrir ce qui se passe dans ces profondeurs.',
         '2022-09-09 18:18:19', '2022-09-09 18:18:19', 4),
-       ('Genshin Impact version 2.5 : Rejoignez Yae Miko et la Shogun Raiden quand les sakura fleurissent',
+       ('slug-article-9','Genshin Impact version 2.5 : Rejoignez Yae Miko et la Shogun Raiden quand les sakura fleurissent',
         'Repoussez les ténèbres d''Enkanomiya, faites équipe avec Yae Miko et la Shogun Raiden et partagez les donjons que vous avez conçus avec les autres voyageurs  !',
         'Bonjour, chers voyageurs ! Ici, l’équipe de développement de Genshin Impact. Nous souhaitons aujourd’hui vous montrer quelque chose en rapport avec la mise à jour de version 2.5 « Quand les sakura fleurissent » qui sera disponible le 16 février ! Yae Miko rejoint enfin la liste des personnages jouables. Sa quête d’histoire ainsi que la suite de celle de la Shogun Raiden seront aussi disponibles, dévoilant le passé qui les lie à Inazuma depuis des centaines d’années. Pendant ce temps, des ténèbres d’origine inconnue envahissent Enkanomiya. Prêtez main forte à Kokomi afin de découvrir la vérité ! En plus des aventures que nous vous avons préparées, vous pourrez également élaborer vos propres modes de jeu ! Découvrez l’événement « Ingéniosité divine » et créez vos propres donjons ou essayez ceux des autres ! Repoussez les ténèbres qui envahissent Enkanomiya
 Les aventuriers expérimentés ont certainement déjà exploré Enkanomiya, une nation antique immergée laissée pour compte pendant des milliers d’années. Dans l’événement « Offrande d’accès aux Trois Royaumes », une zone basée sur Enkanomiya mais hantée par des ténèbres d’origine inconnue vous mettra au défi grâce à un tout nouveau mode de jeu. Nous avons aussi quelques conseils à vous donner.',
         '2022-09-10 23:00:19', '2022-09-10 23:00:19', 5),
-       ('Genshin Impact Version 2.4 Une grande fête et une nouvelle zone mystérieuse pour le nouvel an en Teyvat',
+       ('slug-article-10','Genshin Impact Version 2.4 Une grande fête et une nouvelle zone mystérieuse pour le nouvel an en Teyvat',
         'Célébrez le Festival des lanternes de Liyue en compagnie de nouveaux et de vieux amis, puis démarrez une nouvelle année remplie d''aventures dans la nouvelle zone d''Enkanomiya !',
         'Bonjour, voyageurs ! J’ai le plaisir de vous présenter en compagnie de l’équipe de développeurs la version 2.4 « Couleurs éphémères en vol », la première mise à jour de 2022 qui sera disponible le 5 janvier. Alors que la nouvelle année approche également en Teyvat, nous souhaitons vous inviter au Festival des lanternes de Liyue pour vous joindre à Shenhe, Yun Jin et de vieux amis pour reconstruire la Chambre de Jade. Vous pourrez obtenir de généreuses récompenses, y compris 10 pierres de la fatalité et un personnage 4 étoiles de Liyue gratuitement. À ces bonnes nouvelles s’ajoute un nouveau royaume enfoui sous les eaux calmes de l’Île de Watatsumi. Scellée pendant des milliers d’années, l’Enkanomiya maintenant éveillée a besoin d’un héros.
 
 Reconstruction et réjouissance au Festival des lanternes
 Le Festival des lanternes est la fête annuelle la plus importante de Liyue, un moment particulier où les gens se réunissent pour honorer les disparus et embrasser l’avenir avec leurs meilleurs vœux. Le jour des célébrations, le ciel du Port de Liyue s’illumine de lanternes célestes libérées par chaque foyer, avant d’accueillir un feu d’artifice grandiose.',
         '2022-09-11 10:04:19', '2022-09-11 10:04:19', 5),
-       ('Genshin Impact version 2.3 stage d’hiver dans les Monts Dosdragon !',
+       ('slug-article-11','Genshin Impact version 2.3 stage d’hiver dans les Monts Dosdragon !',
         'Relevez les défis des Monts Dosdragon et découvrez l''hiver en Teyvat avec Albedo, Eula, Arataki Itto et Gorou !',
         'Bonjour voyageurs ! L’équipe de développeurs de Genshin Impact est de retour avec les dernières informations à propos de la mise à jour de version 2.3 « Ombres au cœur du blizzard » qui sera disponible le 24 novembre. L’hiver arrive en Teyvat et nous avons préparé une série de défis et d’activités dans la neige à travers les Monts Dosdragon. Pendant ce temps à Inazuma, l’Agence de détectives Bantan Sango est confrontée à une mission urgente à propos de disparitions massives de petits animaux. Dans la version 2.3, des nouveaux et anciens compagnons rejoindront l’aventure. Albedo et Eula feront leur retour, tandis qu’Arataki Itto et Gorou feront leur apparition en jeu comme nouveaux personnages jouables. Entraînement dans le grand froid
 Couverts de neige tout au long de l’année, les Monts Dosdragon est une énorme chaîne de montagnes au sud de Mondstadt. Dans l’événement « Ombres au cœur du blizzard » de cette saison, la Guilde des aventuriers y organise un stage d’hiver. De vieilles connaissances, comme Albedo et Eula, apparaîtront dans l’histoire. Il est l’heure de rafraîchir vos compétences, de profiter de la neige et d’obtenir des récompenses comme la nouvelle épée 4★ « Fuseau de cinabre » pour perfectionner vos personnages !',
         '2022-09-12 20:59:19', '2022-09-12 20:59:19', 4),
-       ('Genshin Impact Version 2.2 Dissipez la brume mystique qui enveloppe l’île de Tsurumi',
+       ('slug-article-12','Genshin Impact Version 2.2 Dissipez la brume mystique qui enveloppe l’île de Tsurumi',
         'Explorez la dernière des îles principales d''Inazuma et relevez de nouveaux défis avec Thomas, Tartaglia, Xinyan et Hu Tao  !',
         'Bonjour, chers voyageurs ! Une fois de plus, l’équipe de développement de Genshin Impact vient vous communiquer les informations les plus récentes sur la dernière mise à jour du jeu. La version 2.2 « Dans les méandres de la brume » qui arrive le 13 octobre vous fera découvrir la dernière des six îles principales d’Inazuma, un nouveau personnage jouable, Thomas, et une escapade avec ce dernier. En plus de cela, vous pourrez également relever de nouveaux défis à Inazuma avec Tartaglia et Xinyan, ou tout simplement passer de bons moments avec de vieux amis à Liyue, Mondstadt, ou dans votre royaume intérieur.
 
 Par ailleurs, si vous n’avez pas encore reçu le personnage 5★ gratuit Aloy « Salvatrice d’un autre monde », n’oubliez pas de le récupérer dans la version 2.2. Vous pouvez également obtenir « Predator », un arc spécial conçu sur mesure pour Aloy, et commencer à chasser avec elle dans le monde de Teyvat. Une île dans la brume
 Les principales îles d’Inazuma ont chacune leurs particularités, mais l’Île de Tsurumi est peut-être la plus difficile à visiter pour les vagabonds et les explorateurs. L’épais brouillard qui recouvre toute l’île repousse la plupart des étrangers. Vous devrez trouver votre chemin et faire attention à ne pas vous perdre.',
         '2022-09-13 14:06:19', '2022-09-13 14:06:19', 6),
-       ('Genshin Impact Version 2.1 Partez à la chasse avec Aloy dans le monde de Teyvat !',
+       ('slug-article-13','Genshin Impact Version 2.1 Partez à la chasse avec Aloy dans le monde de Teyvat !',
         'Visitez à nouveau Liyue pour le Festival de désilune, rencontrez de nouveaux amis et apprêtez-vous à clore l''histoire principale d''Inazuma !',
         'Bonjour, voyageurs ! Ici, l’équipe de développement de Genshin Impact. Nous espérons que vous avez apprécié explorer Inazuma en juillet ! Avec la version 2.1 « Caresse sélénite sur les mortels » qui sortira le 1er septembre, de nouvelles îles et de nouvelles histoires vous attendent. Bien évidemment, de nouveaux personnages jouables feront leur apparition et vous aurez même l’occasion de revoir vos vieux amis du Port de Liyue.
 

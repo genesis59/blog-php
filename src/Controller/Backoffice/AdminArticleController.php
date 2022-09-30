@@ -13,6 +13,7 @@ use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
 use App\Service\Paginator;
+use App\Service\Slugify;
 use App\Service\Validator\FormValidator;
 use App\View\View;
 
@@ -38,7 +39,8 @@ class AdminArticleController
         private readonly array $env,
         private readonly Session $session,
         private readonly FormValidator $formValidator,
-        private readonly Paginator $paginator
+        private readonly Paginator $paginator,
+        private readonly Slugify $slugify
     ) {
     }
 
@@ -82,16 +84,22 @@ class AdminArticleController
             if (!$this->getUser()) {
                 $this->redirect($this->env["URL_DOMAIN"]);
             }
-            $article = new Article();
-            $article->setTitle($request->request()->get("title"));
-            $article->setChapo($request->request()->get("chapo"));
-            $article->setContent($request->request()->get("content"));
-            /** @var User $user */
-            $user = $this->getUser();
-            $article->setUser($user);
-            $this->articleRepository->create($article);
-            $this->session->addFlashes("success", "L'article a bien été créé.");
-            $this->redirect($this->env["URL_DOMAIN"] . "admin");
+            $slug = $this->slugify->slugify($request->request()->get("title"));
+            if ($this->articleRepository->findOneBy(["slug" => $slug])) {
+                $this->session->addFlashes("danger", "Le titre choisi existe déjà, veuillez le modifier.");
+            } else {
+                $article = new Article();
+                $article->setTitle($request->request()->get("title"));
+                $article->setSlug($slug);
+                $article->setChapo($request->request()->get("chapo"));
+                $article->setContent($request->request()->get("content"));
+                /** @var User $user */
+                $user = $this->getUser();
+                $article->setUser($user);
+                $this->articleRepository->create($article);
+                $this->session->addFlashes("success", "L'article a bien été créé.");
+                $this->redirect($this->env["URL_DOMAIN"] . "admin");
+            }
         }
         return new Response($this->view->render([
             'template' => 'backoffice/pages/newEditArticle',
@@ -104,27 +112,33 @@ class AdminArticleController
         ]), 200);
     }
 
-    public function edit(Request $request): Response
+    public function edit(Request $request, string $slug): Response
     {
-        $idArticle = $request->query()->has("numero") ? (int)$request->query()->get("numero") : null;
-
         /** @var Article $article */
-        $article = $this->articleRepository->find($idArticle ?? 0);
+        $article = $this->articleRepository->findOneBy(["slug" => $slug]);
 
         if ($article == null) {
             $this->session->addFlashes("danger", "Désolé l'article demandé n'existe pas");
             $this->redirect($this->env["URL_DOMAIN"] . "admin");
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->formValidator->formEditArticleIsValid($request)) {
-            /** @var User $user */
-            $user = $this->userRepository->find((int)$request->request()->get("author"));
-            $article->setTitle($request->request()->get("title"));
-            $article->setChapo($request->request()->get("chapo"));
-            $article->setContent($request->request()->get("content"));
-            $article->setUser($user);
-            $this->articleRepository->update($article);
-            $this->session->addFlashes("success", "L'article a bien été modifié.");
-            $this->redirect($this->env["URL_DOMAIN"] . "admin");
+            $slug = $this->slugify->slugify($request->request()->get("title"));
+            /** @var Article $isAlreadySlug */
+            $isAlreadySlug = $this->articleRepository->findOneBy(["slug" => $slug]);
+            if ($isAlreadySlug != null && $isAlreadySlug->getId() !== $article->getId()) {
+                $this->session->addFlashes("danger", "Le titre choisi existe déjà, veuillez le modifier.");
+            } else {
+                /** @var User $user */
+                $user = $this->userRepository->find((int)$request->request()->get("author"));
+                $article->setTitle($request->request()->get("title"));
+                $article->setChapo($request->request()->get("chapo"));
+                $article->setContent($request->request()->get("content"));
+                $article->setSlug($slug);
+                $article->setUser($user);
+                $this->articleRepository->update($article);
+                $this->session->addFlashes("success", "L'article a bien été modifié.");
+                $this->redirect($this->env["URL_DOMAIN"] . "admin");
+            }
         }
         $authors = $this->userRepository->selectUserWithRoleEditorAndAdmin();
         return new Response($this->view->render([

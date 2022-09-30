@@ -68,14 +68,14 @@ class ArticleController
         ]), 200);
     }
 
-    public function article(Request $request): Response
+    public function article(Request $request, string $slug): Response
     {
-        $idArticle = $request->query()->has("numero") ? (int)$request->query()->get("numero") : 0;
         $pageData = $request->query()->has("page") ? (int)$request->query()->get("page") : 1;
         /** @var Article $article */
-        $article = $this->articleRepository->find($idArticle);
+        $article = $this->articleRepository->findOneBy(["slug" => $slug]);
+
         if ($article == null) {
-            $this->session->addFlashes('info', "La page demandée n'existe pas.");
+            $this->session->addFlashes('info', "L'article demandée n'existe pas.");
             $this->redirect($this->env['URL_DOMAIN'] . "articles");
         }
         /** @var User $user */
@@ -120,7 +120,7 @@ class ArticleController
             'previous_entity' => $previousArticle,
             'max_page' => $maxPage,
             'current_page' => $pageData,
-            'url_to_paginate' => $this->env["URL_DOMAIN"] . "article?numero=" . $idArticle . "&page=",
+            'url_to_paginate' => $this->env["URL_DOMAIN"] . "article/" . $article->getSlug() . "?page=",
         ]), 200);
     }
 }

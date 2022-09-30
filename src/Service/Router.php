@@ -37,6 +37,7 @@ final class Router
     private readonly AdminCommentController $commentController;
     private readonly AdminUserController $userController;
     private readonly AdminArticleController $adminArticleController;
+    private readonly Slugify $slugify;
 
 
     /**
@@ -49,6 +50,7 @@ final class Router
         $this->hydrator = new Hydrator($this->database);
         $this->session = new Session();
         $this->paginator = new Paginator();
+        $this->slugify = new Slugify();
         $this->view = new View($this->session, $this->env);
         $this->articleRepository = new ArticleRepository($this->database, $this->hydrator);
         $this->userRepository = new UserRepository($this->database, $this->hydrator);
@@ -56,7 +58,7 @@ final class Router
         $this->mailerService = new MailerService($this->env['MAIL_HOST'], (int)$this->env['MAIL_PORT'], $this->session, $this->view);
         $this->formValidator = new FormValidator($this->session, $this->userRepository);
         $this->articleController = new ArticleController($this->articleRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->formValidator, $this->paginator);
-        $this->adminArticleController = new AdminArticleController($this->articleRepository, $this->userRepository, $this->view, $this->env, $this->session, $this->formValidator, $this->paginator);
+        $this->adminArticleController = new AdminArticleController($this->articleRepository, $this->userRepository, $this->view, $this->env, $this->session, $this->formValidator, $this->paginator, $this->slugify);
         $this->homeController = new HomeController($this->view, $this->formValidator, $this->session, $this->paginator, $this->articleRepository);
         $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->formValidator, $this->userRepository);
         $this->commentController = new AdminCommentController($this->view, $this->session, $this->env, $this->paginator, $this->commentRepository);
@@ -68,14 +70,18 @@ final class Router
         /** Route FRONT OFFICE */
 
         $pathInfo = $this->request->server()->get('PATH_INFO');
+
         if ($pathInfo === null) {
             $pathInfo = "/home";
         }
         if ($pathInfo === "/home") {
             return $this->homeController->index($this->request, $this->mailerService);
         }
-        if ($pathInfo === '/article') {
-            return $this->articleController->article($this->request);
+        if (str_starts_with($pathInfo, '/article/')) {
+            $pathInfoList = explode("/", $pathInfo);
+            $slug = $pathInfoList[count($pathInfoList) - 1];
+
+            return $this->articleController->article($this->request, $slug);
         }
         if ($pathInfo === '/articles') {
             return $this->articleController->articles($this->request);
@@ -116,8 +122,10 @@ final class Router
             return $this->adminArticleController->new($this->request);
         }
 
-        if ($pathInfo === '/admin/article/edit') {
-            return $this->adminArticleController->edit($this->request);
+        if (str_starts_with($pathInfo, '/admin/article/edit/')) {
+            $pathInfoList = explode("/", $pathInfo);
+            $slug = $pathInfoList[count($pathInfoList) - 1];
+            return $this->adminArticleController->edit($this->request, $slug);
         }
 
         if ($pathInfo === '/admin/comments') {

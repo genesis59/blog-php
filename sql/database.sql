@@ -4,13 +4,13 @@ USE blog_php;
 
 CREATE TABLE user
 (
-    id         int UNSIGNED AUTO_INCREMENT                   NOT NULL,
-    pseudo     varchar(255) UNIQUE                           NOT NULL,
+    id         int UNSIGNED AUTO_INCREMENT                                  NOT NULL,
+    pseudo     varchar(255) UNIQUE                                          NOT NULL,
     role_users ENUM ('role_user','role_admin','role_editor','role_anonyme') NOT NULL DEFAULT 'role_user',
     email      varchar(255) UNIQUE,
-    pass       varchar(255)                                  NOT NULL,
-    created_at datetime                                      NOT NULL,
-    updated_at datetime                                      NOT NULL,
+    pass       varchar(255)                                                 NOT NULL,
+    created_at datetime                                                     NOT NULL,
+    updated_at datetime                                                     NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
@@ -20,6 +20,7 @@ CREATE TABLE article
     title      varchar(255)                NOT NULL,
     chapo      text                        NOT NULL,
     content    text                        NOT NULL,
+    slug       varchar(255) UNIQUE         NOT NULL,
     created_at datetime                    NOT NULL,
     updated_at datetime                    NOT NULL,
     id_user    int UNSIGNED                NOT NULL,

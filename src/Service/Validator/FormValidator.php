@@ -51,7 +51,7 @@ class FormValidator extends Validator
 
     public function formEditArticleIsValid(Request $request): bool
     {
-        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 150);
+        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 250);
         $chapoIsValid = $this->inputTextIsValid("chapô", $request->request()->get('chapo'), 10, 255);
         $contentIsValid = $this->inputTextIsValid("contenu", $request->request()->get('content'), 10);
         $author = $this->userRepository->find((int)$request->request()->get('author'));
@@ -63,7 +63,7 @@ class FormValidator extends Validator
 
     public function formNewArticleIsValid(Request $request): bool
     {
-        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 150);
+        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 250);
         $chapoIsValid = $this->inputTextIsValid("chapô", $request->request()->get('chapo'), 10, 255);
         $contentIsValid = $this->inputTextIsValid("contenu", $request->request()->get('content'), 10);
         if ($titleIsValid && $chapoIsValid && $contentIsValid) {
