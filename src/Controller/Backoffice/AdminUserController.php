@@ -28,7 +28,6 @@ class AdminUserController
         }
         $user->setRoleUsers($newRole);
         $this->userRepository->update($user);
-        $this->session->addFlashes("success", "Rôle modifié.");
     }
 
     private function anonymizedArticlesOfDeleteUser(User $user): void
@@ -46,7 +45,6 @@ class AdminUserController
             }
         }
         $this->userRepository->delete($user);
-        $this->session->addFlashes("success", "Utilisateur supprimé.");
     }
 
     /**

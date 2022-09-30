@@ -70,10 +70,10 @@ class ArticleController
 
     public function article(Request $request): Response
     {
-        $id = $request->query()->has("numero") ? (int)$request->query()->get("numero") : 0;
+        $idArticle = $request->query()->has("numero") ? (int)$request->query()->get("numero") : 0;
         $pageData = $request->query()->has("page") ? (int)$request->query()->get("page") : 1;
         /** @var Article $article */
-        $article = $this->articleRepository->find($id);
+        $article = $this->articleRepository->find($idArticle);
         if ($article == null) {
             $this->session->addFlashes('info', "La page demandée n'existe pas.");
             $this->redirect($this->env['URL_DOMAIN'] . "articles");
@@ -120,7 +120,7 @@ class ArticleController
             'previous_entity' => $previousArticle,
             'max_page' => $maxPage,
             'current_page' => $pageData,
-            'url_to_paginate' => $this->env["URL_DOMAIN"] . "article?numero=" . $id . "&page=",
+            'url_to_paginate' => $this->env["URL_DOMAIN"] . "article?numero=" . $idArticle . "&page=",
         ]), 200);
     }
 }

@@ -44,6 +44,17 @@ class AdminArticleController
 
     public function index(Request $request): Response
     {
+        if ($request->server()->get("REQUEST_METHOD") === "POST" && $request->request()->get("typeAction") == "deleteArticle") {
+            $idArticle = $request->request()->has("id") ? (int)$request->request()->get("id") : 0;
+            /** @var Article $article */
+            $article = $this->articleRepository->find($idArticle);
+            if ($article == null) {
+                $this->session->addFlashes("danger", "Une problème est survenu l'article ne peut être supprimé.");
+                $this->redirect($request->server()->get('HTTP_REFERER'));
+            }
+            $this->articleRepository->delete($article);
+            $this->session->addFlashes("success", "Article suprimmé.");
+        }
         $pageData = $request->query()->has("page") && (int)$request->query()->get("page") !== 0 ? (int)$request->query()->get("page") : 1;
         /** @var Article[] $articles */
         $articles = $this->paginator->paginate($this->articleRepository, [], self::MAX_ARTICLE_PER_PAGE, $pageData);

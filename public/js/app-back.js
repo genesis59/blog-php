@@ -23,6 +23,10 @@ function toggleModal(e){
         modalTitleText.innerText = "Suppression";
         modalQuestionText.innerText = "Voulez-vous vraiment supprimer cet utilisateur?";
     }
+    if(e.target.name === "deleteArticle"){
+        modalTitleText.innerText = "Suppression";
+        modalQuestionText.innerText = "Voulez-vous vraiment supprimer cet article?";
+    }
     buttonSubmit.name = "id";
     buttonSubmit.value = e.target.value;
     inputHiddenTypeAction.value = e.target.name;

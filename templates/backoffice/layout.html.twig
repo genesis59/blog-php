@@ -17,9 +17,7 @@
     {% block content %}
     {% endblock %}
 </div>
-{% if template == "backoffice/pages/comments" or template == "backoffice/pages/users" %}
-    {% include './backoffice/components/_modal_comment.html.twig' %}
-{% endif %}
+{% include './backoffice/components/_modal_comment.html.twig' %}
 <script src="{{ url_domain }}bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
 <script src="{{ url_domain }}js/app-back.js"></script>
 </body>
