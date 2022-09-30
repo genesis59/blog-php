@@ -15,27 +15,26 @@ class Validator
 
     public function inputTextIsValid(string $fieldName, ?string $value, int $min = null, int $max = null, bool $speChar = true): bool
     {
-        $valid = true;
-
         if (!$value) {
             $this->session->addFlashes("danger", "Merci de renseigner votre " . $fieldName . ".");
-            $valid = false;
-        } else {
-            if (!$speChar) {
-                if (!preg_match("/^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i", $value)) {
-                    $valid = false;
-                    $this->session->addFlashes("danger", "Champ " . $fieldName . " invalide. Les caractères spéciaux ne sont pas autorisés.");
-                }
-            }
-            if ($min && strlen($value) < $min) {
+            return false;
+        }
+        $valid = true;
+        if (!$speChar) {
+            if (!preg_match("/^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i", $value)) {
                 $valid = false;
-                $this->session->addFlashes("danger", "Le champ " . $fieldName . " doit comporter plus de " . $min . " caractères.");
-            }
-            if ($max && strlen($value) > $max) {
-                $valid = false;
-                $this->session->addFlashes("danger", "Le champ " . $fieldName . " doit comporter moins de " . $max . " caractères.");
+                $this->session->addFlashes("danger", "Champ " . $fieldName . " invalide. Les caractères spéciaux ne sont pas autorisés.");
             }
         }
+        if ($min && strlen($value) < $min) {
+            $valid = false;
+            $this->session->addFlashes("danger", "Le champ " . $fieldName . " doit comporter plus de " . $min . " caractères.");
+        }
+        if ($max && strlen($value) > $max) {
+            $valid = false;
+            $this->session->addFlashes("danger", "Le champ " . $fieldName . " doit comporter moins de " . $max . " caractères.");
+        }
+
         return $valid;
     }
 
@@ -76,8 +75,12 @@ class Validator
         return false;
     }
 
-    public function formatPasswordIsValid(string $password): bool
+    public function formatPasswordIsValid(string $password, string $confirmPassword): bool
     {
+        if ($password !== $confirmPassword) {
+            $this->session->addFlashes("danger", "Les mots de passe renseignés sont différents.");
+            return false;
+        }
 
         if (!preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-.,?;:§+!*$@%_])([-.,?;:§+!*$@%_\w]{8,})$/", $password)) {
             $this->session->addFlashes("danger", "Le mot de passe n'est pas valide. Il doit comporter au moins 8 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial (-.,?;:§+!*$@%_).");

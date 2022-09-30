@@ -108,10 +108,9 @@ class Comment
     {
         $value = $isActive;
         if (is_int($isActive)) {
+            $value = false;
             if ($isActive === 1) {
                 $value = true;
-            } else {
-                $value = false;
             }
         }
         $this->isActive = $value;

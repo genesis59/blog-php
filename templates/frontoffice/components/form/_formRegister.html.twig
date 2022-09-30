@@ -1,48 +1,53 @@
-<form method="post" id="form_register">
-    <div class="row">
-        <div class="mb-3 col-12 col-md-6">
-            <label for="pseudo" class="form-label">
-                Pseudo
-                <span class="text-danger">*</span>
-            </label>
-            <input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Votre pseudo" value="{{ form.pseudo }}"
+<form method="post">
+<div class="row">
+    <div class="mb-3 col-12 col-md-6">
+        <label for="pseudo" class="form-label">
+            Pseudo
+            <span class="text-danger">*</span>
+        </label>
+        <input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Votre pseudo"
+               value="{{ form.pseudo }}"
+               required>
+    </div>
+    <div class="mb-3 col-12 col-md-6">
+        <label for="email" class="form-label">
+            Email
+            <span class="text-danger">*</span>
+        </label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Votre email"
+               value="{{ form.email }}" required>
+    </div>
+    <div class="col-12 col-md-6">
+        <label for="password" class="form-label">
+            Mot de passe
+            <span class="text-danger">*</span>
+        </label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <div class="col-12 col-md-6">
+        <label for="confirm_password" class="form-label">
+            Confirmation du mot de passe
+            <span class="text-danger">*</span>
+        </label>
+        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+    </div>
+    <div class="col-12 mb-3 mt-2">
+        <p> Le mot de passe doit comporter au moins 8 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère
+            spécial (-.,?;:§+!*$@%_).</p>
+    </div>
+    <div class="col-12">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="accept" name="confidentialite"
+                   id="confidentialite" value="{{ form.confidentialite }}" {{ form.confidentialite ? "checked" : "" }}
                    required>
-        </div>
-        <div class="mb-3 col-12 col-md-6">
-            <label for="email" class="form-label">
-                Email
-                <span class="text-danger">*</span>
+            <label class="form-check-label" for="confidentialite">
+                <a href="{{ url_domain }}privacy" class="text-dark">Veuillez accepter nos politiques de
+                    confidentialité</a> <span class="text-danger">*</span>
             </label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Votre email"
-                   value="{{ form.email }}" required>
-        </div>
-        <div class="mb-3 col-12 col-md-6">
-            <label for="password" class="form-label">
-                Mot de passe
-                <span class="text-danger">*</span>
-            </label>
-            <input type="password" class="form-control" id="password" name="password" required>
-            <span class="badge bg-success mt-2" >Le mot de passe doit comporter au moins 8 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial (-.,?;:§+!*$@%_).</span>
-            <span id="error_message" class="badge bg-danger" ></span>
-        </div>
-        <div class="mb-3 col-12 col-md-6">
-            <label for="confirm_password" class="form-label">
-                Confirmation du mot de passe
-                <span class="text-danger">*</span>
-            </label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-        </div>
-        <div class="col-12">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="accept" name="confidentialite"
-                       id="confidentialite" value="{{ form.confidentialite }}" {{ form.confidentialite ? "checked" : "" }} required>
-                <label class="form-check-label" for="confidentialite">
-                    <a href="{{ url_domain }}privacy" class="text-dark">Veuillez accepter nos politiques de confidentialité</a> <span class="text-danger">*</span>
-                </label>
-            </div>
-        </div>
-        <div class="col-12 mt-3">
-            <button class="btn btn-primary" type="submit" id="button_form_register">S'inscrire</button>
         </div>
     </div>
+    <div class="col-12 mt-3">
+        <button class="btn btn-primary" type="submit" id="button_form_register">S'inscrire</button>
+    </div>
+</div>
 </form>

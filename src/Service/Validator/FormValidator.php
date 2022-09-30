@@ -41,7 +41,7 @@ class FormValidator extends Validator
         $emailIsValid = $this->inputEmailIsValid($request->request()->get('email'));
         $emailIsUnique = $this->attributeIsUnique("email", ["email" => $request->request()->get('email')]);
         $acceptedPrivacy = $this->inputCheckBoxIsChecked($request->request()->get('confidentialite'), "accept");
-        $formatPasswordIsValid = $this->formatPasswordIsValid($request->request()->get('password'));
+        $formatPasswordIsValid = $this->formatPasswordIsValid($request->request()->get('password'), $request->request()->get('confirm_password'));
 
         if ($nomIsValid && $emailIsValid && $acceptedPrivacy && $formatPasswordIsValid && $emailIsUnique && $pseudoIsUnique) {
             return true;
@@ -51,7 +51,7 @@ class FormValidator extends Validator
 
     public function formEditArticleIsValid(Request $request): bool
     {
-        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 150);
+        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 250);
         $chapoIsValid = $this->inputTextIsValid("chapô", $request->request()->get('chapo'), 10, 255);
         $contentIsValid = $this->inputTextIsValid("contenu", $request->request()->get('content'), 10);
         $author = $this->userRepository->find((int)$request->request()->get('author'));
@@ -63,7 +63,7 @@ class FormValidator extends Validator
 
     public function formNewArticleIsValid(Request $request): bool
     {
-        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 150);
+        $titleIsValid = $this->inputTextIsValid("titre", $request->request()->get('title'), 3, 250);
         $chapoIsValid = $this->inputTextIsValid("chapô", $request->request()->get('chapo'), 10, 255);
         $contentIsValid = $this->inputTextIsValid("contenu", $request->request()->get('content'), 10);
         if ($titleIsValid && $chapoIsValid && $contentIsValid) {

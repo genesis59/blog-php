@@ -31,6 +31,11 @@ class Article
     private string $content;
 
     /**
+     * @var string
+     */
+    private string $slug;
+
+    /**
      * @var DateTime
      */
     private DateTime $createdAt;
@@ -107,6 +112,22 @@ class Article
     public function setContent(string $content): void
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
     }
 
     /**

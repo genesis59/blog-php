@@ -21,8 +21,6 @@ function initVariables() {
     password = document.getElementById("password");
     confirmPassword = document.getElementById("confirm_password");
     buttonRegister = document.getElementById("button_form_register");
-    errorMessage = document.getElementById("error_message");
-    formRegister = document.getElementById("form_register");
 
 }
 function adjustFooter(idTarget, screenSizeLarge, screenSizeMedium) {
@@ -35,15 +33,5 @@ function adjustFooter(idTarget, screenSizeLarge, screenSizeMedium) {
         target.style.height = "220px";
     }
 }
-
-function confirm(e){
-    e.preventDefault();
-    if(password.value !== confirmPassword.value){
-        errorMessage.innerHTML = errorMessagePassword;
-        return;
-    }
-    formRegister.submit();
-}
-
 
 window.onload = init;
