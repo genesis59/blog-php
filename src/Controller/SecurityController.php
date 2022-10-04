@@ -20,6 +20,30 @@ class SecurityController
 
     use ControllerTrait;
 
+    private function checkLoginIsValid(Request $request): bool
+    {
+        $email = null;
+        $password = null;
+        if ($request->request()->has("email")) {
+            $email = $request->request()->get("email");
+        }
+        if ($request->request()->has("password")) {
+            $password = $request->request()->get("password");
+        }
+        if ($email && $password) {
+            /** @var User $user */
+            $user = $this->userRepository->findOneBy(['email' => $email]);
+
+            if (password_verify($password, $user->getPass())) {
+                $this->session->addFlashes("success", "Votre authentification a réussi.");
+                $this->session->set("user", $user);
+                return true;
+            }
+        }
+        $this->session->addFlashes("danger", "Email ou mot de passe invalide.");
+        return false;
+    }
+
     /**
      * @param array<string,string> $env
      */
@@ -111,30 +135,6 @@ class SecurityController
                 return true;
             }
         }
-        return false;
-    }
-
-    public function checkLoginIsValid(Request $request): bool
-    {
-        $email = null;
-        $password = null;
-        if ($request->request()->has("email")) {
-            $email = $request->request()->get("email");
-        }
-        if ($request->request()->has("password")) {
-            $password = $request->request()->get("password");
-        }
-        if ($email && $password) {
-            /** @var User $user */
-            $user = $this->userRepository->findOneBy(['email' => $email]);
-
-            if (password_verify($password, $user->getPass())) {
-                $this->session->addFlashes("success", "Votre authentification a réussi.");
-                $this->session->set("user", $user);
-                return true;
-            }
-        }
-        $this->session->addFlashes("danger", "Email ou mot de passe invalide.");
         return false;
     }
 }

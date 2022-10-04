@@ -85,9 +85,7 @@ class AdminArticleController
                 $this->redirect($this->env["URL_DOMAIN"]);
             }
             $slug = $this->slugify->slugify($request->request()->get("title"));
-            if ($this->articleRepository->findOneBy(["slug" => $slug])) {
-                $this->session->addFlashes("danger", "Le titre choisi existe déjà, veuillez le modifier.");
-            } else {
+            if (!$this->articleRepository->findOneBy(["slug" => $slug])) {
                 $article = new Article();
                 $article->setTitle($request->request()->get("title"));
                 $article->setSlug($slug);
@@ -100,6 +98,7 @@ class AdminArticleController
                 $this->session->addFlashes("success", "L'article a bien été créé.");
                 $this->redirect($this->env["URL_DOMAIN"] . "admin");
             }
+            $this->session->addFlashes("danger", "Le titre choisi existe déjà, veuillez le modifier.");
         }
         return new Response($this->view->render([
             'template' => 'backoffice/pages/newEditArticle',
