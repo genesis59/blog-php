@@ -68,6 +68,10 @@ class AdminUserController
     public function users(Request $request): Response
     {
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             if ($request->request()->has("user")) {
                 /** @var User $user */
                 $user = $this->userRepository->find($request->request()->get("user"));

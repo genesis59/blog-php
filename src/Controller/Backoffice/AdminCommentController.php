@@ -39,6 +39,10 @@ class AdminCommentController
     {
 
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $request->request()->has("typeAction")) {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             /** @var Comment $comment */
             $comment = $this->commentRepository->find((int)$request->request()->get("id"));
             if ($comment == null) {

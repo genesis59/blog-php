@@ -39,6 +39,7 @@ final class Router
     private readonly AdminArticleController $adminArticleController;
     private readonly Slugify $slugify;
     private readonly CustomsOfficer $customsOfficer;
+    private readonly TokenGenerator $tokenGenerator;
 
 
     /**
@@ -53,7 +54,8 @@ final class Router
         $this->paginator = new Paginator();
         $this->slugify = new Slugify();
         $this->customsOfficer = new CustomsOfficer();
-        $this->view = new View($this->session, $this->env);
+        $this->tokenGenerator = new TokenGenerator($this->session);
+        $this->view = new View($this->session, $this->env, $this->tokenGenerator);
         $this->articleRepository = new ArticleRepository($this->database, $this->hydrator);
         $this->userRepository = new UserRepository($this->database, $this->hydrator);
         $this->commentRepository = new CommentRepository($this->database, $this->hydrator);
@@ -61,7 +63,7 @@ final class Router
         $this->formValidator = new FormValidator($this->session, $this->userRepository);
         $this->articleController = new ArticleController($this->articleRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->formValidator, $this->paginator);
         $this->adminArticleController = new AdminArticleController($this->articleRepository, $this->userRepository, $this->view, $this->env, $this->session, $this->formValidator, $this->paginator, $this->slugify);
-        $this->homeController = new HomeController($this->view, $this->formValidator, $this->session, $this->paginator, $this->articleRepository);
+        $this->homeController = new HomeController($this->view, $this->formValidator, $this->session, $this->paginator, $this->articleRepository, $this->env);
         $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->formValidator, $this->userRepository);
         $this->commentController = new AdminCommentController($this->view, $this->session, $this->env, $this->paginator, $this->commentRepository);
         $this->userController = new AdminUserController($this->view, $this->session, $this->env, $this->userRepository, $this->articleRepository, $this->paginator);

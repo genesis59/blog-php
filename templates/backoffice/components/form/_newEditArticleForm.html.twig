@@ -47,6 +47,7 @@
             <textarea class="form-control" id="content" rows="6" name="content" placeholder="Votre contenu"
                       required>{{ form.content }}</textarea>
         </div>
+        <input type="hidden" name="token" value="{{ token }}">
         <div class="col-12 mt-3">
             <button class="btn btn-primary" type="submit">{{ type_form == "edit" ? "Modifier" : "Ajouter" }}</button>
         </div>

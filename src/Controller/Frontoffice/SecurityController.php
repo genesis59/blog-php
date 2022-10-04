@@ -61,6 +61,10 @@ class SecurityController
             $this->redirect($this->env['URL_DOMAIN']);
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             $check = $this->checkLoginIsValid($request);
             if ($check) {
                 $this->redirect($this->env['URL_DOMAIN']);
@@ -86,6 +90,10 @@ class SecurityController
             $this->redirect($this->env["URL_DOMAIN"]);
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             if ($this->validator->formRegisterIsValid($request)) {
                 try {
                     $user = new User();

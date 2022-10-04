@@ -81,6 +81,10 @@ class ArticleController
         /** @var User $user */
         $user = $this->getUser();
         if ($user !== null && $request->server()->get("REQUEST_METHOD") === "POST") {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             if ($this->formValidator->formAddCommentIsValid($request)) {
                 try {
                     $newComment = new Comment();
@@ -94,7 +98,7 @@ class ArticleController
                 } catch (\Exception $e) {
                     $this->session->addFlashes('danger', 'Une problème est survenu le commentaire ne peut être soumis.');
                 }
-                $this->redirect($this->env['URL_DOMAIN'] . "article?numero=" . $article->getId());
+                $this->redirect($this->env['URL_DOMAIN'] . "article/" . $article->getSlug());
             }
             $this->session->addFlashes('danger', 'Une problème est survenu le commentaire ne peut être soumis.');
         }
