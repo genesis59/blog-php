@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Frontoffice;
 
+use App\Controller\ControllerTrait;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepository;
 use App\Service\Http\Request;
@@ -14,10 +15,6 @@ use App\View\View;
 
 class SecurityController
 {
-    const FORBIDDEN_ROLE = ['role_anonyme'];
-    const ACCESS_ADMIN_AUTHORIZED_ROLE = ['role_admin','role_editor'];
-    const ACCESS_ADMIN_USERS_AUTHORIZED_ROLE = ['role_admin'];
-
     use ControllerTrait;
 
     private function checkLoginIsValid(Request $request): bool
@@ -116,25 +113,5 @@ class SecurityController
                 'confidentialite' => $request->request()->get('confidentialite') ?? "",
             ]
         ]));
-    }
-
-    public function isAuthorized(): bool
-    {
-        if ($user = $this->getUser()) {
-            if (in_array($user->getRoleUsers(), self::ACCESS_ADMIN_AUTHORIZED_ROLE)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function isAdmin(): bool
-    {
-        if ($user = $this->getUser()) {
-            if (in_array($user->getRoleUsers(), self::ACCESS_ADMIN_USERS_AUTHORIZED_ROLE)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
