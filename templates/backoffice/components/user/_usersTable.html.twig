@@ -27,6 +27,7 @@
                                                for="flexSwitchCheckChecked">{{ user.roleUsers == "role_editor" ? "Désactiver le rôle éditeur" : "Activer le rôle éditeur" }}</label>
                                     </div>
                                     <input name="user" type="hidden" value="{{ user.id }}">
+                                    <input type="hidden" name="token" value="{{ token }}">
                                 </form>
                             </div>
                             <div class="col-6">

@@ -12,6 +12,25 @@ final class Request
     private readonly ParametersBag $server; // $_SERVER
 
     /**
+     * @param array<string,mixed> $parameters
+     * @return array<string,mixed>
+     */
+    private function handleProtectionXSS(array &$parameters): array
+    {
+        $parametersProtected = [];
+        $parametersProtected2 = [];
+        foreach ($parameters as $key => $parameter) {
+            if (is_array($parameter)) {
+                foreach ($parameter as $key2 => $parameter2) {
+                    $parametersProtected2[$key2] = htmlspecialchars($parameter2);
+                }
+            }
+            $parametersProtected[$key] = is_array($parameter) ? $parametersProtected2 : htmlspecialchars($parameter);
+        }
+        return $parametersProtected;
+    }
+
+    /**
      * @param array<mixed> $query
      * @param array<mixed> $request
      * @param array<mixed> $files
@@ -19,9 +38,12 @@ final class Request
      */
     public function __construct(array $query, array $request, array $files, array $server)
     {
-        $this->query = new ParametersBag($query);
-        $this->request = new ParametersBag($request);
-        $this->files = new ParametersBag($files);
+        $protectedQuery = $this->handleProtectionXSS($query);
+        $protectedRequest = $this->handleProtectionXSS($request);
+        $protectedFile = $this->handleProtectionXSS($files);
+        $this->query = new ParametersBag($protectedQuery);
+        $this->request = new ParametersBag($protectedRequest);
+        $this->files = new ParametersBag($protectedFile);
         $this->server = new ParametersBag($server);
     }
 

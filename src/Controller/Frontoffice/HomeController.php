@@ -21,12 +21,21 @@ class HomeController
 
     const NUMBER_LAST_ARTICLE_ON_HOMEPAGE = 4;
 
+    /**
+     * @param View $view
+     * @param FormValidator $validator
+     * @param Session $session
+     * @param Paginator $paginator
+     * @param ArticleRepository $articleRepository
+     * @param array<string,string> $env
+     */
     public function __construct(
         private readonly View $view,
         private readonly FormValidator $validator,
         private readonly Session $session,
         private readonly Paginator $paginator,
-        private readonly ArticleRepository $articleRepository
+        private readonly ArticleRepository $articleRepository,
+        private readonly array $env
     ) {
     }
 
@@ -34,6 +43,10 @@ class HomeController
     {
         $flashFromContact = false;
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             if ($this->validator->formContactIsValid($request)) {
                 $mailerService->sendContactEmail(
                     $request->request()->get('email'),

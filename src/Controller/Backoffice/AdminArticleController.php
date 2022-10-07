@@ -47,6 +47,10 @@ class AdminArticleController
     public function index(Request $request): Response
     {
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $request->request()->get("typeAction") == "deleteArticle") {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             $idArticle = $request->request()->has("id") ? (int)$request->request()->get("id") : 0;
             /** @var Article $article */
             $article = $this->articleRepository->find($idArticle);
@@ -81,13 +85,15 @@ class AdminArticleController
     public function new(Request $request): Response
     {
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->formValidator->formNewArticleIsValid($request)) {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             if (!$this->getUser()) {
                 $this->redirect($this->env["URL_DOMAIN"]);
             }
             $slug = $this->slugify->slugify($request->request()->get("title"));
-            if ($this->articleRepository->findOneBy(["slug" => $slug])) {
-                $this->session->addFlashes("danger", "Le titre choisi existe déjà, veuillez le modifier.");
-            } else {
+            if (!$this->articleRepository->findOneBy(["slug" => $slug])) {
                 $article = new Article();
                 $article->setTitle($request->request()->get("title"));
                 $article->setSlug($slug);
@@ -100,6 +106,7 @@ class AdminArticleController
                 $this->session->addFlashes("success", "L'article a bien été créé.");
                 $this->redirect($this->env["URL_DOMAIN"] . "admin");
             }
+            $this->session->addFlashes("danger", "Le titre choisi existe déjà, veuillez le modifier.");
         }
         return new Response($this->view->render([
             'template' => 'backoffice/pages/newEditArticle',
@@ -122,6 +129,10 @@ class AdminArticleController
             $this->redirect($this->env["URL_DOMAIN"] . "admin");
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->formValidator->formEditArticleIsValid($request)) {
+            if ($this->session->get("token") !== $request->request()->get("token")) {
+                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
+                $this->redirect($this->env["URL_DOMAIN"]);
+            }
             $slug = $this->slugify->slugify($request->request()->get("title"));
             /** @var Article $isAlreadySlug */
             $isAlreadySlug = $this->articleRepository->findOneBy(["slug" => $slug]);

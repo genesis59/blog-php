@@ -8,15 +8,23 @@ class Slugify
 {
     public function slugify(string $value): string
     {
-        $slug = str_replace(" ", "-", $value);
 
-        $specialCharInValue = preg_filter("/[A-Za-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+(?:-[A-Za-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+)*/", "", $value);
+        $slug = strtolower(strtr($value, [
+            "á" => "a","à" => "a","â" => "a","ä" => "a",
+            "ã" => "a","å" => "a","ç" => "c","é" => "e",
+            "è" => "e","ê" => "e","ë" => "e","í" => "i",
+            "ì" => "i","î" => "i","ï" => "i","ñ" => "n",
+            "ó" => "o","ò" => "o","ô" => "o","ö" => "o",
+            "õ" => "o","ú" => "u","ù" => "u","û" => "u",
+            "ü" => "u","ý" => "y","ÿ" => "y","æ" => "ae",
+            "œ" => "oe"," " => "_"]));
+
+        $specialCharInValue = preg_filter("/[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*/", "", $value);
         if ($specialCharInValue) {
             foreach (str_split(trim($specialCharInValue)) as $char) {
-                $slug = str_replace($char, "", $slug);
+                $slug = str_replace($char, "_", $slug);
             }
         }
-        $slug = str_replace("--", "-", $slug);
-        return rtrim($slug, "-");
+        return $slug;
     }
 }

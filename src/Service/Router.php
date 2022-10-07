@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Controller\Backoffice\AdminArticleController;
-use App\Controller\Backoffice\AdminUserController;
 use App\Controller\Backoffice\AdminCommentController;
+use App\Controller\Backoffice\AdminUserController;
 use App\Controller\Frontoffice\ArticleController;
 use App\Controller\Frontoffice\HomeController;
-use App\Controller\SecurityController;
+use App\Controller\Frontoffice\SecurityController;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\CommentRepository;
 use App\Model\Repository\UserRepository;
@@ -38,6 +38,8 @@ final class Router
     private readonly AdminUserController $userController;
     private readonly AdminArticleController $adminArticleController;
     private readonly Slugify $slugify;
+    private readonly CustomsOfficer $customsOfficer;
+    private readonly TokenGenerator $tokenGenerator;
 
 
     /**
@@ -51,7 +53,9 @@ final class Router
         $this->session = new Session();
         $this->paginator = new Paginator();
         $this->slugify = new Slugify();
-        $this->view = new View($this->session, $this->env);
+        $this->customsOfficer = new CustomsOfficer();
+        $this->tokenGenerator = new TokenGenerator($this->session);
+        $this->view = new View($this->session, $this->env, $this->tokenGenerator);
         $this->articleRepository = new ArticleRepository($this->database, $this->hydrator);
         $this->userRepository = new UserRepository($this->database, $this->hydrator);
         $this->commentRepository = new CommentRepository($this->database, $this->hydrator);
@@ -59,7 +63,7 @@ final class Router
         $this->formValidator = new FormValidator($this->session, $this->userRepository);
         $this->articleController = new ArticleController($this->articleRepository, $this->commentRepository, $this->view, $this->env, $this->session, $this->formValidator, $this->paginator);
         $this->adminArticleController = new AdminArticleController($this->articleRepository, $this->userRepository, $this->view, $this->env, $this->session, $this->formValidator, $this->paginator, $this->slugify);
-        $this->homeController = new HomeController($this->view, $this->formValidator, $this->session, $this->paginator, $this->articleRepository);
+        $this->homeController = new HomeController($this->view, $this->formValidator, $this->session, $this->paginator, $this->articleRepository, $this->env);
         $this->securityController = new SecurityController($this->view, $this->env, $this->session, $this->formValidator, $this->userRepository);
         $this->commentController = new AdminCommentController($this->view, $this->session, $this->env, $this->paginator, $this->commentRepository);
         $this->userController = new AdminUserController($this->view, $this->session, $this->env, $this->userRepository, $this->articleRepository, $this->paginator);
@@ -108,7 +112,7 @@ final class Router
         // vérification de l'autorisation de l'utilisateur
 
         if (str_starts_with($pathInfo, '/admin')) {
-            if (!$this->securityController->isAuthorized()) {
+            if ($this->session->get('user') !== null && !$this->customsOfficer->isAuthorized($this->session->get('user'))) {
                 $this->session->addFlashes("danger", "Vous n'êtes pas autorisé à accéder à cette page");
                 return $this->homeController->index($this->request, $this->mailerService);
             }
@@ -133,7 +137,7 @@ final class Router
         }
 
         if ($pathInfo === '/admin/users') {
-            if (!$this->securityController->isAdmin()) {
+            if ($this->session->get('user') !== null && !$this->customsOfficer->isAdmin($this->session->get('user'))) {
                 $this->session->addFlashes("danger", "Vous n'êtes pas autorisé à accéder à cette page");
                 return $this->adminArticleController->index($this->request);
             }
