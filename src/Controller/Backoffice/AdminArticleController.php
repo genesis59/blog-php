@@ -35,8 +35,8 @@ class AdminArticleController
     public function __construct(
         private readonly ArticleRepository $articleRepository,
         private readonly UserRepository $userRepository,
-        private readonly View $view,
         private readonly array $env,
+        private readonly View $view,
         private readonly Session $session,
         private readonly FormValidator $formValidator,
         private readonly Paginator $paginator,

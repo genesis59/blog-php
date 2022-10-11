@@ -8,8 +8,8 @@ use App\Service\Http\Session\Session;
 class Validator
 {
     function __construct(
-        protected readonly Session $session,
-        protected readonly UserRepository $userRepository
+        protected readonly UserRepository $userRepository,
+        protected readonly Session $session
     ) {
     }
 

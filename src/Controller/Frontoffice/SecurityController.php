@@ -45,11 +45,11 @@ class SecurityController
      * @param array<string,string> $env
      */
     public function __construct(
-        private readonly View $view,
+        private readonly UserRepository $userRepository,
         private readonly array $env,
+        private readonly View $view,
         private readonly Session $session,
-        private readonly FormValidator $validator,
-        private readonly UserRepository $userRepository
+        private readonly FormValidator $validator
     ) {
     }
 

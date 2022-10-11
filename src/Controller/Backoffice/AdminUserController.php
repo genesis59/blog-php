@@ -56,11 +56,11 @@ class AdminUserController
      * @param Paginator $paginator
      */
     public function __construct(
-        private readonly View $view,
-        private readonly Session $session,
-        private readonly array $env,
         private readonly UserRepository $userRepository,
         private readonly ArticleRepository $articleRepository,
+        private readonly array $env,
+        private readonly View $view,
+        private readonly Session $session,
         private readonly Paginator $paginator
     ) {
     }

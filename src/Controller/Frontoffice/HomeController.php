@@ -30,12 +30,12 @@ class HomeController
      * @param array<string,string> $env
      */
     public function __construct(
+        private readonly ArticleRepository $articleRepository,
+        private readonly array $env,
         private readonly View $view,
         private readonly FormValidator $validator,
         private readonly Session $session,
-        private readonly Paginator $paginator,
-        private readonly ArticleRepository $articleRepository,
-        private readonly array $env
+        private readonly Paginator $paginator
     ) {
     }
 

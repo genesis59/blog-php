@@ -27,11 +27,11 @@ class AdminCommentController
      * @param CommentRepository $commentRepository
      */
     public function __construct(
+        private readonly CommentRepository $commentRepository,
+        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
-        private readonly array $env,
-        private readonly Paginator $paginator,
-        private readonly CommentRepository $commentRepository
+        private readonly Paginator $paginator
     ) {
     }
 

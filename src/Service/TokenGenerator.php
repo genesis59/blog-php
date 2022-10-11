@@ -18,4 +18,9 @@ class TokenGenerator
         $this->session->set("token", $token);
         return $token;
     }
+
+    public function validateCsrfToken(string $token): bool
+    {
+        return true;
+    }
 }

@@ -21,8 +21,8 @@ final class View
      * @param array<string,string> $env
      */
     public function __construct(
-        private readonly Session $session,
         private readonly array $env,
+        private readonly Session $session,
         private readonly TokenGenerator $tokenGenerator
     ) {
         $loader = new FilesystemLoader('../templates');
