@@ -7,6 +7,7 @@ namespace App\Controller\Frontoffice;
 use App\Controller\ControllerTrait;
 use App\Model\Entity\Article;
 use App\Model\Repository\ArticleRepository;
+use App\Service\CsrfValidator;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -27,15 +28,14 @@ class HomeController
      * @param Session $session
      * @param Paginator $paginator
      * @param ArticleRepository $articleRepository
-     * @param array<string,string> $env
      */
     public function __construct(
+        private readonly ArticleRepository $articleRepository,
         private readonly View $view,
         private readonly FormValidator $validator,
         private readonly Session $session,
         private readonly Paginator $paginator,
-        private readonly ArticleRepository $articleRepository,
-        private readonly array $env
+        private readonly CsrfValidator $csrfValidator
     ) {
     }
 
@@ -43,10 +43,8 @@ class HomeController
     {
         $flashFromContact = false;
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
+
             if ($this->validator->formContactIsValid($request)) {
                 $mailerService->sendContactEmail(
                     $request->request()->get('email'),

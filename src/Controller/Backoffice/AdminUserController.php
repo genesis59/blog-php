@@ -8,6 +8,7 @@ use App\Model\Entity\Article;
 use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\UserRepository;
+use App\Service\CsrfValidator;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -56,22 +57,20 @@ class AdminUserController
      * @param Paginator $paginator
      */
     public function __construct(
-        private readonly View $view,
-        private readonly Session $session,
-        private readonly array $env,
         private readonly UserRepository $userRepository,
         private readonly ArticleRepository $articleRepository,
-        private readonly Paginator $paginator
+        private readonly array $env,
+        private readonly View $view,
+        private readonly Session $session,
+        private readonly Paginator $paginator,
+        private readonly CsrfValidator $csrfValidator
     ) {
     }
 
     public function users(Request $request): Response
     {
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
             if ($request->request()->has("user")) {
                 /** @var User $user */
                 $user = $this->userRepository->find($request->request()->get("user"));

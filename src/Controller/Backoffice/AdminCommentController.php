@@ -7,6 +7,7 @@ namespace App\Controller\Backoffice;
 use App\Controller\ControllerTrait;
 use App\Model\Entity\Comment;
 use App\Model\Repository\CommentRepository;
+use App\Service\CsrfValidator;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -27,11 +28,12 @@ class AdminCommentController
      * @param CommentRepository $commentRepository
      */
     public function __construct(
+        private readonly CommentRepository $commentRepository,
+        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
-        private readonly array $env,
         private readonly Paginator $paginator,
-        private readonly CommentRepository $commentRepository
+        private readonly CsrfValidator $csrfValidator
     ) {
     }
 
@@ -39,10 +41,7 @@ class AdminCommentController
     {
 
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $request->request()->has("typeAction")) {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
             /** @var Comment $comment */
             $comment = $this->commentRepository->find((int)$request->request()->get("id"));
             if ($comment == null) {

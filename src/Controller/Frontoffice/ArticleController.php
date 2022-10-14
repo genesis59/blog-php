@@ -10,6 +10,7 @@ use App\Model\Entity\Comment;
 use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\CommentRepository;
+use App\Service\CsrfValidator;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -36,11 +37,12 @@ class ArticleController
     public function __construct(
         private readonly ArticleRepository $articleRepository,
         private readonly CommentRepository $commentRepository,
-        private readonly View $view,
         private readonly array $env,
+        private readonly View $view,
         private readonly Session $session,
         private readonly FormValidator $formValidator,
-        private readonly Paginator $paginator
+        private readonly Paginator $paginator,
+        private readonly CsrfValidator $csrfValidator
     ) {
     }
 
@@ -81,10 +83,7 @@ class ArticleController
         /** @var User $user */
         $user = $this->getUser();
         if ($user !== null && $request->server()->get("REQUEST_METHOD") === "POST") {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
             if ($this->formValidator->formAddCommentIsValid($request)) {
                 try {
                     $newComment = new Comment();
