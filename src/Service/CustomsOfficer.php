@@ -16,7 +16,10 @@ class CustomsOfficer
     public function secureAccessRoute(string $pathInfo): bool
     {
         if ($pathInfo && str_starts_with($pathInfo, '/admin')) {
-            if ($this->session->get('user') === null && !$this->isAuthorized($this->session->get('user'))) {
+            if (!$this->session->get('user')) {
+                return false;
+            }
+            if (!$this->isAuthorized($this->session->get('user'))) {
                 $this->session->addFlashes("danger", "Vous n'êtes pas autorisé à accéder à cette page");
                 return false;
             }
@@ -30,7 +33,11 @@ class CustomsOfficer
 
     public function isAuthorized(User|null $user): bool
     {
-        if ($user && in_array($user->getRoleUsers(), ['role_admin', 'role_editor'])) {
+
+        if (!$user) {
+            return false;
+        }
+        if (in_array($user->getRoleUsers(), ['role_admin', 'role_editor'])) {
             return true;
         }
         return false;
