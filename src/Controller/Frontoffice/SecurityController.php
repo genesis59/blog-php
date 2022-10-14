@@ -7,6 +7,7 @@ namespace App\Controller\Frontoffice;
 use App\Controller\ControllerTrait;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepository;
+use App\Service\CsrfValidator;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -49,7 +50,8 @@ class SecurityController
         private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
-        private readonly FormValidator $validator
+        private readonly FormValidator $validator,
+        private readonly CsrfValidator $csrfValidator
     ) {
     }
 
@@ -61,10 +63,7 @@ class SecurityController
             $this->redirect($this->env['URL_DOMAIN']);
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
             $check = $this->checkLoginIsValid($request);
             if ($check) {
                 $this->redirect($this->env['URL_DOMAIN']);
@@ -90,10 +89,7 @@ class SecurityController
             $this->redirect($this->env["URL_DOMAIN"]);
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
             if ($this->validator->formRegisterIsValid($request)) {
                 try {
                     $user = new User();

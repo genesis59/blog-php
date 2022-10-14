@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Service\Http\Request;
 use App\Service\Http\Response;
+use PHPStan\Type\CallableType;
 use ReflectionClass;
 
 final class Router
@@ -82,14 +83,16 @@ final class Router
                 "environmentVariable" => []
             ]
         ],
-        "TokenGenerator" => [
-            "name" => "App\Service\TokenGenerator",
+        "CsrfValidator" => [
+            "name" => "App\Service\CsrfValidator",
             "attributes" => [
                 "services" => [
                     "Session"
                 ],
                 "dataHandler" => [],
-                "environmentVariable" => []
+                "environmentVariable" => [
+                    "Environment"
+                ]
             ]
         ],
         "View" => [
@@ -97,7 +100,7 @@ final class Router
             "attributes" => [
                 "services" => [
                     "Session",
-                    "TokenGenerator"
+                    "CsrfValidator"
                 ],
                 "dataHandler" => [],
                 "environmentVariable" => [
@@ -117,14 +120,13 @@ final class Router
                 "environmentVariable" => []
             ]
         ],
-        "CustomOfficer" => [
-            "name" => "App\Service\CustomOfficer",
+        "CustomsOfficer" => [
+            "name" => "App\Service\CustomsOfficer",
             "attributes" => [
-                "services" => [],
-                "dataHandler" => [
-                    "Database",
-                    "Hydrator"
+                "services" => [
+                    "Session"
                 ],
+                "dataHandler" => [],
                 "environmentVariable" => []
             ]
         ],
@@ -171,13 +173,12 @@ final class Router
                     "FormValidator",
                     "Session",
                     "Paginator",
+                    "CsrfValidator"
                 ],
                 "dataHandler" => [
                     "ArticleRepository"
                 ],
-                "environmentVariable" => [
-                    "Environment"
-                ]
+                "environmentVariable" => []
             ]
         ],
         "ArticleController" => [
@@ -187,7 +188,8 @@ final class Router
                     "View",
                     "Session",
                     "FormValidator",
-                    "Paginator"
+                    "Paginator",
+                    "CsrfValidator"
                 ],
                 "dataHandler" => [
                     "ArticleRepository",
@@ -205,6 +207,7 @@ final class Router
                     "View",
                     "Session",
                     "FormValidator",
+                    "CsrfValidator"
                 ],
                 "dataHandler" => [
                     "UserRepository"
@@ -222,7 +225,8 @@ final class Router
                     "Session",
                     "FormValidator",
                     "Paginator",
-                    "Slugify"
+                    "Slugify",
+                    "CsrfValidator"
                 ],
                 "dataHandler" => [
                     "ArticleRepository",
@@ -239,7 +243,8 @@ final class Router
                 "services" => [
                     "View",
                     "Session",
-                    "Paginator"
+                    "Paginator",
+                    "CsrfValidator"
                 ],
                 "dataHandler" => [
                     "CommentRepository"
@@ -255,7 +260,8 @@ final class Router
                 "services" => [
                     "View",
                     "Session",
-                    "Paginator"
+                    "Paginator",
+                    "CsrfValidator"
                 ],
                 "dataHandler" => [
                     "UserRepository",
@@ -272,6 +278,8 @@ final class Router
      */
     private array $routes = [
         "home" => [
+            "startUri" => "/home",
+            "paramUri" => [],
             "controller" => "HomeController",
             "method" => "index",
             "attributes" => [
@@ -282,18 +290,20 @@ final class Router
                     "Request"
                 ]
             ],
-            "environmentVariable" => []
         ],
         "privacy" => [
+            "startUri" => "/privacy",
+            "paramUri" => [],
             "controller" => "HomeController",
             "method" => "register",
             "attributes" => [
                 "services" => [],
                 "dataHandler" => []
             ],
-            "environmentVariable" => []
         ],
         "articles" => [
+            "startUri" => "/articles",
+            "paramUri" => [],
             "controller" => "ArticleController",
             "method" => "articles",
             "attributes" => [
@@ -301,22 +311,23 @@ final class Router
                 "dataHandler" => [
                     "Request"
                 ],
-                "environmentVariable" => []
             ]
         ],
         "article" => [
+            "startUri" => "/article",
+            "paramUri" => ["slug"],
             "controller" => "ArticleController",
             "method" => "article",
             "attributes" => [
                 "services" => [],
                 "dataHandler" => [
-                    "Request",
-                    "Slug"
+                    "Request"
                 ],
-                "environmentVariable" => []
             ]
         ],
         "login" => [
+            "startUri" => "/login",
+            "paramUri" => [],
             "controller" => "SecurityController",
             "method" => "login",
             "attributes" => [
@@ -325,18 +336,20 @@ final class Router
                     "Request"
                 ]
             ],
-            "environmentVariable" => []
         ],
         "logout" => [
+            "startUri" => "/logout",
+            "paramUri" => [],
             "controller" => "SecurityController",
             "method" => "logout",
             "attributes" => [
                 "services" => [],
                 "dataHandler" => []
             ],
-            "environmentVariable" => []
         ],
         "signin" => [
+            "startUri" => "/signin",
+            "paramUri" => [],
             "controller" => "SecurityController",
             "method" => "register",
             "attributes" => [
@@ -344,10 +357,11 @@ final class Router
                 "dataHandler" => [
                     "Request"
                 ],
-                "environmentVariable" => []
             ]
         ],
         "admin" => [
+            "startUri" => "/admin",
+            "paramUri" => [],
             "controller" => "AdminArticleController",
             "method" => "index",
             "attributes" => [
@@ -355,10 +369,11 @@ final class Router
                 "dataHandler" => [
                     "Request"
                 ],
-                "environmentVariable" => []
             ]
         ],
-        "admin/article/new" => [
+        "admin_article_new" => [
+            "startUri" => "/admin/article/new",
+            "paramUri" => [],
             "controller" => "AdminArticleController",
             "method" => "new",
             "attributes" => [
@@ -366,22 +381,23 @@ final class Router
                 "dataHandler" => [
                     "Request"
                 ],
-                "environmentVariable" => []
             ]
         ],
-        "admin/article/edit" => [
+        "admin_article_edit" => [
+            "startUri" => "/admin/article/edit",
+            "paramUri" => ["slug"],
             "controller" => "AdminArticleController",
             "method" => "edit",
             "attributes" => [
                 "services" => [],
                 "dataHandler" => [
-                    "Request",
-                    "Slug"
+                    "Request"
                 ],
-                "environmentVariable" => []
             ]
         ],
-        "admin/comments" => [
+        "admin_comments" => [
+            "startUri" => "/admin/comments",
+            "paramUri" => [],
             "controller" => "AdminCommentController",
             "method" => "comments",
             "attributes" => [
@@ -389,10 +405,11 @@ final class Router
                 "dataHandler" => [
                     "Request"
                 ],
-                "environmentVariable" => []
             ]
         ],
-        "admin/users" => [
+        "admin_users" => [
+            "startUri" => "/admin/users",
+            "paramUri" => [],
             "controller" => "AdminUserController",
             "method" => "users",
             "attributes" => [
@@ -400,7 +417,6 @@ final class Router
                 "dataHandler" => [
                     "Request"
                 ],
-                "environmentVariable" => []
             ]
         ]
     ];
@@ -417,6 +433,16 @@ final class Router
      * @var array<string,mixed>
      */
     private array $attributesControllers = [];
+
+    /**
+     * @var string|null $nameRoute
+     */
+    private string|null $nameRoute;
+
+    /**
+     * @var array<mixed,string>
+     */
+    private array $paramsRouteList;
 
     /**
      * @param Request $request
@@ -459,17 +485,82 @@ final class Router
      * @param array<int,mixed> $arguments
      * @return false|mixed
      */
-    private function createInstance(string $className, array $arguments = array())
+    private function createInstance(string $className, array $arguments = array()): mixed
     {
         if (class_exists($className)) {
             return call_user_func_array(
                 array(
-                new ReflectionClass($className), 'newInstance'),
+                    new ReflectionClass($className), 'newInstance'),
                 $arguments
             );
         }
         return false;
     }
+
+    private function getNameRoute(string $pathInfo): void
+    {
+
+        $this->nameRoute = null;
+        $this->paramsRouteList = [];
+        foreach ($this->routes as $key => $route) {
+            if (str_starts_with($pathInfo, $route["startUri"])) {
+                if ($pathInfo === $route["startUri"]) {
+                    $this->nameRoute = $key;
+                    break;
+                }
+                if ($route["paramUri"] > 0) {
+                    // $route["paramUri"] liste des clé eventuelles
+                    // $paramsListTemp liste des paramètres éventuelles
+                    $numberOfParamsExpected = count($route["paramUri"]);
+                    $paramsRouteListTemp = explode("/", substr(substr($pathInfo, strlen($route["startUri"])), 1));
+                    if (count($paramsRouteListTemp) === $numberOfParamsExpected) {
+                        $this->nameRoute = $key;
+                        for ($i = 0; $i < count($paramsRouteListTemp); $i++) {
+                            $this->paramsRouteList[$route["paramUri"][$i]] = $paramsRouteListTemp[0];
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getAttributesRoute(): array
+    {
+        $attributes = [];
+        foreach ($this->routes[$this->nameRoute]["attributes"]["dataHandler"] as $attribute) {
+            if ($attribute === "Request") {
+                $attributes[] = $this->request;
+                continue;
+            }
+            $attributes[] = $this->attributesDataHandler[$attribute];
+        }
+        foreach ($this->routes[$this->nameRoute]["attributes"]["services"] as $attribute) {
+            $attributes[] = $this->attributesServices[$attribute];
+        }
+        foreach ($this->paramsRouteList as $param) {
+            $attributes[] = $param;
+        }
+        return $attributes;
+    }
+
+    private function launchControllerRoute(): Response
+    {
+        // Préparation du controller, de la method et des attributs à passer à la methode du controller
+        $controller = $this->routes[$this->nameRoute]["controller"];
+        $method = $this->routes[$this->nameRoute]["method"];
+        $attributes = $this->getAttributesRoute();
+
+        // typage de la variable $callbackController qui annule l'erreur suivante de PHPStan
+        // Parameter #1 $callback of function call_user_func_array expects callable(): mixed, array{mixed, mixed} given.
+        /** @var mixed $callbackController */
+        $callbackController = array($this->attributesControllers[$controller], $method);
+        return call_user_func_array($callbackController, $attributes);
+    }
+
 
     /**
      * @param Request $request
@@ -486,66 +577,24 @@ final class Router
 
     public function run(): Response
     {
-        //TODO PARAM TYPE SLUG
-        // vérification de l'autorisation de l'utilisateur
-
-//        if (str_starts_with($pathInfo, '/admin')) {
-//            if ($this->session->get('user') !== null && !$this->customsOfficer->isAuthorized($this->session->get('user'))) {
-//                $this->session->addFlashes("danger", "Vous n'êtes pas autorisé à accéder à cette page");
-//                return $this->homeController->index($this->request, $this->mailerService);
-//            }
-//        }
-//        if ($this->session->get('user') !== null && !$this->customsOfficer->isAdmin($this->session->get('user'))) {
-//            $this->session->addFlashes("danger", "Vous n'êtes pas autorisé à accéder à cette page");
-//            return $this->adminArticleController->index($this->request);
-//        }
-        /** Route FRONT OFFICE */
-
         $pathInfo = $this->request->server()->get('PATH_INFO') ? $this->request->server()->get('PATH_INFO') : null;
-        //TODO PARAM TYPE SLUG
-//        if(isset($pathInfo)){
-//            var_dump(count(explode("/", $pathInfo)));
-//            die();
-//        }
-        $nameRoute = "home";
-        if ($pathInfo !== null) {
-            $nameRoute = substr($this->request->server()->get('PATH_INFO'), 1);
+        if (!$pathInfo) {
+            $pathInfo = "/home";
         }
-        if (explode("/", $nameRoute)[0] === "article") {
-            $nameRoute = explode("/", $nameRoute)[0];
+        // vérification des autorisations de l'utilisateur
+        if (!$this->attributesServices["CustomsOfficer"]->secureAccessRoute($pathInfo)) {
+            return $this->attributesControllers["HomeController"]->index($this->request, $this->attributesServices["MailerService"]);
         }
-        if (isset($pathInfo) && str_starts_with($pathInfo, '/admin/article/edit')) {
-            $nameRoute = "admin/article/edit";
-        }
-        if (!isset($this->routes[$nameRoute])) {
-            return new Response($this->services["View"]->render([
+
+        $this->getNameRoute($pathInfo);
+
+        if (!$this->nameRoute) {
+            return new Response($this->attributesServices["View"]->render([
                 'template' => 'frontoffice/pages/errors/404',
                 'url_domain' => $this->env["URL_DOMAIN"],
                 'header_title' => 'Page introuvable',
             ]));
         }
-        $controller = $this->routes[$nameRoute]["controller"];
-        $method = $this->routes[$nameRoute]["method"];
-        $attributes = [];
-
-        foreach ($this->routes[$nameRoute]["attributes"]["dataHandler"] as $attribute) {
-            if ($attribute === "Request") {
-                $attributes[] = $this->request;
-                continue;
-            }
-            if ($attribute === "Slug") {
-                if (str_starts_with($pathInfo, '/article/') || str_starts_with($pathInfo, '/admin/article/edit')) {
-                    $pathInfoList = explode("/", $pathInfo);
-                    $slug = $pathInfoList[count($pathInfoList) - 1];
-                    $attributes[] = $slug;
-                    continue;
-                }
-            }
-            $attributes[] = $this->attributesDataHandler[$attribute];
-        }
-        foreach ($this->routes[$nameRoute]["attributes"]["services"] as $attribute) {
-            $attributes[] = $this->attributesServices[$attribute];
-        }
-        return call_user_func_array(array($this->attributesControllers[$controller], $method), $attributes);
+        return $this->launchControllerRoute();
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\View;
 
-use App\Service\TokenGenerator;
+use App\Service\CsrfValidator;
 use Twig\Environment;
 use App\Service\Http\Session\Session;
 use Twig\Error\LoaderError;
@@ -23,7 +23,7 @@ final class View
     public function __construct(
         private readonly array $env,
         private readonly Session $session,
-        private readonly TokenGenerator $tokenGenerator
+        private readonly CsrfValidator $tokenGenerator
     ) {
         $loader = new FilesystemLoader('../templates');
         $this->twig = new Environment($loader);

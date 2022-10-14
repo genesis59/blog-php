@@ -9,6 +9,7 @@ use App\Model\Entity\Article;
 use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\UserRepository;
+use App\Service\CsrfValidator;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -40,17 +41,15 @@ class AdminArticleController
         private readonly Session $session,
         private readonly FormValidator $formValidator,
         private readonly Paginator $paginator,
-        private readonly Slugify $slugify
+        private readonly Slugify $slugify,
+        private readonly CsrfValidator $csrfValidator
     ) {
     }
 
     public function index(Request $request): Response
     {
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $request->request()->get("typeAction") == "deleteArticle") {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
             $idArticle = $request->request()->has("id") ? (int)$request->request()->get("id") : 0;
             /** @var Article $article */
             $article = $this->articleRepository->find($idArticle);
@@ -85,10 +84,7 @@ class AdminArticleController
     public function new(Request $request): Response
     {
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->formValidator->formNewArticleIsValid($request)) {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
             if (!$this->getUser()) {
                 $this->redirect($this->env["URL_DOMAIN"]);
             }
@@ -129,10 +125,7 @@ class AdminArticleController
             $this->redirect($this->env["URL_DOMAIN"] . "admin");
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->formValidator->formEditArticleIsValid($request)) {
-            if ($this->session->get("token") !== $request->request()->get("token")) {
-                $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-                $this->redirect($this->env["URL_DOMAIN"]);
-            }
+            $this->csrfValidator->validateCsrfToken($request);
             $slug = $this->slugify->slugify($request->request()->get("title"));
             /** @var Article $isAlreadySlug */
             $isAlreadySlug = $this->articleRepository->findOneBy(["slug" => $slug]);
