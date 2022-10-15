@@ -16,7 +16,7 @@ class CsrfValidator
      * @param array<string,string> $env
      * @param Session $session
      */
-    public function __construct(private readonly array $env, private readonly Session $session)
+    public function __construct(private readonly Session $session, private readonly array $env)
     {
     }
 

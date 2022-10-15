@@ -47,11 +47,11 @@ class SecurityController
      */
     public function __construct(
         private readonly UserRepository $userRepository,
-        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
         private readonly FormValidator $validator,
-        private readonly CsrfValidator $csrfValidator
+        private readonly CsrfValidator $csrfValidator,
+        private readonly array $env
     ) {
     }
 

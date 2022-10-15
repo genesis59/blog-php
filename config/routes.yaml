@@ -1,0 +1,110 @@
+---
+home:
+  startUri: "/home"
+  paramUri: [ ]
+  controller: App\Controller\Frontoffice\HomeController
+  method: "index"
+  attributes:
+    services:
+      - App\Service\MailerService
+    dataHandler:
+      - App\Service\Http\Request
+privacy:
+  startUri: "/privacy"
+  paramUri: [ ]
+  controller: App\Controller\Frontoffice\HomeController
+  method: "register"
+  attributes:
+    services: [ ]
+    dataHandler: [ ]
+articles:
+  startUri: "/articles"
+  paramUri: [ ]
+  controller: App\Controller\Frontoffice\ArticleController
+  method: "articles"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request
+article:
+  startUri: "/article"
+  paramUri:
+    - "slug"
+  controller: App\Controller\Frontoffice\ArticleController
+  method: "article"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request
+login:
+  startUri: "/login"
+  paramUri: [ ]
+  controller: App\Controller\Frontoffice\SecurityController
+  method: "login"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request
+logout:
+  startUri: "/logout"
+  paramUri: [ ]
+  controller: App\Controller\Frontoffice\SecurityController
+  method: "logout"
+  attributes:
+    services: [ ]
+    dataHandler: [ ]
+signin:
+  startUri: "/signin"
+  paramUri: [ ]
+  controller: App\Controller\Frontoffice\SecurityController
+  method: "register"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request
+admin:
+  startUri: "/admin"
+  paramUri: [ ]
+  controller: App\Controller\Backoffice\AdminArticleController
+  method: "index"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request
+admin_article_new:
+  startUri: "/admin/article/new"
+  paramUri: [ ]
+  controller: App\Controller\Backoffice\AdminArticleController
+  method: "new"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request
+admin_article_edit:
+  startUri: "/admin/article/edit"
+  paramUri:
+    - "slug"
+  controller: App\Controller\Backoffice\AdminArticleController
+  method: "edit"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request
+admin_comments:
+  startUri: "/admin/comments"
+  paramUri: [ ]
+  controller: App\Controller\Backoffice\AdminCommentController
+  method: "comments"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request
+admin_users:
+  startUri: "/admin/users"
+  paramUri: [ ]
+  controller: App\Controller\Backoffice\AdminUserController
+  method: "users"
+  attributes:
+    services: [ ]
+    dataHandler:
+      - App\Service\Http\Request

@@ -36,13 +36,13 @@ class AdminArticleController
     public function __construct(
         private readonly ArticleRepository $articleRepository,
         private readonly UserRepository $userRepository,
-        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
         private readonly FormValidator $formValidator,
         private readonly Paginator $paginator,
         private readonly Slugify $slugify,
-        private readonly CsrfValidator $csrfValidator
+        private readonly CsrfValidator $csrfValidator,
+        private readonly array $env
     ) {
     }
 

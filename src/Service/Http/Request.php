@@ -14,7 +14,6 @@ final class Request
     private readonly ParametersBag $server; // $_SERVER
 
 
-
     /**
      * @param array<mixed> $query
      * @param array<mixed> $request
@@ -23,13 +22,9 @@ final class Request
      */
     public function __construct(array $query, array $request, array $files, array $server)
     {
-        $xssValidator = new XssValidator();
-        $protectedQuery = $xssValidator->handleProtectionXSS($query);
-        $protectedRequest = $xssValidator->handleProtectionXSS($request);
-        $protectedFile = $xssValidator->handleProtectionXSS($files);
-        $this->query = new ParametersBag($protectedQuery);
-        $this->request = new ParametersBag($protectedRequest);
-        $this->files = new ParametersBag($protectedFile);
+        $this->query = new ParametersBag($query);
+        $this->request = new ParametersBag($request);
+        $this->files = new ParametersBag($files);
         $this->server = new ParametersBag($server);
     }
 

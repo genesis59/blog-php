@@ -21,9 +21,9 @@ final class View
      * @param array<string,string> $env
      */
     public function __construct(
-        private readonly array $env,
         private readonly Session $session,
-        private readonly CsrfValidator $tokenGenerator
+        private readonly CsrfValidator $tokenGenerator,
+        private readonly array $env
     ) {
         $loader = new FilesystemLoader('../templates');
         $this->twig = new Environment($loader);

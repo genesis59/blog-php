@@ -32,10 +32,20 @@ class Environment
     }
 
     /**
-     * @return array<string,string>
+     * @return mixed[]|null
      */
-    public function getEnv(): array
+    public function all(): ?array
     {
         return $this->env;
+    }
+
+    public function get(string $key): mixed
+    {
+        return $this->has($key) ? $this->env[$key] : null;
+    }
+
+    public function has(string $key): bool
+    {
+        return isset($this->env[$key]);
     }
 }

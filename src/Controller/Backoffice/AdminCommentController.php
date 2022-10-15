@@ -29,11 +29,11 @@ class AdminCommentController
      */
     public function __construct(
         private readonly CommentRepository $commentRepository,
-        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
         private readonly Paginator $paginator,
-        private readonly CsrfValidator $csrfValidator
+        private readonly CsrfValidator $csrfValidator,
+        private readonly array $env
     ) {
     }
 
