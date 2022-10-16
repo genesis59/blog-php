@@ -8,6 +8,8 @@ use App\Controller\Frontoffice\HomeController;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\View\View;
+use ReflectionClass;
+use ReflectionNamedType;
 use Symfony\Component\Yaml\Yaml;
 
 final class Router
@@ -54,23 +56,23 @@ final class Router
     }
 
     /**
+     * @param string $className
+     * @param string $method
      * @return array<mixed>
      */
-    private function getAttributesRoute(): array
+    private function getAttributesRoute(string $className, string $method): array
     {
         $attributes = [];
-        foreach ($this->routes[$this->nameRoute]["attributes"]["dataHandler"] as $attribute) {
-            if ($attribute === Request::class) {
-                $attributes[] = $this->request;
-                continue;
+        if (class_exists($className)) {
+            $clone = new ReflectionClass($className);
+            if (count($clone->getMethod($method)->getParameters()) > 0) {
+                foreach ($clone->getMethod($method)->getParameters() as $parameter) {
+                    if ($parameter->getType() instanceof ReflectionNamedType) {
+                        $nameType = $parameter->getType()->getName();
+                        $attributes[] = $nameType !== "string" ? $this->container->get($nameType) : $this->paramsRouteList[$parameter->getName()];
+                    }
+                }
             }
-            $attributes[] = $this->container->get($attribute);
-        }
-        foreach ($this->routes[$this->nameRoute]["attributes"]["services"] as $attribute) {
-            $attributes[] = $this->container->get($attribute);
-        }
-        foreach ($this->paramsRouteList as $param) {
-            $attributes[] = $param;
         }
         return $attributes;
     }
@@ -80,7 +82,7 @@ final class Router
         // Préparation du controller, de la method et des attributs à passer à la methode du controller
         $controller = $this->routes[$this->nameRoute]["controller"];
         $method = $this->routes[$this->nameRoute]["method"];
-        $attributes = $this->getAttributesRoute();
+        $attributes = $this->getAttributesRoute($controller, $method);
 
         /** @var mixed $callbackController */
         $callbackController = array($this->container->get($controller), $method);
