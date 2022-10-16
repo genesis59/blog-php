@@ -12,14 +12,13 @@ class MailerService
     private Swift_Mailer $mailer;
 
     /**
-     * @param string $host
-     * @param int $port
      * @param Session $session
      * @param View $view
+     * @param Environment $environment
      */
-    public function __construct(string $host, int $port, private readonly Session $session, private readonly View $view)
+    public function __construct(private readonly Session $session, private readonly View $view, private readonly Environment $environment)
     {
-        $this->mailer = new Swift_Mailer(new Swift_SmtpTransport($host, $port));
+        $this->mailer = new Swift_Mailer(new Swift_SmtpTransport($this->environment->get("MAIL_HOST"), $this->environment->get("MAIL_PORT")));
     }
 
     public function sendContactEmail(string $from, string $message, string $nom, string $prenom): void

@@ -9,6 +9,7 @@ use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\UserRepository;
 use App\Service\CsrfValidator;
+use App\Service\Environment;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -49,12 +50,13 @@ class AdminUserController
     }
 
     /**
-     * @param View $view
-     * @param Session $session
-     * @param array<string,string> $env
      * @param UserRepository $userRepository
      * @param ArticleRepository $articleRepository
+     * @param View $view
+     * @param Session $session
      * @param Paginator $paginator
+     * @param CsrfValidator $csrfValidator
+     * @param Environment $environment
      */
     public function __construct(
         private readonly UserRepository $userRepository,
@@ -63,7 +65,7 @@ class AdminUserController
         private readonly Session $session,
         private readonly Paginator $paginator,
         private readonly CsrfValidator $csrfValidator,
-        private readonly array $env
+        private readonly Environment $environment
     ) {
     }
 
@@ -95,7 +97,7 @@ class AdminUserController
             if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
                 $pageData = 1;
                 $this->session->addFlashes('info', "La page demandée n'existe pas.");
-                $this->redirect($this->env["URL_DOMAIN"] . "admin/users");
+                $this->redirect($this->environment->get("URL_DOMAIN") . "admin/users");
             }
         }
         return new Response($this->view->render([
@@ -103,7 +105,7 @@ class AdminUserController
             'users' => $users,
             'max_page' => $maxPage ?? 1,
             'current_page' => $pageData,
-            'url_to_paginate' => $this->env["URL_DOMAIN"] . "admin/users?page="
+            'url_to_paginate' => $this->environment->get("URL_DOMAIN") . "admin/users?page="
         ]), 200);
     }
 }

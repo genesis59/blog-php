@@ -1,183 +1,24 @@
 ---
-App\Service\XssValidator:
-  attributes:
-    services: [ ]
-    dataHandler: [ ]
-    environmentVariable: [ ]
-App\Service\Environment:
-  attributes:
-    services: [ ]
-    dataHandler: [ ]
-    environmentVariable: [ ]
-App\Service\Http\Request:
-  attributes:
-    services: [ ]
-    dataHandler: [ ]
-    environmentVariable: [ ]
-App\Service\Router:
-  attributes:
-    services:
-      - App\Service\Environment
-    dataHandler:
-      - App\Service\Http\Request
-      - App\Service\Container
-    environmentVariable: [ ]
-App\Service\Database:
-  attributes:
-    services: [ ],
-    dataHandler: [ ]
-    environmentVariable:
-      - "MYSQL_DSN"
-      - "MYSQL_USER"
-      - "MYSQL_PASSWORD"
-App\Service\Hydrator:
-  attributes:
-    services: [ ]
-    dataHandler:
-      - App\Service\Database
-    environmentVariable: [ ]
-App\Model\Repository\ArticleRepository:
-  attributes:
-    services: [ ]
-    dataHandler:
-      - App\Service\Database
-      - App\Service\Hydrator
-    environmentVariable: [ ]
-App\Model\Repository\UserRepository:
-  attributes:
-    services: [ ]
-    dataHandler:
-      - App\Service\Database
-      - App\Service\Hydrator
-    environmentVariable: [ ]
-App\Model\Repository\CommentRepository:
-  attributes:
-    services: [ ]
-    dataHandler:
-      - App\Service\Database
-      - App\Service\Hydrator
-    environmentVariable: [ ]
-App\Service\Http\Session\Session:
-  attributes:
-    services: [ ],
-    dataHandler: [ ],
-    environmentVariable: [ ]
-App\Service\CsrfValidator:
-  attributes:
-    services:
-      - App\Service\Http\Session\Session
-      - App\Service\Environment
-    dataHandler: [ ]
-    environmentVariable: [ ]
-App\View\View:
-  attributes:
-    services:
-      - App\Service\Http\Session\Session
-      - App\Service\CsrfValidator
-      - App\Service\Environment
-    dataHandler: [ ]
-    environmentVariable: [ ]
-App\Service\Validator\FormValidator:
-  attributes:
-    services:
-      - App\Service\Http\Session\Session
-    dataHandler:
-      - App\Model\Repository\UserRepository
-    environmentVariable: [ ]
-App\Service\CustomsOfficer:
-  attributes:
-    services:
-      - App\Service\Http\Session\Session
-    dataHandler: [ ]
-    environmentVariable: [ ]
-App\Service\MailerService:
-  attributes:
-    services:
-      - App\Service\Http\Session\Session
-      - App\View\View
-    dataHandler: [ ]
-    environmentVariable:
-      - "MAIL_HOST"
-      - "MAIL_PORT"
-App\Service\Paginator:
-  attributes:
-    services: [ ]
-    dataHandler: [ ]
-    environmentVariable: [ ]
-App\Service\Slugify:
-  attributes:
-    services: [ ]
-    dataHandler: [ ]
-    environmentVariable: [ ]
-App\Controller\Frontoffice\HomeController:
-  attributes:
-    services:
-      - App\View\View
-      - App\Service\Validator\FormValidator
-      - App\Service\Http\Session\Session
-      - App\Service\Paginator
-      - App\Service\CsrfValidator
-    dataHandler:
-      - App\Model\Repository\ArticleRepository
-    environmentVariable: [ ]
-App\Controller\Frontoffice\ArticleController:
-  attributes:
-    services:
-      - App\View\View
-      - App\Service\Http\Session\Session
-      - App\Service\Validator\FormValidator
-      - App\Service\Paginator
-      - App\Service\CsrfValidator
-      - App\Service\Environment
-    dataHandler:
-      - App\Model\Repository\ArticleRepository
-      - App\Model\Repository\CommentRepository
-    environmentVariable: []
-App\Controller\Frontoffice\SecurityController:
-  attributes:
-    services:
-      - App\View\View
-      - App\Service\Http\Session\Session
-      - App\Service\Validator\FormValidator
-      - App\Service\CsrfValidator
-      - App\Service\Environment
-    dataHandler:
-      - App\Model\Repository\UserRepository
-    environmentVariable: []
-App\Controller\Backoffice\AdminArticleController:
-  attributes:
-    services:
-      - App\View\View
-      - App\Service\Http\Session\Session
-      - App\Service\Validator\FormValidator
-      - App\Service\Paginator
-      - App\Service\Slugify
-      - App\Service\CsrfValidator
-      - App\Service\Environment
-    dataHandler:
-      - App\Model\Repository\ArticleRepository
-      - App\Model\Repository\UserRepository
-    environmentVariable: []
-App\Controller\Backoffice\AdminCommentController:
-  attributes:
-    services:
-      - App\View\View
-      - App\Service\Http\Session\Session
-      - App\Service\Paginator
-      - App\Service\CsrfValidator
-      - App\Service\Environment
-    dataHandler:
-      - App\Model\Repository\CommentRepository
-    environmentVariable: []
-App\Controller\Backoffice\AdminUserController:
-  attributes:
-    services:
-      - App\View\View
-      - App\Service\Http\Session\Session
-      - App\Service\Paginator
-      - App\Service\CsrfValidator
-      - App\Service\Environment
-    dataHandler:
-      - App\Model\Repository\UserRepository
-      - App\Model\Repository\ArticleRepository
-    environmentVariable: []
+App\Service\XssValidator: App\Service\XssValidator
+App\Service\Environment: App\Service\Environment
+App\Service\Http\Request: App\Service\Http\Request
+App\Service\Router: App\Service\Router
+App\Service\Database: App\Service\Database
+App\Service\Hydrator: App\Service\Hydrator
+App\Model\Repository\ArticleRepository: App\Model\Repository\ArticleRepository
+App\Model\Repository\UserRepository: App\Model\Repository\UserRepository
+App\Model\Repository\CommentRepository: App\Model\Repository\CommentRepository
+App\Service\Http\Session\Session: App\Service\Http\Session\Session
+App\Service\CsrfValidator: App\Service\CsrfValidator
+App\View\View: App\View\View
+App\Service\Validator\FormValidator: App\Service\Validator\FormValidator
+App\Service\CustomsOfficer: App\Service\CustomsOfficer
+App\Service\MailerService: App\Service\MailerService
+App\Service\Paginator: App\Service\Paginator
+App\Service\Slugify: App\Service\Slugify
+App\Controller\Frontoffice\HomeController: App\Controller\Frontoffice\HomeController
+App\Controller\Frontoffice\ArticleController: App\Controller\Frontoffice\ArticleController
+App\Controller\Frontoffice\SecurityController: App\Controller\Frontoffice\SecurityController
+App\Controller\Backoffice\AdminArticleController: App\Controller\Backoffice\AdminArticleController
+App\Controller\Backoffice\AdminCommentController: App\Controller\Backoffice\AdminCommentController
+App\Controller\Backoffice\AdminUserController: App\Controller\Backoffice\AdminUserController

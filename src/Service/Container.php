@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Service\Http\Request;
 use App\Service\Http\Session\Session;
 use ReflectionClass;
+use ReflectionNamedType;
 use Symfony\Component\Yaml\Yaml;
 
 class Container
@@ -17,10 +18,9 @@ class Container
     private array $instanceData;
 
     /**
-     * @var array<string,mixed>
+     * @var array<int|string,mixed>
      */
     private array $instanceList = [];
-
 
     /**
      * @param array<mixed> $query
@@ -31,37 +31,16 @@ class Container
      */
     private function instantiate(array $query, array $request, array $files, array $server): void
     {
-        foreach ($this->instanceData as $key => $value) {
-            $className = $key;
-            $attributes = [];
-            if ($key === Request::class) {
+        $this->instanceList[Container::class] = $this;
+        foreach ($this->instanceData as $className) {
+            if ($className === Request::class) {
                 $this->instanceList[XssValidator::class]->handleProtectionXSS($query);
                 $this->instanceList[XssValidator::class]->handleProtectionXSS($request);
                 $this->instanceList[XssValidator::class]->handleProtectionXSS($files);
-                $attributes = [...[$query, $request, $files, $server]];
+                $this->instanceList[$className] = $this->createInstance($className, [...[$query, $request, $files, $server]]);
+                continue;
             }
-            // Instantiation dataHandler
-            foreach ($value["attributes"]["dataHandler"] as $attribute) {
-                if ($attribute === Container::class) {
-                    $attributes[] = $this;
-                    continue;
-                }
-
-                $attributes[] = $this->instanceList[$attribute];
-            }
-            // Instantiation environments variables
-            foreach ($value["attributes"]["environmentVariable"] as $attribute) {
-                $attributes[] = $this->instanceList[Environment::class]->get($attribute);
-            }
-            // Instantiation services
-            foreach ($value["attributes"]["services"] as $attribute) {
-                if ($attribute === Environment::class) {
-                    $attributes[] = $this->instanceList[Environment::class]->all();
-                    continue;
-                }
-                $attributes[] = $this->instanceList[$attribute];
-            }
-            $this->instanceList[$key] = $this->createInstance($className, $attributes);
+            $this->instanceList[$className] = $this->createInstance($className);
         }
     }
 
@@ -73,11 +52,19 @@ class Container
     private function createInstance(string $className, array $arguments = array()): mixed
     {
         if (class_exists($className)) {
-            return call_user_func_array(
-                array(
-                    new ReflectionClass($className), 'newInstance'),
-                $arguments
-            );
+            if ($className === Request::class) {
+                return call_user_func_array(array(new ReflectionClass($className), 'newInstance'), $arguments);
+            }
+            // On récupère les objets à passer au constructeur à l'aide de ReflectionClass
+            $clone = new ReflectionClass($className);
+            if ($clone->getConstructor() && count($clone->getConstructor()->getParameters()) > 0) {
+                foreach ($clone->getConstructor()->getParameters() as $parameter) {
+                    if ($parameter->getType() instanceof ReflectionNamedType) {
+                        $arguments[] = $this->instanceList[$parameter->getType()->getName()];
+                    }
+                }
+            }
+            return call_user_func_array(array($clone, 'newInstance'), $arguments);
         }
         return false;
     }

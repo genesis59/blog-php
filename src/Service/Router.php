@@ -91,10 +91,10 @@ final class Router
 
     /**
      * @param Request $request
-     * @param array<string,string> $env
      * @param Container $container
+     * @param Environment $environment
      */
-    public function __construct(private readonly Request $request, private readonly Container $container, private readonly array $env)
+    public function __construct(private readonly Request $request, private readonly Container $container, private readonly Environment $environment)
     {
         $this->routes = Yaml::parseFile("./../config/routes.yaml");
     }
@@ -125,7 +125,7 @@ final class Router
             $view = $this->container->get("View");
             return new Response($view->render([
                 'template' => 'frontoffice/pages/errors/404',
-                'url_domain' => $this->env["URL_DOMAIN"],
+                'url_domain' => $this->environment->get("URL_DOMAIN"),
                 'header_title' => 'Page introuvable',
             ]));
         }

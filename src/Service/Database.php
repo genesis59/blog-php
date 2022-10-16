@@ -36,13 +36,11 @@ final class Database
     }
 
     /**
-     * @param string $dsn
-     * @param string $user
-     * @param string $password
+     * @param Environment $environment
      */
-    public function __construct(private readonly string $dsn, private readonly string $user, private readonly string $password)
+    public function __construct(private readonly Environment $environment)
     {
-        $this->connection = $this->getConnection($this->dsn, $this->user, $this->password);
+        $this->connection = $this->getConnection($this->environment->get("MYSQL_DSN"), $this->environment->get("MYSQL_USER"), $this->environment->get("MYSQL_PASSWORD"));
     }
 
     /**
