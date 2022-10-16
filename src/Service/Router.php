@@ -40,9 +40,8 @@ final class Router
                 if ($route["paramUri"] > 0) {
                     // $route["paramUri"] liste des clé eventuelles
                     // $paramsListTemp liste des paramètres éventuelles
-                    $numberOfParamsExpected = count($route["paramUri"]);
                     $paramsRouteListTemp = explode("/", substr(substr($pathInfo, strlen($route["startUri"])), 1));
-                    if (count($paramsRouteListTemp) === $numberOfParamsExpected) {
+                    if (count($paramsRouteListTemp) === count($route["paramUri"])) {
                         $this->nameRoute = $key;
                         for ($i = 0; $i < count($paramsRouteListTemp); $i++) {
                             $this->paramsRouteList[$route["paramUri"][$i]] = $paramsRouteListTemp[0];
@@ -88,7 +87,6 @@ final class Router
         return call_user_func_array($callbackController, $attributes);
     }
 
-
     /**
      * @param Request $request
      * @param Container $container
@@ -96,9 +94,8 @@ final class Router
      */
     public function __construct(private readonly Request $request, private readonly Container $container, private readonly Environment $environment)
     {
-        $this->routes = Yaml::parseFile("./../config/routes.yaml");
+        $this->routes = Yaml::parseFile($this->environment->get("CONFIG_ROUTES"));
     }
-
 
     public function run(): Response
     {
@@ -107,7 +104,6 @@ final class Router
             $pathInfo = "/home";
         }
         // vérification des autorisations de l'utilisateur
-
         /** @var CustomsOfficer $customersOfficer */
         $customersOfficer = $this->container->get(CustomsOfficer::class);
         if (!$customersOfficer->secureAccessRoute($pathInfo)) {
@@ -117,7 +113,6 @@ final class Router
             $mailerService = $this->container->get(MailerService::class);
             return $homeController->index($this->request, $mailerService);
         }
-
         $this->getNameRoute($pathInfo);
 
         if (!$this->nameRoute) {

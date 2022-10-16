@@ -1,6 +1,5 @@
 ---
 App\Service\XssValidator: App\Service\XssValidator
-App\Service\Environment: App\Service\Environment
 App\Service\Http\Request: App\Service\Http\Request
 App\Service\Router: App\Service\Router
 App\Service\Database: App\Service\Database

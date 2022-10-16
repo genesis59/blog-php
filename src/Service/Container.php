@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Service\Http\Request;
 use App\Service\Http\Session\Session;
+use http\Env;
 use ReflectionClass;
 use ReflectionNamedType;
 use Symfony\Component\Yaml\Yaml;
@@ -32,6 +33,9 @@ class Container
     private function instantiate(array $query, array $request, array $files, array $server): void
     {
         $this->instanceList[Container::class] = $this;
+        $this->instanceList[Environment::class] = new Environment();
+        $this->instanceData = Yaml::parseFile($this->instanceList[Environment::class]->get("CONFIG_CONTAINER"));
+
         foreach ($this->instanceData as $className) {
             if ($className === Request::class) {
                 $this->instanceList[XssValidator::class]->handleProtectionXSS($query);
@@ -77,22 +81,20 @@ class Container
      */
     public function __construct(array $query, array $request, array $files, array $server)
     {
-        $this->instanceData = Yaml::parseFile("./../config/container.yaml");
         $this->instantiate($query, $request, $files, $server);
     }
 
     /**
      * @param string $className
-     * @return object
+     * @return object|null
      */
-    public function get(string $className): object
+    public function get(string $className): object|null
     {
         $instance = $this->has($className) ? $this->instanceList[$className] : null;
         if ($instance instanceof $className) {
             return $instance;
         }
-        $this->instanceData[Session::class]->addFlashes("danger", "Désolé nous rencontrons un problème.");
-        exit();
+        return null;
     }
 
     /**
