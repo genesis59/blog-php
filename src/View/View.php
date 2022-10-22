@@ -18,12 +18,13 @@ final class View
 
     /**
      * @param Session $session
-     * @param array<string,string> $env
+     * @param CsrfValidator $tokenGenerator
+     * @param \App\Service\Environment $environment
      */
     public function __construct(
-        private readonly array $env,
         private readonly Session $session,
-        private readonly CsrfValidator $tokenGenerator
+        private readonly CsrfValidator $tokenGenerator,
+        private readonly \App\Service\Environment $environment
     ) {
         $loader = new FilesystemLoader('../templates');
         $this->twig = new Environment($loader);
@@ -42,7 +43,7 @@ final class View
         $data['data']['session'] = $this->session->toArray();
         $data['token'] = $this->tokenGenerator->generateToken();
         $data['data']['flashes'] = $this->session->getFlashes();
-        $data['url_domain'] = $this->env["URL_DOMAIN"];
+        $data['url_domain'] = $this->environment->get("URL_DOMAIN");
         $data['user'] = $this->session->get('user') ?? null;
 
         return $this->twig->render("${data['template']}.html.twig", $data);

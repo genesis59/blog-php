@@ -10,6 +10,7 @@ use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\UserRepository;
 use App\Service\CsrfValidator;
+use App\Service\Environment;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -28,21 +29,23 @@ class AdminArticleController
      * @param ArticleRepository $articleRepository
      * @param UserRepository $userRepository
      * @param View $view
-     * @param array<string,string> $env
      * @param Session $session
      * @param FormValidator $formValidator
      * @param Paginator $paginator
+     * @param Slugify $slugify
+     * @param CsrfValidator $csrfValidator
+     * @param Environment $environment
      */
     public function __construct(
         private readonly ArticleRepository $articleRepository,
         private readonly UserRepository $userRepository,
-        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
         private readonly FormValidator $formValidator,
         private readonly Paginator $paginator,
         private readonly Slugify $slugify,
-        private readonly CsrfValidator $csrfValidator
+        private readonly CsrfValidator $csrfValidator,
+        private readonly Environment $environment
     ) {
     }
 
@@ -69,7 +72,7 @@ class AdminArticleController
             if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
                 $pageData = 1;
                 $this->session->addFlashes('info', "La page demandée n'existe pas.");
-                $this->redirect($this->env["URL_DOMAIN"] . "admin?page=");
+                $this->redirect($this->environment->get("URL_DOMAIN") . "admin?page=");
             }
         }
         return new Response($this->view->render([
@@ -77,7 +80,7 @@ class AdminArticleController
             'articles' => $articles,
             'max_page' => $maxPage,
             'current_page' => $pageData,
-            'url_to_paginate' => $this->env["URL_DOMAIN"] . "admin?page="
+            'url_to_paginate' => $this->environment->get("URL_DOMAIN") . "admin?page="
         ]), 200);
     }
 
@@ -86,7 +89,7 @@ class AdminArticleController
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->formValidator->formNewArticleIsValid($request)) {
             $this->csrfValidator->validateCsrfToken($request);
             if (!$this->getUser()) {
-                $this->redirect($this->env["URL_DOMAIN"]);
+                $this->redirect($this->environment->get("URL_DOMAIN"));
             }
             $slug = $this->slugify->slugify($request->request()->get("title"));
             if (!$this->articleRepository->findOneBy(["slug" => $slug])) {
@@ -100,7 +103,7 @@ class AdminArticleController
                 $article->setUser($user);
                 $this->articleRepository->create($article);
                 $this->session->addFlashes("success", "L'article a bien été créé.");
-                $this->redirect($this->env["URL_DOMAIN"] . "admin");
+                $this->redirect($this->environment->get("URL_DOMAIN") . "admin");
             }
             $this->session->addFlashes("danger", "Le titre choisi existe déjà, veuillez le modifier.");
         }
@@ -122,7 +125,7 @@ class AdminArticleController
 
         if ($article == null) {
             $this->session->addFlashes("danger", "Désolé l'article demandé n'existe pas");
-            $this->redirect($this->env["URL_DOMAIN"] . "admin");
+            $this->redirect($this->environment->get("URL_DOMAIN") . "admin");
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST" && $this->formValidator->formEditArticleIsValid($request)) {
             $this->csrfValidator->validateCsrfToken($request);
@@ -141,7 +144,7 @@ class AdminArticleController
                 $article->setUser($user);
                 $this->articleRepository->update($article);
                 $this->session->addFlashes("success", "L'article a bien été modifié.");
-                $this->redirect($this->env["URL_DOMAIN"] . "admin");
+                $this->redirect($this->environment->get("URL_DOMAIN") . "admin");
             }
         }
         $authors = $this->userRepository->selectUserWithRoleEditorAndAdmin();

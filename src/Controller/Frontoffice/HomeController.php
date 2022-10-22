@@ -44,7 +44,6 @@ class HomeController
         $flashFromContact = false;
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
             $this->csrfValidator->validateCsrfToken($request);
-
             if ($this->validator->formContactIsValid($request)) {
                 $mailerService->sendContactEmail(
                     $request->request()->get('email'),

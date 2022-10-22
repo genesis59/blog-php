@@ -1,0 +1,23 @@
+---
+App\Service\XssValidator: App\Service\XssValidator
+App\Service\Http\Request: App\Service\Http\Request
+App\Service\Router: App\Service\Router
+App\Service\Database: App\Service\Database
+App\Service\Hydrator: App\Service\Hydrator
+App\Model\Repository\ArticleRepository: App\Model\Repository\ArticleRepository
+App\Model\Repository\UserRepository: App\Model\Repository\UserRepository
+App\Model\Repository\CommentRepository: App\Model\Repository\CommentRepository
+App\Service\Http\Session\Session: App\Service\Http\Session\Session
+App\Service\CsrfValidator: App\Service\CsrfValidator
+App\View\View: App\View\View
+App\Service\Validator\FormValidator: App\Service\Validator\FormValidator
+App\Service\CustomsOfficer: App\Service\CustomsOfficer
+App\Service\MailerService: App\Service\MailerService
+App\Service\Paginator: App\Service\Paginator
+App\Service\Slugify: App\Service\Slugify
+App\Controller\Frontoffice\HomeController: App\Controller\Frontoffice\HomeController
+App\Controller\Frontoffice\ArticleController: App\Controller\Frontoffice\ArticleController
+App\Controller\Frontoffice\SecurityController: App\Controller\Frontoffice\SecurityController
+App\Controller\Backoffice\AdminArticleController: App\Controller\Backoffice\AdminArticleController
+App\Controller\Backoffice\AdminCommentController: App\Controller\Backoffice\AdminCommentController
+App\Controller\Backoffice\AdminUserController: App\Controller\Backoffice\AdminUserController

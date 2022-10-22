@@ -13,10 +13,10 @@ class CsrfValidator
     use ControllerTrait;
 
     /**
-     * @param array<string,string> $env
      * @param Session $session
+     * @param Environment $environment
      */
-    public function __construct(private readonly array $env, private readonly Session $session)
+    public function __construct(private readonly Session $session, private readonly Environment $environment)
     {
     }
 
@@ -31,7 +31,7 @@ class CsrfValidator
     {
         if ($this->session->get("token") !== $request->request()->get("token")) {
             $this->session->addFlashes("danger", "Désolé, impossible d'exécuter cette action pour le moment.");
-            $this->redirect($this->env["URL_DOMAIN"]);
+            $this->redirect($this->environment->get("URL_DOMAIN"));
         }
         return true;
     }

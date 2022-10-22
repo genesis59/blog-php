@@ -8,6 +8,7 @@ use App\Controller\ControllerTrait;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepository;
 use App\Service\CsrfValidator;
+use App\Service\Environment;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -43,15 +44,20 @@ class SecurityController
     }
 
     /**
-     * @param array<string,string> $env
+     * @param UserRepository $userRepository
+     * @param View $view
+     * @param Session $session
+     * @param FormValidator $validator
+     * @param CsrfValidator $csrfValidator
+     * @param Environment $environment
      */
     public function __construct(
         private readonly UserRepository $userRepository,
-        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
         private readonly FormValidator $validator,
-        private readonly CsrfValidator $csrfValidator
+        private readonly CsrfValidator $csrfValidator,
+        private readonly Environment $environment
     ) {
     }
 
@@ -60,16 +66,16 @@ class SecurityController
         $user = $this->getUser() ?? null;
         if ($user) {
             $this->session->addFlashes('info', 'Vous êtes déjà connecté');
-            $this->redirect($this->env['URL_DOMAIN']);
+            $this->redirect($this->environment->get('URL_DOMAIN'));
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
             $this->csrfValidator->validateCsrfToken($request);
             $check = $this->checkLoginIsValid($request);
             if ($check) {
-                $this->redirect($this->env['URL_DOMAIN']);
+                $this->redirect($this->environment->get('URL_DOMAIN'));
             }
 
-            $this->redirect($this->env['URL_DOMAIN'] . "login");
+            $this->redirect($this->environment->get('URL_DOMAIN') . "login");
         }
         return new Response($this->view->render([
             'template' => 'frontoffice/pages/login',
@@ -80,13 +86,13 @@ class SecurityController
     public function logout(): void
     {
         $this->session->remove('user');
-        $this->redirect($this->env['URL_DOMAIN']);
+        $this->redirect($this->environment->get('URL_DOMAIN'));
     }
 
     public function register(Request $request): Response
     {
         if ($this->getUser()) {
-            $this->redirect($this->env["URL_DOMAIN"]);
+            $this->redirect($this->environment->get("URL_DOMAIN"));
         }
         if ($request->server()->get("REQUEST_METHOD") === "POST") {
             $this->csrfValidator->validateCsrfToken($request);
@@ -102,7 +108,7 @@ class SecurityController
                     $this->userRepository->create($user);
                     $this->session->set("user", $user);
                     $this->session->addFlashes("success", "Bravo, votre inscription est un succès");
-                    $this->redirect($this->env["URL_DOMAIN"]);
+                    $this->redirect($this->environment->get("URL_DOMAIN"));
                 } catch (\Exception $e) {
                     $this->session->addFlashes("danger", "Désolé impossible de vous inscrire pour le moment.");
                 }

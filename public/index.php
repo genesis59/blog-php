@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 require_once '../vendor/autoload.php';
 
-use App\Service\Http\Request;
+use App\Service\Container;
 use App\Service\Environment;
 use App\Service\Router;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
-$env = (new Environment())->getEnv();
 
-if ($env['APP_ENV'] === 'dev') {
+if ((new Environment())->get("APP_ENV") === 'dev') {
     $whoops = new Run();
     $whoops->pushHandler(new PrettyPageHandler());
     $whoops->register();
 }
+$container = new Container($_GET, $_POST, $_FILES, $_SERVER);
 
-$request = new Request($_GET, $_POST, $_FILES, $_SERVER);
-$router = new Router($request,$env);
+$router = $container->get(Router::class);
 $response = $router->run();
 $response->send();

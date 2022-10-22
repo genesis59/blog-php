@@ -2,9 +2,9 @@
 
 {% block content %}
     <div class="container mt-4 mb-4">
-        <h2 class="border-5 border-bottom border-dark pb-2">Listes des articles</h2>
         {% include './components/_flashes.html.twig' %}
         <section class="container mt-4">
+            <h2 class="border-5 border-bottom border-dark pb-2">Listes des articles</h2>
             <div class="row">
                 {% if articles is not null %}
                     {% for article in articles %}

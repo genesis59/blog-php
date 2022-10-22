@@ -8,6 +8,7 @@ use App\Controller\ControllerTrait;
 use App\Model\Entity\Comment;
 use App\Model\Repository\CommentRepository;
 use App\Service\CsrfValidator;
+use App\Service\Environment;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -21,19 +22,20 @@ class AdminCommentController
     const MAX_COMMENT_PER_PAGE = 5;
 
     /**
+     * @param CommentRepository $commentRepository
      * @param View $view
      * @param Session $session
-     * @param array<string,string> $env
      * @param Paginator $paginator
-     * @param CommentRepository $commentRepository
+     * @param CsrfValidator $csrfValidator
+     * @param Environment $environment
      */
     public function __construct(
         private readonly CommentRepository $commentRepository,
-        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
         private readonly Paginator $paginator,
-        private readonly CsrfValidator $csrfValidator
+        private readonly CsrfValidator $csrfValidator,
+        private readonly Environment $environment
     ) {
     }
 
@@ -56,7 +58,7 @@ class AdminCommentController
                 $this->commentRepository->delete($comment);
                 $this->session->addFlashes("success", "Le commentaire a été supprimé.");
             }
-            $this->redirect($this->env["URL_DOMAIN"] . "admin/comments");
+            $this->redirect($this->environment->get("URL_DOMAIN") . "admin/comments");
         }
 
         // Récupération des données pour la pagination
@@ -65,7 +67,7 @@ class AdminCommentController
         if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
             $pageData = 1;
             $this->session->addFlashes('info', "La page demandée n'existe pas.");
-            $this->redirect($this->env["URL_DOMAIN"] . "admin/comments");
+            $this->redirect($this->environment->get("URL_DOMAIN") . "admin/comments");
         }
         $comments = $this->paginator->paginate($this->commentRepository, ["is_active" => 0], self::MAX_COMMENT_PER_PAGE, $pageData);
 
@@ -74,7 +76,7 @@ class AdminCommentController
             'comments' => $comments,
             'max_page' => $maxPage,
             'current_page' => $pageData,
-            'url_to_paginate' => $this->env["URL_DOMAIN"] . "admin/comments?page="
+            'url_to_paginate' => $this->environment->get("URL_DOMAIN") . "admin/comments?page="
         ]), 200);
     }
 }

@@ -3,7 +3,7 @@ a.cv-button:hover {
     transition: 0.4s;
 }
 a.cv-button {
-    outline: 0px solid #fff;
+    outline: 0 solid #fff;
     transition: 0.2s;
 }
 .cursor {
@@ -18,7 +18,7 @@ header.masthead {
     background-attachment: scroll;
     background-position: center center;
     background-size: cover;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
 }
 header.masthead .masthead-subheading {
     font-size: 1.5rem;

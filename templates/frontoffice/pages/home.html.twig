@@ -4,8 +4,8 @@
         {% if not flash_from_contact %}
             {% include './components/_flashes.html.twig' %}
         {% endif %}
-        <h2 class="border-5 border-bottom border-dark pb-2">Dernières publications</h2>
         <section class="container mt-3">
+            <h2 class="border-5 border-bottom border-dark pb-2">Dernières publications</h2>
             <div class="row">
                 {% if articles is not null %}
                 {% for article in articles %}

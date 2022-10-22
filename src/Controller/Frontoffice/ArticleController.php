@@ -11,6 +11,7 @@ use App\Model\Entity\User;
 use App\Model\Repository\ArticleRepository;
 use App\Model\Repository\CommentRepository;
 use App\Service\CsrfValidator;
+use App\Service\Environment;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\Http\Session\Session;
@@ -29,20 +30,21 @@ class ArticleController
      * @param ArticleRepository $articleRepository
      * @param CommentRepository $commentRepository
      * @param View $view
-     * @param array<string,string> $env
      * @param Session $session
      * @param FormValidator $formValidator
      * @param Paginator $paginator
+     * @param CsrfValidator $csrfValidator
+     * @param Environment $environment
      */
     public function __construct(
         private readonly ArticleRepository $articleRepository,
         private readonly CommentRepository $commentRepository,
-        private readonly array $env,
         private readonly View $view,
         private readonly Session $session,
         private readonly FormValidator $formValidator,
         private readonly Paginator $paginator,
-        private readonly CsrfValidator $csrfValidator
+        private readonly CsrfValidator $csrfValidator,
+        private readonly Environment $environment
     ) {
     }
 
@@ -57,7 +59,7 @@ class ArticleController
             if (!$this->paginator->isExistingPage($pageData, $maxPage)) {
                 $pageData = 1;
                 $this->session->addFlashes('info', "La page demandée n'existe pas.");
-                $this->redirect($this->env["URL_DOMAIN"] . "articles?page=");
+                $this->redirect($this->environment->get("URL_DOMAIN") . "articles?page=");
             }
         }
         return new Response($this->view->render([
@@ -65,7 +67,7 @@ class ArticleController
             'articles' => $articles,
             'max_page' => $maxPage,
             'current_page' => $pageData,
-            'url_to_paginate' => $this->env["URL_DOMAIN"] . "articles?page=",
+            'url_to_paginate' => $this->environment->get("URL_DOMAIN") . "articles?page=",
             'header_title' => "Liste des articles"
         ]), 200);
     }
@@ -78,7 +80,7 @@ class ArticleController
 
         if ($article == null) {
             $this->session->addFlashes('info', "L'article demandée n'existe pas.");
-            $this->redirect($this->env['URL_DOMAIN'] . "articles");
+            $this->redirect($this->environment->get('URL_DOMAIN') . "articles");
         }
         /** @var User $user */
         $user = $this->getUser();
@@ -97,7 +99,7 @@ class ArticleController
                 } catch (\Exception $e) {
                     $this->session->addFlashes('danger', 'Une problème est survenu le commentaire ne peut être soumis.');
                 }
-                $this->redirect($this->env['URL_DOMAIN'] . "article/" . $article->getSlug());
+                $this->redirect($this->environment->get('URL_DOMAIN') . "article/" . $article->getSlug());
             }
             $this->session->addFlashes('danger', 'Une problème est survenu le commentaire ne peut être soumis.');
         }
@@ -123,7 +125,7 @@ class ArticleController
             'previous_entity' => $previousArticle,
             'max_page' => $maxPage,
             'current_page' => $pageData,
-            'url_to_paginate' => $this->env["URL_DOMAIN"] . "article/" . $article->getSlug() . "?page=",
+            'url_to_paginate' => $this->environment->get("URL_DOMAIN") . "article/" . $article->getSlug() . "?page=",
         ]), 200);
     }
 }
