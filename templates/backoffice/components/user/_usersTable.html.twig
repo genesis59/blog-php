@@ -21,10 +21,10 @@
                                 <form name="form-change-role{{ user.id }}" method="POST">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" name="role"
-                                               id="flexSwitchCheckChecked" {{ user.roleUsers == "role_editor" ? "checked" : "" }}
+                                               id="flexSwitchCheckChecked{{ user.id }}" {{ user.roleUsers == "role_editor" ? "checked" : "" }}
                                                onchange="submitFormChangeRole({{ user.id }})">
                                         <label class="form-check-label"
-                                               for="flexSwitchCheckChecked">{{ user.roleUsers == "role_editor" ? "Désactiver le rôle éditeur" : "Activer le rôle éditeur" }}</label>
+                                               for="flexSwitchCheckChecked{{ user.id }}">{{ user.roleUsers == "role_editor" ? "Désactiver le rôle éditeur" : "Activer le rôle éditeur" }}</label>
                                     </div>
                                     <input name="user" type="hidden" value="{{ user.id }}">
                                     <input type="hidden" name="token" value="{{ token }}">

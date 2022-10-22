@@ -5,19 +5,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Service\Http\Request;
-use App\Service\Http\Session\Session;
-use http\Env;
 use ReflectionClass;
 use ReflectionNamedType;
 use Symfony\Component\Yaml\Yaml;
+use Whoops\Exception\ErrorException;
 
 class Container
 {
-    /**
-     * @var array<string,mixed>
-     */
-    private array $instanceData;
-
     /**
      * @var array<int|string,mixed>
      */
@@ -34,9 +28,9 @@ class Container
     {
         $this->instanceList[Container::class] = $this;
         $this->instanceList[Environment::class] = new Environment();
-        $this->instanceData = Yaml::parseFile($this->instanceList[Environment::class]->get("CONFIG_CONTAINER"));
+        $instanceData = Yaml::parseFile($this->instanceList[Environment::class]->get("CONFIG_CONTAINER"));
 
-        foreach ($this->instanceData as $className) {
+        foreach ($instanceData as $className) {
             if ($className === Request::class) {
                 $this->instanceList[XssValidator::class]->handleProtectionXSS($query);
                 $this->instanceList[XssValidator::class]->handleProtectionXSS($request);
@@ -56,6 +50,8 @@ class Container
     private function createInstance(string $className, array $arguments = array()): mixed
     {
         if (class_exists($className)) {
+            // on ne veut pas rechercher les attributs de la classe Request
+            // on les passe directement à la variable $arguments de createInstance
             if ($className === Request::class) {
                 return call_user_func_array(array(new ReflectionClass($className), 'newInstance'), $arguments);
             }
@@ -86,15 +82,16 @@ class Container
 
     /**
      * @param string $className
-     * @return object|null
+     * @return object
+     * @throws ErrorException
      */
-    public function get(string $className): object|null
+    public function get(string $className): object
     {
         $instance = $this->has($className) ? $this->instanceList[$className] : null;
-        if ($instance instanceof $className) {
-            return $instance;
+        if (!$instance instanceof $className) {
+            throw new ErrorException("Avez-vous oubliez dans le fichier container.yaml: {$className}");
         }
-        return null;
+        return $instance;
     }
 
     /**
@@ -103,6 +100,6 @@ class Container
      */
     public function has(string $className): bool
     {
-        return (bool)$this->instanceList[$className];
+        return isset($this->instanceList[$className]);
     }
 }

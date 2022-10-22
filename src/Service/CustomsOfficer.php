@@ -16,10 +16,7 @@ class CustomsOfficer
     public function secureAccessRoute(string $pathInfo): bool
     {
         if ($pathInfo && str_starts_with($pathInfo, '/admin')) {
-            if (!$this->session->get('user')) {
-                return false;
-            }
-            if (!$this->isAuthorized($this->session->get('user'))) {
+            if (!$this->session->get('user') || !$this->isAuthorized($this->session->get('user'))) {
                 $this->session->addFlashes("danger", "Vous n'êtes pas autorisé à accéder à cette page");
                 return false;
             }

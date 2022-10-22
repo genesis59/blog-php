@@ -8,7 +8,7 @@ privacy:
   startUri: "/privacy"
   paramUri: [ ]
   controller: App\Controller\Frontoffice\HomeController
-  method: "register"
+  method: "privacy"
 articles:
   startUri: "/articles"
   paramUri: [ ]
