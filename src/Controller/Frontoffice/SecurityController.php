@@ -106,7 +106,9 @@ class SecurityController
                     $user->setEmail($request->request()->get('email'));
                     $user->setPass(password_hash($request->request()->get('password'), PASSWORD_ARGON2I));
                     $this->userRepository->create($user);
-                    $this->session->set("user", $user);
+                    /** @var User $newUserInDatabase */
+                    $newUserInDatabase = $this->userRepository->findOneBy(['email' => $user->getEmail()]);
+                    $this->session->set("user", $newUserInDatabase);
                     $this->session->addFlashes("success", "Bravo, votre inscription est un succès");
                     $this->redirect($this->environment->get("URL_DOMAIN"));
                 } catch (\Exception $e) {
