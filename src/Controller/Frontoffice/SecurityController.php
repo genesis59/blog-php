@@ -33,7 +33,7 @@ class SecurityController
             /** @var User $user */
             $user = $this->userRepository->findOneBy(['email' => $email]);
 
-            if (password_verify($password, $user->getPass())) {
+            if ($user !== null && password_verify($password, $user->getPass())) {
                 $this->session->addFlashes("success", "Votre authentification a réussi.");
                 $this->session->set("user", $user);
                 return true;
