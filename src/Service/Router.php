@@ -108,6 +108,7 @@ final class Router
         // vérification des autorisations de l'utilisateur
         /** @var CustomsOfficer $customersOfficer */
         $customersOfficer = $this->container->get(CustomsOfficer::class);
+
         if (!$customersOfficer->secureAccessRoute($pathInfo)) {
             /** @var HomeController $homeController */
             $homeController = $this->container->get(HomeController::class);
@@ -119,7 +120,7 @@ final class Router
 
         if (!$this->nameRoute) {
             /** @var View $view */
-            $view = $this->container->get("View");
+            $view = $this->container->get(View::class);
             return new Response($view->render([
                 'template' => 'frontoffice/pages/errors/404',
                 'url_domain' => $this->environment->get("URL_DOMAIN"),
